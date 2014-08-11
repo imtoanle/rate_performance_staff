@@ -1,0 +1,9 @@
+/* here you can put your own css to customize and override the theme */
+li.ms-optgroup-label
+{
+  font-weight: bold;
+}
+#ms-select_permissions
+{
+  width:100%;
+}
