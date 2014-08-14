@@ -56,6 +56,7 @@ return array(
     
     // dashboard
     'dashboard-index' => 'backend.dashboard.index',
+    'dashboard-index-little' => 'backend.dashboard.index-little',
     'login' => 'backend.dashboard.login',
 
     // groups

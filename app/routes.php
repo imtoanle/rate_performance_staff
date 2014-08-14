@@ -454,6 +454,11 @@ Route::group(array('before' => 'basicAuth', 'prefix' => Config::get('variable.ba
         'uses' => 'BackendDashboardController@getIndex')
     );
 
+    Route::get('dashboard-little', array(
+        'as' => 'indexDashboardLittle',
+        'uses' => 'BackendDashboardController@getIndex')
+    );
+
     Route::get('logout', array(
         'as' => 'logout',
         'uses' => 'BackendDashboardController@getLogout')

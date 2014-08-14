@@ -9,7 +9,10 @@ class BackendDashboardController extends BackendBaseController
     */
     public function getIndex()
     {
-        return View::make(Config::get('view.backend.dashboard-index'));
+        if(Route::currentRouteName() == 'indexDashboardLittle')
+            return View::make(Config::get('view.backend.dashboard-index-little'));
+        else                        
+            return View::make(Config::get('view.backend.dashboard-index'));
         //$this->layout->tilte = trans('syntara::all.titles.index');
         //$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.dashboard');
     }

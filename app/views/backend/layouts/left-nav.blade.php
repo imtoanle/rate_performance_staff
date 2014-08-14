@@ -18,7 +18,7 @@
   </li>
 
   <?php $arrRoutes = array('indexDashboard'); ?>
-  {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
+  {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboardLittle', 'fa fa-home') }}  
 
   <?php $arrRoutes = array('listVotes'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
