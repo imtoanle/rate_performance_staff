@@ -39,6 +39,8 @@ return array(
 		'user-remove-success' => 'Xóa thành viên thành công',
 		'user-update-success' => 'Cập nhập thành viên thành công',
 		'user-update-fail' => 'Lỗi khi cập nhập thông tin thành viên',
+		'user-pass-not-match' => 'Mật khẩu hiện tại không đúng',
+		'user-wrong-form' => 'Sai dữ liệu form',
 		'group-not-found' => 'Nhóm không tồn tại',
 		'group-user-removed-success' => 'Xóa thành viên khỏi nhóm thành công',
 		'group-update-success' => 'Cập nhập dữ liệu nhóm thành công',
@@ -46,6 +48,14 @@ return array(
 		'group-update-fail' => 'Lỗi khi cập nhập dữ liệu nhóm',
 		'group-update-exists' => 'Tên nhóm đã tồn tại',
 		'remove-own-user' => 'Bạn không thể xóa tài khoản của mình',
+		'login-failed' => 'Lỗi khi đăng nhập. Kiểm tra lại tài khoản và mật khẩu!',
+		'vote-create-success' => 'Tạo đánh giá mới thành công.',
+		'vote-create-fail' => 'Lỗi khi tạo đánh giá mới.',
+		'vote-not-found' => 'Đánh giá này không tồn tại',
+		'vote-remove-success' => 'Xóa đánh giá thành công',
+		'cant-edit-closed-vote' => 'Không thể sửa đánh giá đã đóng',
+		'only-can-delete-newly-vote' => 'Không thể xóa, chỉ có thể xóa đánh giá mới',
+		'page-not-found' => 'Trang yêu cầu không tồn tại.',
 		),
 	
 	'notification' => 'Thông báo',
@@ -80,6 +90,40 @@ return array(
 	'user-ip' => 'Địa chỉ IP',
 	'user-banned-at' => 'Bị khóa tài khoản lúc',
 	'ban-user' => 'Khóa tài khoản',
+	'overview' => 'Thông tin chung',
+	'account' => 'Tài khoản',
+	'summary' => 'Thống kê',
+	'avg-mark' => 'Điểm trung bình',
+	'last-mark' => 'Điểm lần gần nhất',
+	'wage-coefficient' => 'Hệ số lương',
+	'salary' => 'Tiền lương',
+	'lastest-vote' => 'Các đánh giá trước',
+	'feed' => 'Hoạt động',
+	'personal-info' => 'Thông tin cá nhân',
+	'change-pass' => 'Đổi mật khẩu',
+	'privacity-setting' => 'Cấu hình bảo mật',
+	'mobile-number' => 'Số di động',
+	'address' => 'Địa chỉ',
+	'birth-date' => 'Ngày sinh',
+	'current-pass' => 'Mật khẩu hiện tại',
+	'new-pass' => 'Mật khẩu mới',
+	'confirm-pass' => 'Xác nhận mật khẩu',
+	'votes' => 'Đánh giá',
+	'vote-manage' => 'Quản lý đánh giá',
+	'join-vote' => 'Tham gia đánh giá',
+	'votes-list' => 'Danh sách đánh giá',
+	'object-vote' => 'Đối tượng đánh gía',
+	'title' => 'Tiêu đề',
+	'entitled-vote' => 'Người được đánh giá',
+	'voter' => 'Người cho điểm',
+	'create-vote' => 'Tạo đánh giá',
+	'edit-vote' => 'Sửa đánh giá',
+	'vote-info' => 'Thông tin đánh giá',
+	'save' => 'Lưu',
+	'date-create' => 'Ngày tạo',
+	'newly' => 'Mới tạo',
+	'opened' => 'Đang đánh giá',
+	'closed' => 'Đã chốt',
 
 
 
@@ -127,7 +171,7 @@ return array(
 	'service-file' => 'Dịch vụ File',
 	'service-server' => 'Dịch vụ Server',
 	'addfund' => 'Nạp tiền',
-	'account' => 'Tài khoản',
+	
 	
 	
 	
@@ -158,14 +202,14 @@ return array(
 	'confirm-modal-delete' => 'Bạn có muốn xóa dữ liệu này ?',
 	'order' => 'Đơn hàng',
 	
-	'address' => 'Địa chỉ',
+	
 	'city' => 'Thành phố',
 	'state' => 'Quận / Huyện',
 	'zip-code' => 'Zip Code',
 	'country' => 'Quốc gia',
 	'language' => 'Ngôn ngữ',
 	'currency' => 'Tiền tệ',
-	'save' => 'Lưu',
+	
 	'loading' => 'Đang tải...',
 	'send-mail' => 'Gửi thư',
 	'time' => 'Thời gian',
@@ -208,12 +252,12 @@ return array(
 	
 	
 	
-	'overview' => 'Thông tin chung',
+	
 	'group-service' => 'Nhóm dịch vụ',
 	'service-type' => 'Kiểu dịch vụ',
 	
 	'create' => 'Thêm',
-	'summary' => 'Thống kê',
+	
 	//backend menu
 	'dashboard' => 'Bảng điều khiển',
 	'unpaid-invoice' => 'Hóa đơn chưa thanh toán',
@@ -311,7 +355,7 @@ return array(
 	'sitemap' => 'Sitemap',
 	
 	'category' => 'Danh mục',
-	'date' => 'Ngày',
+	
 	'yesterday' => 'Hôm qua',
 	'today' => 'Hôm nay',
 	'due-date' => 'Hạn chót',
@@ -399,21 +443,19 @@ return array(
 		),
 
 	'settings' => array(
-		'personal-info' => 'Thông tin cá nhân',
+		
 		'security-login' => 'Bảo mật tài khoản',
 		'invoice' => 'Hóa đơn',
 		'my-mail' => 'Hộp thư',
 		'statement' => 'Báo cáo chi tiết',
 		'my-services' => 'Dịch vụ đang hoạt động',
 		'edit-info' => 'Thay đổi thông tin',
-		'change-pass' => 'Đổi mật khẩu',
+		
 		'change-question' => 'Đổi câu hỏi bí mật',
 		'email-notify' => 'Cấu hình thông báo',
 		'detail-address' => 'Địa chỉ chi tiết',
 		'more-info' => 'Thông tin thêm',
-		'current-pass' => 'Mật khẩu hiện tại',
-		'new-pass' => 'Mật khẩu mới',
-		'confirm-pass' => 'Xác nhận mật khẩu',
+		
 		'question' => 'Câu hỏi bí mật',
 		'new-question' => 'Chọn câu hỏi mới',
 		'answer' => 'Câu trả lời',

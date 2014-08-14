@@ -20,82 +20,18 @@
   <?php $arrRoutes = array('indexDashboard'); ?>
   {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
 
+  <?php $arrRoutes = array('listVotes'); ?>
+  {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
+    {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
+    {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUsers', 'fa fa-signal') }}  
+  {{ BackendSideBar::create_root_close() }} 
+
   <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
     {{ BackendSideBar::create_node(trans('all.group'), 'listGroups', 'fa fa-group') }}  
     {{ BackendSideBar::create_node(trans('all.permission'), 'listPermissions', 'fa fa-database') }}  
   {{ BackendSideBar::create_root_close() }} 
-
-  <li class="">
-    <a href="javascript:;">
-    <i class="fa fa-cogs"></i>
-    <span class="title">
-      Page Layouts
-    </span>
-    <span class="arrow ">
-    </span>
-    </a>
-    <ul class="sub-menu">
-      <li>
-        <a href="layout_session_timeout.html">
-        <span class="badge badge-warning">
-          new
-        </span>
-        Session Timeout</a>
-      </li>
-      <li>
-        <a href="layout_idle_timeout.html">
-        <span class="badge badge-important">
-          new
-        </span>
-        User Idle Timeout</a>
-      </li>
-      <li>
-        <a href="layout_language_bar.html">
-        <span class="badge badge-important">
-          new
-        </span>
-        Language Switch Bar</a>
-      </li>
-      <li>
-        <a href="layout_disabled_menu.html">
-        Disabled Menu Links</a>
-      </li>
-      <li>
-        <a href="layout_sidebar_reversed.html">
-        <span class="badge badge-success">
-          new
-        </span>
-        Right Sidebar Page</a>
-      </li>
-      <li>
-        <a href="layout_sidebar_fixed.html">
-        Sidebar Fixed Page</a>
-      </li>
-      <li>
-        <a href="layout_sidebar_closed.html">
-        Sidebar Closed Page</a>
-      </li>
-      <li>
-        <a href="layout_blank_page.html">
-        Blank Page</a>
-      </li>
-      <li>
-        <a href="layout_boxed_page.html">
-        Boxed Page</a>
-      </li>
-      <li>
-        <a href="layout_boxed_not_responsive.html">
-        Non-Responsive Layout</a>
-      </li>
-      <li>
-        <a href="layout_ajax.html">
-        Content Loading via Ajax</a>
-      </li>
-    </ul>
-  </li>
-   
 </ul>
 <!-- END SIDEBAR MENU -->
 

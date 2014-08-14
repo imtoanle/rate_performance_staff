@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateBlogsTable extends Migration {
+class CreateTableVotes extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,19 +12,16 @@ class CreateBlogsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('blogs', function(Blueprint $table)
+		Schema::create('votes', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('title');
-			$table->text('description');
-			$table->text('content');
-			$table->integer('user_id');
-			$table->integer('cat_id');
-			$table->integer('views');
+			$table->string('object_entitled_vote');
+			$table->string('entitled_vote');
+			$table->string('voter');
 			$table->timestamps();
 		});
 	}
-
 
 	/**
 	 * Reverse the migrations.
@@ -33,7 +30,7 @@ class CreateBlogsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('blogs');
+		Schema::drop('votes');
 	}
 
 }

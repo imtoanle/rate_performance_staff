@@ -1,6 +1,13 @@
 <?php
 
 return array(
+    'vote-status' => array(
+      'newly' => 0,
+      'opened' => 1,
+      'closed' => 2,
+        ),
+
+
     'order-status' => array(
     	'pending' => 1,
     	'denied' => 2,
@@ -60,7 +67,7 @@ return array(
         ),
     'transaction_tax' => 5,
     'backend' => array(
-        'uri-config' => 'admin',
+        'uri-config' => '',
         'sub-menus' => array(
             'service' => array(
                 array(trans('all.overview'), 'editImeiServices'),
@@ -119,6 +126,16 @@ return array(
     'newPermissionPost' => 'permissions-management',
     'showPermission' => 'permissions-management',
     'putPermission' => 'permissions-management',
+
+    //votes
+    'listVotes' => 'votes-management',
+    'newVote' => 'votes-management',
+    'postNewVote' => 'votes-management',
+    'putVote' => 'votes-management',
+    'deleteVote' => 'votes-management',
+    'showVote' => 'votes-management',
+    'listUsersSearch' => 'votes-management',
+    
     
     //servives
     'indexImeiServices' => 'imei-service-management',

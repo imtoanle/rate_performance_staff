@@ -108,18 +108,35 @@ return array(
       'api_key' => 'required'
       ),
 
+    'vote-create' => array(
+      'title' => 'required',
+      'select2_groups' => 'required',
+      'select2_entitled_vote' => 'required',
+      'select2_voter' => 'required|different:select2_entitled_vote',
+    ),
+
     'user-create' => array(
       'email' => array('required', 'email'),
       'password' => array('required', 'min:6', 'max:255'),
       'username' => array('required', 'min:3', 'max:255'),
       'full_name' => array('min:3', 'max:255'),
     ),
-    'user-update' => array(
-      'email' => array('required', 'email'),
+    'user-update-privacy' => array(
+      //'email' => array('required', 'email'),
       'password' => array('min:6', 'max:255'),
-      'username' => array('required', 'min:3', 'max:255'),
-      'full_name' => array('min:3', 'max:255'),
+      //'username' => array('required', 'min:3', 'max:255'),
+      //'full_name' => array('min:3', 'max:255'),
     ),
+    'user-update-personal' => array(
+      'full_name' => array('required','min:3', 'max:255'),
+    ),
+    'user-change-pass' => array(
+      'current_password' => 'required',
+      'new_password' => 'required|min:5|different:current_password',
+      'confirm_password' => 'required|same:new_password'
+    ),
+
+
     'user-login' => array(
       'username' => array('required', 'min:3'),
       'password' => array('required', 'min:6', 'max:255'),

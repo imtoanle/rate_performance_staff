@@ -1,6 +1,7 @@
 <?php 
 
 use Validators\Backend as BackendValidator;
+use Carbon\Carbon;
 class BackendUserController extends BackendBaseController 
 {
 
@@ -9,6 +10,48 @@ class BackendUserController extends BackendBaseController
     *
     * @return Response
     */
+
+    public function fullTextSearch()
+    {
+      $userArr = array();
+      if(Input::has('user_id'))
+      {
+        $userIds = explode(',',Input::get('user_id'));
+        $users = User::whereIn('id', $userIds)->get();
+        foreach ($users as $user) {
+          $userArr[] = $this->structSelect2($user);
+        }
+
+      }else
+      {
+        $query = Input::get('q');
+        $group_ids = Input::has('groups_id') ? Input::get('groups_id') : array();
+        $select_id = Input::get('select_id');
+
+        $users = User::select('id','username', 'full_name', 'phone_num', 'address')
+                    ->where('username', 'LIKE', '%'.$query.'%')
+                    ->orWhere('full_name', 'LIKE', '%'.$query.'%')
+                    ->orWhere('phone_num', 'LIKE', '%'.$query.'%')
+                    ->orWhere('address', 'LIKE', '%'.$query.'%')
+          ->paginate(Input::get('page_limit'));
+        
+        foreach ($users as $user) {
+          $group_name_tmp = '';
+          $user_in_group = 0;
+
+          foreach ($user->getGroups() as $group) {
+            $group_name_tmp .= $group->name.', ';
+            if (in_array($group->id, $group_ids)) $user_in_group++;
+          }
+     
+          if ($user_in_group || $select_id == 'select2_voter')
+          {
+            $userArr[] = $this->structSelect2($user, $group_name_tmp);
+          }
+        }
+      }
+      return Response::json($userArr);
+    }
     public function getIndex()
     {
         // get alls users
@@ -39,11 +82,10 @@ class BackendUserController extends BackendBaseController
     {
         try
         {
-            $validator = new BackendValidator(Input::all(), 'user-create');
-
             $permissionsValues = Input::get('select_permissions');
             $permissions = $this->_formatPermissions($permissionsValues);
 
+            $validator = new BackendValidator(Input::all(), 'user-create');
             if(!$validator->passes())
             {
                 return Response::json(array('userCreated' => false, 'errorMessages' => $validator->getErrors()));
@@ -240,79 +282,112 @@ class BackendUserController extends BackendBaseController
     {   
         try
         {
-            $validator = new BackendValidator(Input::all(), 'user-update');
+          $user = Sentry::findUserById($userId);
+          $form_name = Input::get('form_name');
+          switch ($form_name) {
+            case 'personal_info':
+              $validator = new BackendValidator(Input::all(), 'user-update-personal');
+              if(!$validator->passes())
+              {
+                  return Response::json(array('userUpdated' => false, 'errorMessages' => $validator->getErrors()));
+              }
 
-            if(!$validator->passes())
-            {
-                return Response::json(array('userUpdated' => false, 'errorMessages' => $validator->getErrors()));
-            }
+              $birth_date = explode('/',Input::get('birth_date'));
+              $user->full_name = Input::get('full_name');
+              $user->birth_date = Carbon::createFromDate($birth_date[2], $birth_date[1], $birth_date[0]);
+              $user->phone_num = Input::get('mobile_number');
+              $user->address = Input::get('address');
+              break;
+            case 'change_pass':
+              $validator = new BackendValidator(Input::all(), 'user-change-pass');
+              if(!$validator->passes())
+              {
+                  return Response::json(array('userUpdated' => false, 'errorMessages' => $validator->getErrors()));
+              }
+              if($user->checkPassword(Input::get('current_password')))
+              {
+                  $user->password = Input::get('new_password');
+              }
+              else
+              {
+                  return Response::json(array('userUpdated' => true, 'message' => trans('all.messages.user-pass-not-match'), 'messageType' => 'error'));
+              }
+              break;
+            case 'privacy_manage':
+              $validator = new BackendValidator(Input::all(), 'user-update-privacy');
+              if(!$validator->passes())
+              {
+                  return Response::json(array('userUpdated' => false, 'errorMessages' => $validator->getErrors()));
+              }
 
-            $permissionsValues = Input::get('select_permissions');
-            $permissions = $this->_formatPermissions($permissionsValues);
+              $permissionsValues = Input::get('select_permissions');
+              $permissions = $this->_formatPermissions($permissionsValues);
 
-            // Find the user using the user id
-            $user = Sentry::findUserById($userId);
-            $user->username = Input::get('username');
-            $user->email = Input::get('email');
-            $user->full_name = Input::get('full_name');
+              // Find the user using the user id
 
-            $currentUser = Sentry::getUser();
-            $permissions = (empty($permissions)) ? '' : json_encode($permissions);
-            $hasPermissionManagement = $currentUser->hasAccess('permissions-management') || $currentUser->hasAccess('superuser');
-            if($hasPermissionManagement === true)
-            {
-                DB::table('users')
-                    ->where('id', $userId)
-                    ->update(array('permissions' => $permissions));
-            }
+              $currentUser = Sentry::getUser();
+              $permissions = (empty($permissions)) ? '' : json_encode($permissions);
+              $hasPermissionManagement = $currentUser->hasAccess('permissions-management') || $currentUser->hasAccess('superuser');
+              if($hasPermissionManagement === true)
+              {
+                  DB::table('users')
+                      ->where('id', $userId)
+                      ->update(array('permissions' => $permissions));
+              }
 
-            $pass = Input::get('password');
-            if(!empty($pass))
-            {
-                $user->password = $pass;
-            }
+              $pass = Input::get('password');
+              if(!empty($pass))
+              {
+                  $user->password = $pass;
+              }
 
-            // Update the user
-            if($user->save())
-            {
-                // if the user has permission to update
-                $banned = Input::get('banned');
-                if(isset($banned) && Sentry::getUser()->getId() !== $user->getId())
-                {
+              // if the user has permission to update
+              $banned = Input::get('banned');
+              if(isset($banned) && Sentry::getUser()->getId() !== $user->getId())
+              {
 
-                    $this->_banUser($userId, $banned);
-                }
+                  $this->_banUser($userId, $banned);
+              }
 
-                if($currentUser->hasAccess('user-group-management'))
-                {
-                    $groups = (Input::get('select_groups') === null) ? array() : explode(',',Input::get('select_groups'));
-                    $userGroups = $user->getGroups()->toArray();
-                    
-                    foreach($userGroups as $group)
-                    {
-                        if(!in_array($group['id'], $groups))
-                        {
-                            $group = Sentry::findGroupById($group['id']);
-                            $user->removeGroup($group);
-                        }
-                    }
+              if($currentUser->hasAccess('user-group-management'))
+              {
+                  $groups = (Input::get('select_groups') === null) ? array() : explode(',',Input::get('select_groups'));
+                  $userGroups = $user->getGroups()->toArray();
+                  
+                  foreach($userGroups as $group)
+                  {
+                      if(!in_array($group['id'], $groups))
+                      {
+                          $group = Sentry::findGroupById($group['id']);
+                          $user->removeGroup($group);
+                      }
+                  }
 
-                    if(isset($groups) && is_array($groups))
-                    {
-                        foreach($groups as $groupId)
-                        {
-                            $group = Sentry::findGroupById($groupId);
-                            $user->addGroup($group);
-                        }
-                    }
-                }
+                  if(isset($groups) && is_array($groups))
+                  {
+                      foreach($groups as $groupId)
+                      {
+                          $group = Sentry::findGroupById($groupId);
+                          $user->addGroup($group);
+                      }
+                  }
+              }
+              break;
 
-                return Response::json(array('userUpdated' => true, 'message' => trans('all.messages.user-update-success'), 'messageType' => 'success'));
-            }
-            else 
-            {
-                return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-update-fail'), 'messageType' => 'danger'));
-            }
+            default:
+              return Response::json(array('userUpdated' => true, 'message' => trans('all.messages.user-wrong-form'), 'messageType' => 'error'));
+              break;
+          }
+
+          // Update the user
+          if($user->save())
+          {
+            return Response::json(array('userUpdated' => true, 'message' => trans('all.messages.user-update-success'), 'messageType' => 'success'));
+          }
+          else 
+          {
+            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-update-fail'), 'messageType' => 'danger'));
+          }
         }
         catch(\Cartalyst\Sentry\Users\UserExistsException $e)
         {
@@ -349,5 +424,17 @@ class BackendUserController extends BackendBaseController
         {
             $throttle->ban();
         }
+    }
+
+    protected function structSelect2($user, $group_name=null)
+    {
+      $user_lite = array();
+      if ($group_name) $user_lite['group_name'] = rtrim($group_name,', ');
+      $user_lite['id'] = $user->id;
+      $user_lite['text'] = $user->username;
+      $user_lite['full_name'] = $user->full_name;
+      $user_lite['phone_num'] = $user->phone_num;
+      $user_lite['address'] = $user->address;
+      return $user_lite;
     }
 }

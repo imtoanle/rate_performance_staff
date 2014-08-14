@@ -509,6 +509,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserController@putActivate')
   );
 
+  Route::get('users/full-text-search', array(
+      'as' => 'listUsersSearch',
+      'uses' => 'BackendUserController@fullTextSearch')
+  );
+
   /**
    * Group routes
    */
@@ -584,6 +589,39 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'as' => 'putPermission',
       'uses' => 'BackendPermissionController@putShow')
   );
+
+  //vote manage
+  Route::get('votes', array(
+      'as' => 'listVotes',
+      'uses' => 'BackendVoteController@getIndex')
+  );
+
+  Route::get('vote/new', array(
+      'as' => 'newVote',
+      'uses' => 'BackendVoteController@getCreate')
+  );
+
+  Route::post('vote/new', array(
+      'as' => 'postNewVote',
+      'uses' => 'BackendVoteController@postCreate')
+  );
+
+  Route::get('vote/{voteId}', array(
+      'as' => 'showVote',
+      'uses' => 'BackendVoteController@getShow')
+  );
+
+  Route::put('vote/{voteId}', array(
+      'as' => 'putVote',
+      'uses' => 'BackendVoteController@putShow')
+  );
+
+  Route::delete('vote/delete', array(
+      'as' => 'deleteVote',
+      'uses' => 'BackendVoteController@delete')
+  );
+
+
 
 
 

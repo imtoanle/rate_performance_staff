@@ -34,16 +34,19 @@ jQuery(document).ready(function() {
     });
     
     ajax_call_custom($(this).attr('type'), $(this).attr('action'), data, function(result){
-      if(typeof(result.redirectUrl) != 'undefined')
-      {
-        redirect_url_ajax(result.redirectUrl);
-      }  
-      else if(typeof(result.errorMessages) != 'undefined')
+      if(typeof(result.errorMessages) != 'undefined')
       {
         showRegisterFormAjaxErrors(result.errorMessages);
-      }else if (typeof(result.message) != 'undefined')
+      }else
       {
-        removeErrorsFormValidate();
+        if(typeof(result.redirectUrl) != 'undefined')
+        {
+          redirect_url_ajax(result.redirectUrl);
+        }else if (typeof(result.message) != 'undefined')
+        {
+          removeErrorsFormValidate();
+        }
+
         toastr[result.messageType](result.message);
       }
     });
@@ -98,8 +101,11 @@ jQuery(document).ready(function() {
   
 });
 
-function ajax_call_custom(type, url, data=null, successCallback=null)
+function ajax_call_custom(type, url, data, successCallback)
 {
+  if (typeof data === 'undefined') { data = ''; }
+  if (typeof successCallback === 'undefined') { successCallback = null; }
+
   $.ajax({
     type: type,
     cache: false,
@@ -107,7 +113,15 @@ function ajax_call_custom(type, url, data=null, successCallback=null)
     data: data,
     dataType: "json",
     success: function (result) {
-      successCallback(result);
+      if (successCallback !== null)
+      {
+        clear_form();
+        successCallback(result);
+      }
+    },
+    error: function (xhr) {
+      var json_responsed = JSON.parse(xhr.responseText);
+      toastr['error'](json_responsed.error.message);
     },
   });
 }
@@ -186,9 +200,15 @@ function redirect_url_ajax(url)
           App.initAjax(); // initialize core stuff
       },
       error: function (xhr, ajaxOptions, thrownError) {
-          pageContentBody.html('<h4>Could not load the requested content.</h4>');
+          var json_responsed = JSON.parse(xhr.responseText);
+          toastr['error'](json_responsed.error.message);
           App.unblockUI(pageContent);
       },
       async: false
   });
+}
+
+function clear_form()
+{
+  $('input[type=password]').val('');
 }

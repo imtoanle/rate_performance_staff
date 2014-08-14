@@ -7,3 +7,11 @@ li.ms-optgroup-label
 {
   width:100%;
 }
+
+form .form-body.text-left label
+{
+  text-align: left;
+}
+.color-success{
+  color: #3CC051!important;
+}

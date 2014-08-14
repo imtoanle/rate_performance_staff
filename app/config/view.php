@@ -79,6 +79,11 @@ return array(
     'user-profile' => 'backend.user.show-user',
     'user-activation' => 'backend.user.activation',
 
+    //votes
+    'votes-index' => 'backend.vote.index-vote',
+    'vote-create' => 'backend.vote.create-vote',
+    'vote-show' => 'backend.vote.show-vote',
+
 
 
 

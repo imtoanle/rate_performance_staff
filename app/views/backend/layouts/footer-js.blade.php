@@ -21,11 +21,11 @@
 <script src="{{asset('assets/plugins/jquery.sparkline.min.js')}}" type="text/javascript"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/select2/select2.min.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes')))
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/jquery.dataTables.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/DT_bootstrap.js')}}"></script>
 @endif
@@ -36,5 +36,9 @@
 
 @if(in_array(Route::currentRouteName(), array('showUser')))
 <script src="{{asset('assets/plugins/bootstrap-switch/static/js/bootstrap-switch.min.js')}}" type="text/javascript"></script>
+@endif
+
+@if(in_array(Route::currentRouteName(), array('showUser')))
+<script type="text/javascript" src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"></script>
 @endif
 <!-- END PAGE LEVEL PLUGINS -->
