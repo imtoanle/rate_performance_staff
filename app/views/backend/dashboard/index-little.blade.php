@@ -7,8 +7,9 @@ Nội dung đang được cập nhập
 
 @include(Config::get('view.backend.footer-js'))
 <script>
-jQuery(document).ready(function() {   
 
-});
+//jQuery(document).ready(function() {   
+
+//});
 
 </script>
