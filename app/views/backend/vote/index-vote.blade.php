@@ -42,9 +42,77 @@
       </div>
     </td>
     <td>{{$vote->title}}</td>
-    <td>{{$vote->object_entitled_vote}}</td>
-    <td>{{$vote->entitled_vote}}</td>
-    <td>{{$vote->voter}}</td>
+    <td>
+      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-object-{{$vote->id}}" data-original-title="{{trans('all.object-vote')}}">{{trans('all.list')}}</span>
+      <div class="invi popover-object-{{$vote->id}}">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>{{trans('all.username')}}</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
+            @foreach($object_groups as $id)
+            <tr>
+              <td>{{$groups[$id]}}</td>
+            </tr>
+            @endforeach
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+    </td>
+    <td>
+      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-entitled-user-{{$vote->id}}" data-original-title="{{trans('all.entitled-vote')}}">{{trans('all.list')}}</span>
+      <div class="invi popover-entitled-user-{{$vote->id}}">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>{{trans('all.username')}}</th>
+                <th>{{trans('all.full-name')}}</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php $entitled_users = explode(',', $vote->entitled_vote) ?>
+            @foreach($entitled_users as $id)
+            <tr>
+              <td>{{$users[$id]['username']}}</td>
+              <td>{{$users[$id]['username']}}</td>
+            </tr>
+            @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </td>
+    <td>
+      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-voter-{{$vote->id}}" data-original-title="{{trans('all.voter')}}">{{trans('all.list')}}</span>
+      <div class="invi popover-voter-{{$vote->id}}">
+        <div class="table-responsive">
+          <table class="table table-condensed table-hover">
+            <thead>
+              <tr>
+                <th>{{trans('all.username')}}</th>
+                <th>{{trans('all.full-name')}}</th>
+              </tr>
+            </thead>
+            <tbody>
+            <?php $voters = explode(',', $vote->voter) ?>
+            @foreach($voters as $id)
+            <tr>
+              <td>{{$users[$id]['username']}}</td>
+              <td>{{$users[$id]['username']}}</td>
+            </tr>
+            @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </td>
     <td>{{$vote->created_at->format('d/m/Y')}}</td>
     <td>
       @if($vote->status == Config::get('variable.vote-status.newly'))

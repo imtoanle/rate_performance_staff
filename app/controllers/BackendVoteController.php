@@ -10,7 +10,23 @@ class BackendVoteController extends BackendBaseController
   */
   public function getIndex()
   {
+    $groups = Group::all();
+    $groupArrs = array();
+    foreach ($groups as $group) {
+      $groupArrs[$group->id] = $group->name;
+    }
+    //user
+    $users = User::all();
+    $userArrs = array();
+    foreach ($users as $user) {
+      $userArrs[$user->id]['username'] = $user->username;
+      $userArrs[$user->id]['full_name'] = $user->full_name;
+    }
+
     $params['votes'] = Vote::all();
+    $params['groups'] = $groupArrs;
+    $params['users'] = $userArrs;
+
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
     
   }

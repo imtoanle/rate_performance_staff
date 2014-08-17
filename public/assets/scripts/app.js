@@ -565,8 +565,27 @@ var App = function () {
     var lastPopedPopover;
 
     var handlePopovers = function () {
-        jQuery('.popovers').popover();
+        $('[data-toggle="popover"]').each(function (i, el) {
+            var $this = $(el),
+                placement = App.attrDefault($this, 'placement', 'right'),
+                html = App.attrDefault($this, 'html', false),
+                content_selector = App.attrDefault($this, 'content-selector', false),
+                content_text = App.attrDefault($this, 'content', ''),
+                trigger = App.attrDefault($this, 'trigger', 'click'),
+                content_full = (content_selector ?  $(content_selector).html() : content_text),
+                popover_class = $this.hasClass('popover-secondary') ? 'popover-secondary' : ($this.hasClass('popover-primary') ? 'popover-primary' : ($this.hasClass('popover-default') ? 'popover-default' : ''));
 
+            $this.popover({
+                html: html,
+                content: content_full,
+                placement: placement,
+                trigger: trigger
+            });
+            $this.on('shown.bs.popover', function (ev) {
+                var $popover = $this.next();
+                $popover.addClass(popover_class);
+            });
+        });
         // close last poped popover
 
         $(document).on('click.bs.popover.data-api', function (e) {
@@ -863,6 +882,13 @@ var App = function () {
         //public function to fix the sidebar and content height accordingly
         fixContentHeight: function () {
             handleSidebarAndContentHeight();
+        },
+
+        attrDefault: function($el, data_var, default_val) {
+            if (typeof $el.data(data_var) != 'undefined') {
+                return $el.data(data_var);
+            }
+            return default_val;
         },
 
         //public function to remember last opened popover that needs to be closed on click

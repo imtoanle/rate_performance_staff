@@ -124,6 +124,7 @@ return array(
 	'newly' => 'Mới tạo',
 	'opened' => 'Đang đánh giá',
 	'closed' => 'Đã chốt',
+	'list' => 'Danh sách',
 
 
 

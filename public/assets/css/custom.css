@@ -15,3 +15,6 @@ form .form-body.text-left label
 .color-success{
   color: #3CC051!important;
 }
+.invi{
+  display: none;
+}
