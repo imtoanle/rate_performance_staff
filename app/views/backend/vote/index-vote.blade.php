@@ -43,27 +43,10 @@
     </td>
     <td>{{$vote->title}}</td>
     <td>
-      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-object-{{$vote->id}}" data-original-title="{{trans('all.object-vote')}}">{{trans('all.list')}}</span>
-      <div class="invi popover-object-{{$vote->id}}">
-        <div class="table-responsive">
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>{{trans('all.username')}}</th>
-              </tr>
-            </thead>
-            <tbody>
-            <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
-            @foreach($object_groups as $id)
-            <tr>
-              <td>{{$groups[$id]}}</td>
-            </tr>
-            @endforeach
-            </tbody>
-          </table>
-        </div>
-        
-      </div>
+      <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
+      @foreach($object_groups as $id)
+      {{$groups[$id]}}, 
+      @endforeach
     </td>
     <td>
       <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-entitled-user-{{$vote->id}}" data-original-title="{{trans('all.entitled-vote')}}">{{trans('all.list')}}</span>
