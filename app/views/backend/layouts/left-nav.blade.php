@@ -23,7 +23,7 @@
   <?php $arrRoutes = array('listVotes'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
     {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
-    {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUsers', 'fa fa-signal') }}  
+    {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUserVotes', 'fa fa-signal') }}  
   {{ BackendSideBar::create_root_close() }} 
 
   <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions'); ?>

@@ -626,6 +626,12 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendVoteController@delete')
   );
 
+  //user vote
+  Route::get('user-votes', array(
+      'as' => 'listUserVotes',
+      'uses' => 'BackendUserVoteController@getIndex')
+  );
+
 
 
 

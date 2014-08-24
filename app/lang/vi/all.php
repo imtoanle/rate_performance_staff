@@ -19,7 +19,7 @@ return array(
 	'submit' => 'Gửi',
 	'user-manager' => 'Quản lý thành viên',
 	'user' => 'Thành viên',
-	'group' => 'Chức vụ',
+	'group' => 'Nhóm',
 	'permission' => 'Quyền hạn',
 	'name' => 'Tên',
 	'value' => 'Giá trị',
@@ -82,7 +82,7 @@ return array(
 	'active' => 'Hoạt động',
 	'inactive' => 'Tạm dừng',
 	'empty-to-keep-password' => 'Để trống sẽ giữ mật khẩu cũ',
-	'select-group' => 'Lựa chọn chức vụ',
+	'select-group' => 'Lựa chọn nhóm',
 	'user-infomation' => 'Thông tin thành viên',
 	'user-registration' => 'Ngày đăng ký',
 	'user-last-update' => 'Lần cập nhập cuối',
@@ -125,6 +125,9 @@ return array(
 	'opened' => 'Đang đánh giá',
 	'closed' => 'Đã chốt',
 	'list' => 'Danh sách',
+	'can-votes' => 'Có thể đánh giá',
+	'self-voting' => 'Đang được đánh giá',
+	'old-votes' => 'Đánh giá cũ',
 
 
 

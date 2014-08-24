@@ -85,8 +85,8 @@ return array(
     'vote-create' => 'backend.vote.create-vote',
     'vote-show' => 'backend.vote.show-vote',
 
-
-
+    //votes
+    'user-votes-index' => 'backend.user-vote.index',
 
 
 

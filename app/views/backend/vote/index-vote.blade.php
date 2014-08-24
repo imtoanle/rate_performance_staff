@@ -46,7 +46,7 @@
       <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
       @foreach($object_groups as $id)
       {{$groups[$id]}}, 
-      @endforeach
+      @endforeach 
     </td>
     <td>
       <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-entitled-user-{{$vote->id}}" data-original-title="{{trans('all.entitled-vote')}}">{{trans('all.list')}}</span>
@@ -64,7 +64,7 @@
             @foreach($entitled_users as $id)
             <tr>
               <td>{{$users[$id]['username']}}</td>
-              <td>{{$users[$id]['username']}}</td>
+              <td>{{$users[$id]['full_name']}}</td>
             </tr>
             @endforeach
             </tbody>
@@ -88,7 +88,7 @@
             @foreach($voters as $id)
             <tr>
               <td>{{$users[$id]['username']}}</td>
-              <td>{{$users[$id]['username']}}</td>
+              <td>{{$users[$id]['full_name']}}</td>
             </tr>
             @endforeach
             </tbody>
