@@ -4,7 +4,6 @@
 <script src="{{asset('assets/plugins/respond.min.js')}}"></script>
 <script src="{{asset('assets/plugins/excanvas.min.js')}}"></script> 
 <![endif]-->
-<script src="{{asset('assets/plugins/jquery-1.10.2.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/jquery-migrate-1.2.1.min.js')}}" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js')}} before bootstrap.min.js')}} to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="{{asset('assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js')}}" type="text/javascript"></script>
@@ -17,7 +16,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-toastr/toastr.min.js')}}"></script>
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
-
+@include(Config::get('view.backend.footer-js'))
 <!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="{{asset('assets/scripts/app.js')}}" type="text/javascript"></script>

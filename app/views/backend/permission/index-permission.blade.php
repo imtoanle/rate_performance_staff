@@ -1,6 +1,5 @@
-<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
-@include(Config::get('view.backend.header-css'))
-<!-- END PAGE LEVEL PLUGIN STYLES -->
+@extends(Config::get('view.backend.master'))
+@section('content')
 
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
           <div class="portlet box light-grey">
@@ -67,7 +66,6 @@
           </div>
           <!-- END EXAMPLE TABLE PORTLET-->
 
-@include(Config::get('view.backend.footer-js'))
 <script>
 jQuery(document).ready(function() {   
   
@@ -118,4 +116,4 @@ jQuery(document).ready(function() {
   TableManaged.init();
 });
 </script>
-@include(Config::get('view.backend.custom-js'))
+@stop

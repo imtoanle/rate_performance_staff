@@ -1,6 +1,5 @@
-<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
-@include(Config::get('view.backend.header-css'))
-<!-- END PAGE LEVEL PLUGIN STYLES -->
+@extends(Config::get('view.backend.master'))
+@section('content')
 
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet box light-grey">
@@ -70,7 +69,7 @@
 </div>
 <!-- /.modal -->
 <!-- Modal END -->
-@include(Config::get('view.backend.footer-js'))
+
 <script>
 jQuery(document).ready(function() {   
   var oTable = $('#ajax-data-table').dataTable({
@@ -219,3 +218,4 @@ function saveRow(oTable, nRow, new_mode) {
 }
 
 </script>
+@stop

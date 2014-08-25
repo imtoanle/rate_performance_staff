@@ -22,7 +22,11 @@
 <link href="{{asset('assets/css/themes/default.css')}}" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
+<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
+@include(Config::get('view.backend.header-css'))
+<!-- END PAGE LEVEL PLUGIN STYLES -->
 <link rel="shortcut icon" href="http://www.keenthemes.com/preview/conquer/favicon.ico"/>
+<script src="{{asset('assets/plugins/jquery-1.10.2.min.js')}}" type="text/javascript"></script>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->

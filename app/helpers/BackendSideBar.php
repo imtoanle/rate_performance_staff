@@ -24,7 +24,7 @@ class BackendSideBar
 			$active = Route::currentRouteName() == $routeName ? 'active' : '';
 			$link = $routeName == '' ? '' : route($routeName);
 			return '<li class="'.$active.'">
-    		<a class="ajaxify" href="'.$link.'"><i class="'.$icon.'"></i><span>'.$title.'</span></a>
+    		<a href="'.$link.'"><i class="'.$icon.'"></i><span>'.$title.'</span></a>
   		</li>';
 	}
 

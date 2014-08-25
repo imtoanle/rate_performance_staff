@@ -1,6 +1,5 @@
-<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
-@include(Config::get('view.backend.header-css'))
-<!-- END PAGE LEVEL PLUGIN STYLES -->
+@extends(Config::get('view.backend.master'))
+@section('content')
 
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet box light-grey">
@@ -139,7 +138,7 @@
 </div>
 <!-- /.modal -->
 <!-- Modal END -->
-@include(Config::get('view.backend.footer-js'))
+
 <script>
 jQuery(document).ready(function() {   
   
@@ -183,3 +182,4 @@ jQuery(document).ready(function() {
   jQuery('#ajax-data-table_wrapper .dataTables_length select').addClass("form-control input-xsmall"); // modify table per page dropdown
 });
 </script>
+@stop

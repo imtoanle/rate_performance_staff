@@ -18,7 +18,7 @@
   </li>
 
   <?php $arrRoutes = array('indexDashboard'); ?>
-  {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboardLittle', 'fa fa-home') }}  
+  {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
 
   <?php $arrRoutes = array('listVotes'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
@@ -26,7 +26,7 @@
     {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUserVotes', 'fa fa-signal') }}  
   {{ BackendSideBar::create_root_close() }} 
 
-  <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions', 'listJobTitles'); ?>
+  <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions', 'listJobTitles', 'listUsers', 'listGroups'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
     {{ BackendSideBar::create_node(trans('all.job-title'), 'listJobTitles', 'fa fa-mortar-board') }}  
