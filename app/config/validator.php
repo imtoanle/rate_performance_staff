@@ -59,6 +59,9 @@ return array(
       'job_name' => 'required|min:3',
     ),
 
+    'department-create' => array(
+      'department_name' => 'required|min:3',
+    ),
 
     'service-update' => array(
       'service_name' => 'required|min:3',

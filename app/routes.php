@@ -586,6 +586,29 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   );
 
   /**
+   * Department routes
+   */
+  Route::get('departments', array(
+      'as' => 'listDepartments',
+      'uses' => 'BackendDepartmentController@getIndex')
+  );
+
+  Route::post('department/new', array(
+      'as' => 'newDepartmentPost',
+      'uses' => 'BackendDepartmentController@postCreate')
+  );
+
+  Route::delete('department/deleteMulti', array(
+      'as' => 'deleteDepartment',
+      'uses' => 'BackendDepartmentController@delete')
+  );
+
+  Route::put('department/{jobTitleId}', array(
+      'as' => 'putDepartment',
+      'uses' => 'BackendDepartmentController@putShow')
+  );
+
+  /**
    * Permission routes
    */
   Route::get('permissions', array(
