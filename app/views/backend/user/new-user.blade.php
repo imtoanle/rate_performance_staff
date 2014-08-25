@@ -61,6 +61,16 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label class="control-label col-md-3">{{trans('all.job-title')}}</label>
+              <div class="col-md-9">
+                  <select id="select_job_titles" name="select_job_titles" class="form-control select2" multiple>
+                    @foreach($jobTitles as $job)
+                    <option value="{{$job->id}}">{{$job->name}}</option>
+                    @endforeach
+                  </select>
+              </div>
+            </div>
 
             <div class="form-group">
               <label class="control-label col-md-3">{{trans('all.group')}}</label>
@@ -139,7 +149,7 @@ jQuery(document).ready(function() {
       selectableOptgroup: true
   });
 
-  $('#select_groups').select2({
+  $('#select_groups, #select_job_titles').select2({
     placeholder: "{{trans('all.select-group')}}",
     allowClear: true
   });

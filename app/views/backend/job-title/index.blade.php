@@ -5,10 +5,10 @@
 <div class="portlet box light-grey">
 <div class="portlet-title">
   <div class="caption">
-    <i class="fa fa-list"></i>{{trans('all.votes-list')}}
+    <i class="fa fa-list"></i>{{trans('all.job-title-list')}}
   </div>
   <div class="actions">
-    <a href="{{route('newVote')}}" id="ajax-data-table_new" class="btn btn-info"><i class="fa fa-pencil"></i> {{trans('all.add')}}</a>
+    <a id="ajax-data-table_new" class="btn btn-info"><i class="fa fa-pencil"></i> {{trans('all.add')}}</a>
     <a href="#delete-modal" data-toggle="modal" class="btn btn-danger"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
     
     <a class="btn btn-warning" href="table_managed.html#"><i class="fa fa-print"></i> Print</a>
@@ -178,7 +178,7 @@ function editRow(oTable, nRow, new_mode) {
       itemId = $('input', aData[0]);
     var jqTds = $('>td', nRow),
     new_mode_string = new_mode ? 'data-mode="new"' : '';
-    jqTds[1].innerHTML = '<input type="text" class="form-control input-small" item-id="'+itemId.val()+'" value="' + aData[1] + '">';
+    jqTds[1].innerHTML = '<input type="text" class="form-control input-xlarge" item-id="'+itemId.val()+'" value="' + aData[1] + '">';
     jqTds[2].innerHTML = '<a class="edit btn btn-default btn-xs purple" edit-mode="save" '+new_mode_string+'><i class="fa fa-edit"></i> {{trans('all.save')}}</a><a class="cancel btn btn-default btn-xs black" '+new_mode_string+'><i class="fa fa-trash-o"></i> {{trans('all.cancel')}}</a>';
 }
 

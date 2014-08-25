@@ -82,8 +82,6 @@ return array(
 
     //votes
     'job-titles-index' => 'backend.job-title.index',
-    'job-title-create' => 'backend.job-title.create',
-    'job-title-show' => 'backend.job-title.show',
 
     //votes
     'votes-index' => 'backend.vote.index-vote',

@@ -67,6 +67,7 @@ class BackendUserController extends BackendBaseController
     */
     public function getCreate()
     {
+      $params['jobTitles'] = JobTitle::all();
         $params['groups'] = Sentry::findAllGroups();
         $params['permissions'] = Permission::all();
 
@@ -98,6 +99,7 @@ class BackendUserController extends BackendBaseController
                 'password' => Input::get('password'),
                 'username' => Input::get('username'),
                 'full_name' => (string)Input::get('full_name'),
+                'job_title' => Input::get('select_job_titles'),
                 'permissions' => $permissions
             ));
 
@@ -252,6 +254,7 @@ class BackendUserController extends BackendBaseController
         {
             $user = Sentry::findUserById($userId);
             $throttle = Sentry::findThrottlerByUserId($userId);
+            $jobTitles = JobTitle::all();
             $groups = Sentry::findAllGroups();
 
             // get user permissions
@@ -260,6 +263,7 @@ class BackendUserController extends BackendBaseController
 
             $params['user'] = $user;
             $params['throttle'] = $throttle;
+            $params['jobTitles'] = $jobTitles;
             $params['groups'] = $groups;
             $params['permissions'] = $permissions;
             $params['userPermissions'] = array_keys($userPermissions);
@@ -372,6 +376,8 @@ class BackendUserController extends BackendBaseController
                       }
                   }
               }
+
+              $user->job_title = Input::get('select_job_titles');
               break;
 
             default:

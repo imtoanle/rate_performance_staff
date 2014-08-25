@@ -136,6 +136,7 @@ return array(
 	'old-votes' => 'Đánh giá cũ',
 	'job-title' => 'Chức vụ',
 	'cancel' => 'Hủy',
+	'job-title-list' => 'Danh sách chức vụ',
 
 
 
