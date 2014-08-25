@@ -62,6 +62,13 @@ return array(
 		'job-title-update-failed' => 'Lỗi khi cập nhập chức danh',
 		'job-title-not-found' => 'Không tìm thấy chức vụ này',
 		'job-title-delete-success' => 'Xóa chức danh thành công',
+
+		'department-created' => 'Tạo phòng ban thành công !',
+		'department-create-failed' => 'Lỗi khi tạo mới phòng ban',
+		'department-updated' => 'Cập nhập phòng ban thành công !',
+		'department-update-failed' => 'Lỗi khi cập nhập phòng ban',
+		'department-not-found' => 'Không tìm thấy phòng ban này',
+		'department-delete-success' => 'Xóa phòng ban thành công',
 		),
 	
 	'notification' => 'Thông báo',
@@ -137,6 +144,8 @@ return array(
 	'job-title' => 'Chức vụ',
 	'cancel' => 'Hủy',
 	'job-title-list' => 'Danh sách chức vụ',
+	'department' => 'Phòng ban',
+	'department-list' => 'Danh sách phòng ban',
 
 
 

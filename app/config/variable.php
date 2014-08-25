@@ -129,10 +129,14 @@ return array(
 
     'listJobTitles' => 'job-titles-management',
     'newJobTitlePost' => 'job-titles-management',
-    'newJobTitle' => 'job-titles-management',
     'deleteJobTitle' => 'job-titles-management',
-    'showJobTitle' => 'job-titles-management',
     'putJobTitle' => 'job-titles-management',
+
+    //department
+    'listDepartments' => 'department-management',
+    'newDepartmentPost' => 'department-management',
+    'deleteDepartment' => 'department-management',
+    'putDepartment' => 'department-management',
     
     //votes
     'listVotes' => 'votes-management',
