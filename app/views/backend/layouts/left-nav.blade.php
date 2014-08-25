@@ -26,9 +26,10 @@
     {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUserVotes', 'fa fa-signal') }}  
   {{ BackendSideBar::create_root_close() }} 
 
-  <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions'); ?>
+  <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions', 'listJobTitles'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
+    {{ BackendSideBar::create_node(trans('all.job-title'), 'listJobTitles', 'fa fa-mortar-board') }}  
     {{ BackendSideBar::create_node(trans('all.group'), 'listGroups', 'fa fa-group') }}  
     {{ BackendSideBar::create_node(trans('all.permission'), 'listPermissions', 'fa fa-database') }}  
   {{ BackendSideBar::create_root_close() }} 

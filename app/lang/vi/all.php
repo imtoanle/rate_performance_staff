@@ -56,6 +56,12 @@ return array(
 		'cant-edit-closed-vote' => 'Không thể sửa đánh giá đã đóng',
 		'only-can-delete-newly-vote' => 'Không thể xóa, chỉ có thể xóa đánh giá mới',
 		'page-not-found' => 'Trang yêu cầu không tồn tại.',
+		'job-title-created' => 'Tạo chức danh thành công !',
+		'job-title-create-failed' => 'Lỗi khi tạo mới chức danh',
+		'job-title-updated' => 'Cập nhập chức danh thành công !',
+		'job-title-update-failed' => 'Lỗi khi cập nhập chức danh',
+		'job-title-not-found' => 'Không tìm thấy chức vụ này',
+		'job-title-delete-success' => 'Xóa chức danh thành công',
 		),
 	
 	'notification' => 'Thông báo',
@@ -128,6 +134,8 @@ return array(
 	'can-votes' => 'Có thể đánh giá',
 	'self-voting' => 'Đang được đánh giá',
 	'old-votes' => 'Đánh giá cũ',
+	'job-title' => 'Chức vụ',
+	'cancel' => 'Hủy',
 
 
 

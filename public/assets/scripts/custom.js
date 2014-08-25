@@ -145,6 +145,18 @@ function showRegisterFormAjaxErrors(errors) {
   }
 }
 
+function showRegisterFormAjaxErrorsNotify(errors) {
+  var $ = jQuery, html_add = '';
+  for(var errorType in errors)
+  {
+      for(var i in errors[errorType])
+      {
+        html_add += '<span>'+errors[errorType][i]+'</span>';
+      }
+  }
+  toastr['error'](html_add);
+}
+
 function removeErrorsFormValidate()
 {
   $('.has-error span.help-block').remove();

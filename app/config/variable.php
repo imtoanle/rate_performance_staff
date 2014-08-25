@@ -127,6 +127,13 @@ return array(
     'showPermission' => 'permissions-management',
     'putPermission' => 'permissions-management',
 
+    'listJobTitles' => 'job-titles-management',
+    'newJobTitlePost' => 'job-titles-management',
+    'newJobTitle' => 'job-titles-management',
+    'deleteJobTitle' => 'job-titles-management',
+    'showJobTitle' => 'job-titles-management',
+    'putJobTitle' => 'job-titles-management',
+    
     //votes
     'listVotes' => 'votes-management',
     'newVote' => 'votes-management',

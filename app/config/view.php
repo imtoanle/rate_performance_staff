@@ -81,6 +81,11 @@ return array(
     'user-activation' => 'backend.user.activation',
 
     //votes
+    'job-titles-index' => 'backend.job-title.index',
+    'job-title-create' => 'backend.job-title.create',
+    'job-title-show' => 'backend.job-title.show',
+
+    //votes
     'votes-index' => 'backend.vote.index-vote',
     'vote-create' => 'backend.vote.create-vote',
     'vote-show' => 'backend.vote.show-vote',

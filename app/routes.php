@@ -563,6 +563,29 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   );
 
   /**
+   * Job Title routes
+   */
+  Route::get('job-titles', array(
+      'as' => 'listJobTitles',
+      'uses' => 'BackendJobTitleController@getIndex')
+  );
+
+  Route::post('job-title/new', array(
+      'as' => 'newJobTitlePost',
+      'uses' => 'BackendJobTitleController@postCreate')
+  );
+
+  Route::delete('job-title/deleteMulti', array(
+      'as' => 'deleteJobTitle',
+      'uses' => 'BackendJobTitleController@delete')
+  );
+
+  Route::put('job-title/{jobTitleId}', array(
+      'as' => 'putJobTitle',
+      'uses' => 'BackendJobTitleController@putShow')
+  );
+
+  /**
    * Permission routes
    */
   Route::get('permissions', array(

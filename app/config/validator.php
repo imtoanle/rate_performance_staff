@@ -55,6 +55,9 @@ return array(
     'usergroup-update' => array(
       'group_name' => 'required|min:3',
       ),
+    'job-title-create' => array(
+      'job_name' => 'required|min:3',
+    ),
 
 
     'service-update' => array(
