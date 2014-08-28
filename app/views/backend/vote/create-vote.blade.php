@@ -19,6 +19,19 @@
     <form action="{{route('postNewVote')}}" class="form-horizontal base-ajax-form" type="POST">
       <div class="form-body">
         <h3 class="form-section">{{trans('all.vote-info')}}</h3>
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
+          <div class="col-md-8">
+            <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
+              <input type="text" name="expiration_date" class="form-control" readonly>
+              <span class="input-group-btn">
+                <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.vote-code')}}</label>
           <div class="col-md-8">
@@ -116,6 +129,13 @@
 jQuery(document).ready(function() {   
   var sel = $("#select2_object_vote");
   sel.data("prev",sel.val());
+
+  if (jQuery().datepicker) {
+    $('.date-picker').datepicker({
+        rtl: App.isRTL(),
+        autoclose: true
+    });
+  }
 
   $('#select2_object_vote').change(function(){
     ajax_call_custom('GET', '{{route('listUsersSearchJob')}}', 'old_object_vote='+$(this).data('prev')+'&new_object_vote='+$(this).val(), function(result){

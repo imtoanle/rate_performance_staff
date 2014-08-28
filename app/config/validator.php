@@ -119,7 +119,8 @@ return array(
       'title' => 'required',
       'object_vote_list' => 'required',
       'entitled_vote' => 'required',
-      'voter_id' => 'required'
+      'voter_id' => 'required',
+      'expiration_date' => 'required'
     ),
 
     'user-create' => array(

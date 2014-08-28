@@ -22,6 +22,10 @@
 @endif
 
 @if(in_array(Route::currentRouteName(), array('showUser')))
-<script type="text/javascript" src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js"></script>
+<script type="text/javascript" src="{{asset('assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}"></script>
+@endif
+
+@if(in_array(Route::currentRouteName(), array('newVote')))
+<script type="text/javascript" src="{{asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
 @endif
 <!-- END PAGE LEVEL PLUGINS -->

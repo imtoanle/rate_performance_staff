@@ -17,4 +17,8 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-conquer.css')}}"/>
 @endif
 
+@if(in_array(Route::currentRouteName(), array('newVote')))
+<link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-datepicker/css/datepicker.css')}}"/>
+@endif
+
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-toastr/toastr.min.css')}}"/>

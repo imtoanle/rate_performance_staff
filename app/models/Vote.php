@@ -15,7 +15,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter');
+    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter', 'expired_at');
 
     /**
      * The attributes that aren't mass assignable.

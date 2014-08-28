@@ -24,8 +24,6 @@
     <th>{{trans('all.vote-code')}}</th>
     <th>{{trans('all.title')}}</th>
     <th>{{trans('all.object-vote')}}</th>
-    <th>{{trans('all.entitled-vote')}}</th>
-    <th>{{trans('all.voter')}}</th>
     <th>{{trans('all.date-create')}}</th>
     <th>{{trans('all.status')}}</th>
     <th>{{trans('all.actions')}}</th>
@@ -46,12 +44,6 @@
     <td>
       {{$vote->object_entitled_vote_name()}}
     </td>
-    <td>
-      Thanh vien bi danh gia
-    </td>
-    <td>
-      Thanh vien cham diem
-    </td>
     <td>{{$vote->created_at->format('d/m/Y')}}</td>
     <td>
       @if($vote->status == Config::get('variable.vote-status.newly'))
@@ -63,8 +55,9 @@
       @endif
     </td>
     <td>
-        <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans('all.edit')}}</a>
-        <a item-id="{{$vote->id}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
+      <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans('all.view')}}</a>
+      <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans('all.edit')}}</a>
+      <a item-id="{{$vote->id}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
     </td>
   </tr>
   @endforeach
@@ -103,9 +96,7 @@ jQuery(document).ready(function() {
   $('#ajax-data-table').dataTable({
       //'bAutoWidth': false,
       "aoColumns": [
-        null,
         {"bSortable": false},
-        null,
         null,
         null,
         null,
@@ -119,20 +110,6 @@ jQuery(document).ready(function() {
       ],
       // set the initial value
       "iDisplayLength": 10,
-      "sPaginationType": "bootstrap",
-      "oLanguage": {
-          "sProcessing": '<i class="fa fa-coffee"></i>&nbsp;{{trans('all.please-wait')}}',
-          "sLengthMenu": "_MENU_ records",
-          "oPaginate": {
-              "sPrevious": "Prev",
-              "sNext": "Next"
-          }
-      },
-      "aoColumnDefs": [{
-              'bSortable': false,
-              'aTargets': [0]
-          }
-      ]
   });
 
   //jQuery('#ajax-data-table_wrapper .dataTables_length select').select2(); // initialize select2 dropdown

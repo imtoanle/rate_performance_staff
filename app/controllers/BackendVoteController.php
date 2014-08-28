@@ -1,5 +1,6 @@
 <?php
 use Validators\Backend as BackendValidator;
+use Carbon\Carbon;
 class BackendVoteController extends BackendBaseController 
 {
 
@@ -47,13 +48,13 @@ class BackendVoteController extends BackendBaseController
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
     }
     $voter_list = array_combine(Input::get('voter_id'), Input::get('voter_role'));
-
     $vote = Vote::create(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
+      'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
       ));
 
     if($vote->save())

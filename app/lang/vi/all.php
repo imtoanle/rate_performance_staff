@@ -154,6 +154,7 @@ return array(
 	'selected-voter-list' => 'Danh sách người chấm điểm',
 	'not-enter-yet' => 'Chưa nhập...',
 	'vote-code' => 'Mã đánh giá',
+	'expiration-date' => 'Ngày hết hạn',
 
 
 
