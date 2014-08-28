@@ -30,37 +30,7 @@
   </tr>
   </thead>
   <tbody>
-  @foreach($votes as $vote)
-  <tr class="odd gradeX" id="ajax-table-item-{{$vote->id}}">
-    <td>
-      <div class="checker">
-        <span>
-          <input type="checkbox" class="checkboxes" value="{{ $vote->id }}"/>
-        </span>
-      </div>
-    </td>
-    <td>{{$vote->vote_code}}</td>
-    <td>{{$vote->title}}</td>
-    <td>
-      {{$vote->object_entitled_vote_name()}}
-    </td>
-    <td>{{$vote->created_at->format('d/m/Y')}}</td>
-    <td>
-      @if($vote->status == Config::get('variable.vote-status.newly'))
-        <span class="label label-primary">{{trans('all.newly')}}</span>
-      @elseif($vote->status == Config::get('variable.vote-status.opened'))
-        <span class="label label-success">{{trans('all.opened')}}</span>
-      @else
-        <span class="label label-default">{{trans('all.closed')}}</span>
-      @endif
-    </td>
-    <td>
-      <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans('all.view')}}</a>
-      <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans('all.edit')}}</a>
-      <a item-id="{{$vote->id}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
-    </td>
-  </tr>
-  @endforeach
+  
   </tbody>
   </table>
 </div>
@@ -110,6 +80,14 @@ jQuery(document).ready(function() {
       ],
       // set the initial value
       "iDisplayLength": 10,
+
+      "bServerSide": true,
+      "sAjaxSource": "<?php echo URL::route('listVotes') ?>",
+      "fnServerParams": function ( aoData ) {
+        aoData.push( { "name": "order_by_col", "value": "id" } );
+        aoData.push( { "name": "order_dir", "value": "desc" } );
+        aoData.push( { "name": "mode", "value": "datatable" } );
+      },
   });
 
   //jQuery('#ajax-data-table_wrapper .dataTables_length select').select2(); // initialize select2 dropdown

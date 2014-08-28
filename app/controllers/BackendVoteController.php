@@ -11,26 +11,44 @@ class BackendVoteController extends BackendBaseController
   */
   public function getIndex()
   {
+    if(Request::Ajax() && Input::get('mode') == 'datatable')
+    {
+      $limit = Input::get('limit');
 
-    /*
-    $groups = Group::all();
-    $groupArrs = array();
-    foreach ($groups as $group) {
-      $groupArrs[$group->id] = $group->name;
+      $votes = Vote::select(array('id as inputbox', 'vote_code', 'title', 'object_entitled_vote', 'created_at', 'status','id as actions'))
+                ->limit($limit);
+      return Datatables::of($votes)
+        ->edit_column('inputbox', 
+          '<div class="checker">
+            <span>
+              <input type="checkbox" class="checkboxes" value="{{ $inputbox }}"/>
+            </span>
+          </div>')
+        ->edit_column('object_entitled_vote', function($row){
+          return $row->object_entitled_vote_name();
+        })
+        ->edit_column('created_at', function($row){
+          return $row->created_at->format('d-m-Y');
+        })
+        ->edit_column('status', '
+          @if($status == Config::get("variable.vote-status.newly"))
+            <span class="label label-primary">{{trans("all.newly")}}</span>
+          @elseif($status == Config::get("variable.vote-status.opened"))
+            <span class="label label-success">{{trans("all.opened")}}</span>
+          @else
+            <span class="label label-default">{{trans("all.closed")}}</span>
+          @endif')
+        ->edit_column('actions', '
+            <a href="{{route(\'showVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.view\')}}</a>
+            <a href="{{route(\'showVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans(\'all.edit\')}}</a>
+            <a item-id="{{$actions}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans(\'all.delete\')}}</a>
+          ')
+        ->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+        ->make();
     }
-    //user
-    $users = User::all();
-    $userArrs = array();
-    foreach ($users as $user) {
-      $userArrs[$user->id]['username'] = $user->username;
-      $userArrs[$user->id]['full_name'] = $user->full_name;
-    }
-    */
     $votes = Vote::all();
     $params['votes'] = $votes;
-
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
-    
   }
 
   public function getCreate()
