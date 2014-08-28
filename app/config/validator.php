@@ -115,10 +115,11 @@ return array(
       ),
 
     'vote-create' => array(
+      'vote_code' => 'required',
       'title' => 'required',
-      'select2_groups' => 'required',
-      'select2_entitled_vote' => 'required',
-      'select2_voter' => 'required|different:select2_entitled_vote',
+      'object_vote_list' => 'required',
+      'entitled_vote' => 'required',
+      'voter_id' => 'required'
     ),
 
     'user-create' => array(

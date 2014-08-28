@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{asset('assets/plugins/data-tables/DT_bootstrap.css')}}"/>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser')))
+@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote')))
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/jquery-multi-select/css/multi-select.css')}}"/>
 @endif
 

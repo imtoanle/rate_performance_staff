@@ -69,6 +69,8 @@ return array(
 		'department-update-failed' => 'Lỗi khi cập nhập phòng ban',
 		'department-not-found' => 'Không tìm thấy phòng ban này',
 		'department-delete-success' => 'Xóa phòng ban thành công',
+
+		'need-select-voter' => 'Cần chọn người chấm điểm trước',
 		),
 	
 	'notification' => 'Thông báo',
@@ -146,6 +148,12 @@ return array(
 	'job-title-list' => 'Danh sách chức vụ',
 	'department' => 'Phòng ban',
 	'department-list' => 'Danh sách phòng ban',
+	'role' => 'Vai trò',
+	'select-voter' => 'Chọn người chấm điểm',
+	'select-object-vote' => 'Chọn đối tượng đánh giá',
+	'selected-voter-list' => 'Danh sách người chấm điểm',
+	'not-enter-yet' => 'Chưa nhập...',
+	'vote-code' => 'Mã đánh giá',
 
 
 

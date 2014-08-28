@@ -11,6 +11,36 @@ class BackendUserController extends BackendBaseController
     * @return Response
     */
 
+  public function searchViaJobTitle()
+  {
+    $str_old_value = Input::get('old_object_vote') == 'null' ? '' : Input::get('old_object_vote');
+    $str_new_value = Input::get('new_object_vote');
+    $arr_old_value = explode(',',$str_old_value);
+    $arr_new_value = explode(',',$str_new_value);
+    $diff          = array_diff($arr_new_value, $arr_old_value);
+    $invert_diff   = array_diff($arr_old_value, $arr_new_value);
+
+    if(count($diff) == 0 || $str_new_value == 'null')
+    {
+      #delete
+      return Response::json(array('action' => 'delete', 'jobId' => array_pop($invert_diff)));
+    }else
+    {
+      $value = array_pop($diff);
+      $pattern = "^$value,|,$value,|^$value$|,$value$";
+      $users = User::select('id', 'username', 'full_name')->whereRaw("job_title regexp '".$pattern."'")->get();
+      $usersInJob = array();
+      foreach ($users as $user) {
+        $usersInJob[] = array(
+          'id' => $user->id,
+          'username' => $user->username, 
+          'full_name' => $user->full_name,
+        );
+      }
+      return Response::json(array('action' => 'add', 'jobId' => $value, 'jobTitleName' => JobTitle::find($value)->name, 'data' => $usersInJob));
+    }
+  }
+
     public function fullTextSearch()
     {
       $userArr = array();
@@ -19,35 +49,22 @@ class BackendUserController extends BackendBaseController
         $userIds = explode(',',Input::get('user_id'));
         $users = User::whereIn('id', $userIds)->get();
         foreach ($users as $user) {
-          $userArr[] = $this->structSelect2($user);
+          $userArr[] = $this->structSelect2($user, $user->job_titles_name());
         }
 
       }else
       {
         $query = Input::get('q');
-        $group_ids = Input::has('groups_id') ? Input::get('groups_id') : array();
         $select_id = Input::get('select_id');
-
-        $users = User::select('id','username', 'full_name', 'phone_num', 'address')
-                    ->where('username', 'LIKE', '%'.$query.'%')
-                    ->orWhere('full_name', 'LIKE', '%'.$query.'%')
-                    ->orWhere('phone_num', 'LIKE', '%'.$query.'%')
-                    ->orWhere('address', 'LIKE', '%'.$query.'%')
+        $notIn = is_array(Input::get('entitled_user')) ? Input::get('entitled_user') : explode(',', Input::get('entitled_user'));
+        $users = User::select('id','username', 'full_name', 'job_title')
+          ->whereRaw("(username LIKE '%$query%' OR full_name LIKE '%$query%')")
+          ->whereNotIn('id', $notIn)
           ->paginate(Input::get('page_limit'));
-        
-        foreach ($users as $user) {
-          $group_name_tmp = '';
-          $user_in_group = 0;
 
-          foreach ($user->getGroups() as $group) {
-            $group_name_tmp .= $group->name.', ';
-            if (in_array($group->id, $group_ids)) $user_in_group++;
-          }
-     
-          if ($user_in_group || $select_id == 'select2_voter')
-          {
-            $userArr[] = $this->structSelect2($user, $group_name_tmp);
-          }
+        $userArr = array();
+        foreach ($users as $user) {
+          $userArr[] = $this->structSelect2($user, $user->job_titles_name());
         }
       }
       return Response::json($userArr);
@@ -432,10 +449,10 @@ class BackendUserController extends BackendBaseController
         }
     }
 
-    protected function structSelect2($user, $group_name=null)
+    protected function structSelect2($user, $job_title_name=null)
     {
       $user_lite = array();
-      if ($group_name) $user_lite['group_name'] = rtrim($group_name,', ');
+      if ($job_title_name) $user_lite['job_title_name'] = rtrim($job_title_name,', ');
       $user_lite['id'] = $user->id;
       $user_lite['text'] = $user->username;
       $user_lite['full_name'] = $user->full_name;

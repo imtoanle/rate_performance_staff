@@ -21,6 +21,7 @@
     <th class="table-checkbox">
       <input type="checkbox" class="group-checkable" data-set="#ajax-data-table .checkboxes"/>
     </th>
+    <th>{{trans('all.vote-code')}}</th>
     <th>{{trans('all.title')}}</th>
     <th>{{trans('all.object-vote')}}</th>
     <th>{{trans('all.entitled-vote')}}</th>
@@ -40,60 +41,16 @@
         </span>
       </div>
     </td>
+    <td>{{$vote->vote_code}}</td>
     <td>{{$vote->title}}</td>
     <td>
-      <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
-      @foreach($object_groups as $id)
-      {{$groups[$id]}}, 
-      @endforeach 
+      {{$vote->object_entitled_vote_name()}}
     </td>
     <td>
-      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-entitled-user-{{$vote->id}}" data-original-title="{{trans('all.entitled-vote')}}">{{trans('all.list')}}</span>
-      <div class="invi popover-entitled-user-{{$vote->id}}">
-        <div class="table-responsive">
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>{{trans('all.username')}}</th>
-                <th>{{trans('all.full-name')}}</th>
-              </tr>
-            </thead>
-            <tbody>
-            <?php $entitled_users = explode(',', $vote->entitled_vote) ?>
-            @foreach($entitled_users as $id)
-            <tr>
-              <td>{{$users[$id]['username']}}</td>
-              <td>{{$users[$id]['full_name']}}</td>
-            </tr>
-            @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
+      Thanh vien bi danh gia
     </td>
     <td>
-      <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-voter-{{$vote->id}}" data-original-title="{{trans('all.voter')}}">{{trans('all.list')}}</span>
-      <div class="invi popover-voter-{{$vote->id}}">
-        <div class="table-responsive">
-          <table class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>{{trans('all.username')}}</th>
-                <th>{{trans('all.full-name')}}</th>
-              </tr>
-            </thead>
-            <tbody>
-            <?php $voters = explode(',', $vote->voter) ?>
-            @foreach($voters as $id)
-            <tr>
-              <td>{{$users[$id]['username']}}</td>
-              <td>{{$users[$id]['full_name']}}</td>
-            </tr>
-            @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
+      Thanh vien cham diem
     </td>
     <td>{{$vote->created_at->format('d/m/Y')}}</td>
     <td>
@@ -146,6 +103,7 @@ jQuery(document).ready(function() {
   $('#ajax-data-table').dataTable({
       //'bAutoWidth': false,
       "aoColumns": [
+        null,
         {"bSortable": false},
         null,
         null,

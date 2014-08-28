@@ -15,7 +15,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = array('title','object_entitled_vote', 'entitled_vote', 'voter');
+    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter');
 
     /**
      * The attributes that aren't mass assignable.
@@ -32,4 +32,12 @@ class Vote extends Model
         return parent::save($options);
     }
     */
+
+    public function object_entitled_vote_name()
+    {
+        $idsjob = explode(',', $this->object_entitled_vote);
+        $jobTitles = JobTitle::select(DB::raw("group_concat(name SEPARATOR ', ') as job_names"))
+        ->whereIn('id',$idsjob)->first();
+        return $jobTitles->job_names;
+    }
 }

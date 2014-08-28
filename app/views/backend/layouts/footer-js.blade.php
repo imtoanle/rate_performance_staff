@@ -12,8 +12,9 @@
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/DT_bootstrap.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser')))
+@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/jquery-multi-select/js/jquery.multi-select.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/plugins/jquery-multi-select/js/jquery.quicksearch.js')}}"></script>
 @endif
 
 @if(in_array(Route::currentRouteName(), array('showUser')))

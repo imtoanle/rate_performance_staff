@@ -10,6 +10,8 @@ class BackendVoteController extends BackendBaseController
   */
   public function getIndex()
   {
+
+    /*
     $groups = Group::all();
     $groupArrs = array();
     foreach ($groups as $group) {
@@ -22,10 +24,9 @@ class BackendVoteController extends BackendBaseController
       $userArrs[$user->id]['username'] = $user->username;
       $userArrs[$user->id]['full_name'] = $user->full_name;
     }
-
-    $params['votes'] = Vote::all();
-    $params['groups'] = $groupArrs;
-    $params['users'] = $userArrs;
+    */
+    $votes = Vote::all();
+    $params['votes'] = $votes;
 
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
     
@@ -33,7 +34,7 @@ class BackendVoteController extends BackendBaseController
 
   public function getCreate()
   {
-    $params['groups'] = Sentry::findAllGroups();
+    $params['jobTitles'] = JobTitle::all();
     $this->layout = View::make(Config::get('view.backend.vote-create'), $params);
     
   }
@@ -45,12 +46,14 @@ class BackendVoteController extends BackendBaseController
     {
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
     }
-    //return Input::all();
+    $voter_list = array_combine(Input::get('voter_id'), Input::get('voter_role'));
+
     $vote = Vote::create(array(
+      'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
-      'object_entitled_vote' => Input::get('select2_groups'),
-      'entitled_vote' => Input::get('select2_entitled_vote'),
-      'voter' => Input::get('select2_voter'),
+      'object_entitled_vote' => Input::get('object_vote_list'),
+      'entitled_vote' => Input::get('entitled_vote'),
+      'voter' => json_encode($voter_list),
       ));
 
     if($vote->save())
@@ -127,5 +130,19 @@ class BackendVoteController extends BackendBaseController
     }
 
     return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
+  }
+
+  protected function _convert_voter_list($voter_id, $voter_role)
+  {
+    $countArr = count($voter_id);
+    $dataArr = array();
+    for($i=0;$i<$countArr;$i++)
+    {
+      $dataArr[] = array(
+        'user_id' => $voter_id[$i],
+        'role' => $voter_role[$i],
+      );
+    }
+    return json_encode($dataArr);
   }
 }

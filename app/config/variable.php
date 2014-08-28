@@ -146,6 +146,7 @@ return array(
     'deleteVote' => 'votes-management',
     'showVote' => 'votes-management',
     'listUsersSearch' => 'votes-management',
+    'listUsersSearchJob' => 'votes-management',
     //user-vote
     'listUserVotes' => 'user-votes-management',
     

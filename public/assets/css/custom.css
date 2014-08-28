@@ -3,7 +3,7 @@ li.ms-optgroup-label
 {
   font-weight: bold;
 }
-#ms-select_permissions
+#ms-select_permissions, #ms-multi_entitled_vote
 {
   width:100%;
 }
