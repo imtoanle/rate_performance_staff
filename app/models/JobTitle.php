@@ -24,4 +24,9 @@ class JobTitle extends Model
      */
     protected $guarded = array('id');
 
+    public function getName()
+    {
+        return 'dssda';
+    }
+
 }

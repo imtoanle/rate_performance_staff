@@ -647,6 +647,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   );
 
   //vote manage
+  Route::get('vote/{voteId}/list-persions', array(
+      'as' => 'listPersionsVote',
+      'uses' => 'BackendVoteController@getListPersion')
+  );
+
   Route::get('votes', array(
       'as' => 'listVotes',
       'uses' => 'BackendVoteController@getIndex')
@@ -676,6 +681,8 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'as' => 'deleteVote',
       'uses' => 'BackendVoteController@delete')
   );
+
+
 
   //user vote
   Route::get('user-votes', array(

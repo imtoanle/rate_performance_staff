@@ -12,7 +12,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/DT_bootstrap.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote')))
+@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote', 'showVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/jquery-multi-select/js/jquery.multi-select.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/jquery-multi-select/js/jquery.quicksearch.js')}}"></script>
 @endif
@@ -25,7 +25,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('newVote')))
+@if(in_array(Route::currentRouteName(), array('newVote', 'showVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
 @endif
 <!-- END PAGE LEVEL PLUGINS -->

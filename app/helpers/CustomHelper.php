@@ -61,4 +61,47 @@ class CustomHelper
         return $email;
     }
 
+  public static function get_users_from_job_list($jobIds)
+  {
+    $usersInJob = array();
+    $existsUsers = array();
+    foreach ($jobIds as $jobId) {
+      $pattern = "^$jobId,|,$jobId,|^$jobId$|,$jobId$";
+      $users = User::select('id', 'username', 'full_name')->whereRaw("job_title regexp '".$pattern."'")->get();
+      $usersInJob[$jobId]['data'] = array();
+      foreach ($users as $user) {
+        if(!in_array($user->username, $existsUsers))
+        {
+          $usersInJob[$jobId]['data'][] = array(
+            'id' => $user->id,
+            'username' => $user->username, 
+            'full_name' => $user->full_name,
+          );
+          $existsUsers[] = $user->username;
+        }
+      }
+      $jobTitle = JobTitle::find($jobId);
+      $usersInJob[$jobId]['jobName'] = is_object($jobTitle) ? $jobTitle->name : '';
+    }
+    return $usersInJob;
+  }
+
+  public static function get_users_from_voter_list($json_voter)
+  {
+    $decodeJson = json_decode($json_voter, true);
+    $arrayUserId = array_keys($decodeJson);
+    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', $arrayUserId)->get();
+    $resultArr = [];
+    foreach ($users as $user) {
+      $resultArr[] = array(
+        'id' => $user->id,
+        'username' => $user->username,
+        'full_name' => $user->full_name,
+        'job_name' => $user->job_titles_name(),
+        'role' => $decodeJson[$user->id]
+        );
+    }
+
+    return $resultArr;
+  }
 }

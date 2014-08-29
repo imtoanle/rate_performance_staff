@@ -51,6 +51,8 @@ return array(
 		'login-failed' => 'Lỗi khi đăng nhập. Kiểm tra lại tài khoản và mật khẩu!',
 		'vote-create-success' => 'Tạo đánh giá mới thành công.',
 		'vote-create-fail' => 'Lỗi khi tạo đánh giá mới.',
+		'vote-update-success' => 'Cập nhập đánh giá thành công.',
+		'vote-update-fail' => 'Lỗi khi cập nhập đánh giá.',
 		'vote-not-found' => 'Đánh giá này không tồn tại',
 		'vote-remove-success' => 'Xóa đánh giá thành công',
 		'cant-edit-closed-vote' => 'Không thể sửa đánh giá đã đóng',
@@ -155,6 +157,8 @@ return array(
 	'not-enter-yet' => 'Chưa nhập...',
 	'vote-code' => 'Mã đánh giá',
 	'expiration-date' => 'Ngày hết hạn',
+	'participant' => 'Thành phần tham gia',
+	'loading' => 'Đang tải...',
 
 
 
@@ -241,7 +245,7 @@ return array(
 	'language' => 'Ngôn ngữ',
 	'currency' => 'Tiền tệ',
 	
-	'loading' => 'Đang tải...',
+	
 	'send-mail' => 'Gửi thư',
 	'time' => 'Thời gian',
 	'unknown' => 'Không xác định',

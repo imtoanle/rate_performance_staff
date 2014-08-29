@@ -147,6 +147,7 @@ return array(
     'showVote' => 'votes-management',
     'listUsersSearch' => 'votes-management',
     'listUsersSearchJob' => 'votes-management',
+    'listPersionsVote' => 'votes-management',
     //user-vote
     'listUserVotes' => 'user-votes-management',
     

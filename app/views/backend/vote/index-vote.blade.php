@@ -59,9 +59,48 @@
 <!-- /.modal -->
 <!-- Modal END -->
 
+<!-- Modal 7 (Ajax Modal)-->
+<div class="modal fade" id="modal-list-persions">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{{trans('all.participant')}}</h4>
+      </div>
+      
+      <div class="modal-body">
+      
+        {{trans('all.loading')}}
+        
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('all.close')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
-jQuery(document).ready(function() {   
+jQuery(document).ready(function() {
+  //clear checked when close modal
+
+  $('table tbody').on('click', 'a.ajax-modal', function(e){
+    e.preventDefault();
+    var modal = 'modal-list-persions';
+    jQuery('#'+modal).modal('show', {backdrop: 'static'});
   
+    $.ajax({
+      url: $(this).attr('href'),
+      success: function(response)
+      {
+        jQuery('#'+modal+' .modal-body').html(response);
+      }
+    });
+  });
+
    // begin first table
   $('#ajax-data-table').dataTable({
       //'bAutoWidth': false,
@@ -84,8 +123,6 @@ jQuery(document).ready(function() {
       "bServerSide": true,
       "sAjaxSource": "<?php echo URL::route('listVotes') ?>",
       "fnServerParams": function ( aoData ) {
-        aoData.push( { "name": "order_by_col", "value": "id" } );
-        aoData.push( { "name": "order_dir", "value": "desc" } );
         aoData.push( { "name": "mode", "value": "datatable" } );
       },
   });

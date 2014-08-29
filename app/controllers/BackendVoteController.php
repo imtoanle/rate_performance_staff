@@ -39,7 +39,7 @@ class BackendVoteController extends BackendBaseController
             <span class="label label-default">{{trans("all.closed")}}</span>
           @endif')
         ->edit_column('actions', '
-            <a href="{{route(\'showVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.view\')}}</a>
+            <a href="{{route(\'listPersionsVote\', $actions)}}" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> {{trans(\'all.view\')}}</a>
             <a href="{{route(\'showVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans(\'all.edit\')}}</a>
             <a item-id="{{$actions}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans(\'all.delete\')}}</a>
           ')
@@ -49,6 +49,17 @@ class BackendVoteController extends BackendBaseController
     $votes = Vote::all();
     $params['votes'] = $votes;
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
+  }
+
+  public function getListPersion($voteId)
+  {
+    $vote = Vote::find($voteId);
+    $entitled_vote_users = User::whereIn('id', explode(',', $vote->entitled_vote))->get();
+    $voter_users = User::whereIn('id', array_keys((array)json_decode($vote->voter)))->get();
+    $params['entitledVoteUsers'] = $entitled_vote_users;
+    $params['voterUsers'] = $voter_users;
+
+    return View::make(Config::get('view.backend.vote-modal-persions-list'), $params);
   }
 
   public function getCreate()
@@ -94,7 +105,7 @@ class BackendVoteController extends BackendBaseController
     }
     
     $params['vote'] = $vote;
-    $params['groups'] = Sentry::findAllGroups();
+    $params['jobTitles'] = JobTitle::all();
     return View::make(Config::get('view.backend.vote-show'), $params);
   }
 
@@ -112,18 +123,23 @@ class BackendVoteController extends BackendBaseController
       App::abort(500, trans('all.messages.cant-edit-closed-vote'));
     }
 
-    $vote->title = Input::get('title');
-    $vote->object_entitled_vote = Input::get('select2_groups');
-    $vote->entitled_vote = Input::get('select2_entitled_vote');
-    $vote->voter = Input::get('select2_voter');
+    $voter_list = array_combine(Input::get('voter_id'), Input::get('voter_role'));
+    $vote->fill(array(
+      'vote_code' => Input::get('vote_code'),
+      'title' => Input::get('title'),
+      'object_entitled_vote' => Input::get('object_vote_list'),
+      'entitled_vote' => Input::get('entitled_vote'),
+      'voter' => json_encode($voter_list),
+      'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
+      ));
 
     if($vote->save())
     {
-      return Response::json(array('voteUpdated' => true, 'message' => trans('all.messages.vote-create-success'), 'messageType' => 'success'));
+      return Response::json(array('voteUpdated' => true, 'message' => trans('all.messages.vote-update-success'), 'messageType' => 'success'));
     }
     else
     {
-      return Response::json(array('voteUpdated' => false, 'message' => trans('all.messages.vote-create-fail'), 'messageType' => 'error'));
+      return Response::json(array('voteUpdated' => false, 'message' => trans('all.messages.vote-update-fail'), 'messageType' => 'error'));
     }
   }
 

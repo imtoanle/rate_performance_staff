@@ -89,6 +89,7 @@ return array(
     'votes-index' => 'backend.vote.index-vote',
     'vote-create' => 'backend.vote.create-vote',
     'vote-show' => 'backend.vote.show-vote',
+    'vote-modal-persions-list' => 'backend.vote.modal-list-persions',
 
     //votes
     'user-votes-index' => 'backend.user-vote.index',

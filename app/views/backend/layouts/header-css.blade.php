@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{asset('assets/plugins/data-tables/DT_bootstrap.css')}}"/>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote')))
+@if(in_array(Route::currentRouteName(), array('showGroup', 'newGroup', 'showUser', 'newUser', 'newVote', 'showVote')))
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/jquery-multi-select/css/multi-select.css')}}"/>
 @endif
 
@@ -17,7 +17,7 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-conquer.css')}}"/>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('newVote')))
+@if(in_array(Route::currentRouteName(), array('newVote', 'showVote')))
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-datepicker/css/datepicker.css')}}"/>
 @endif
 
