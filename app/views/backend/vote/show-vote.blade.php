@@ -55,6 +55,18 @@
         -->
 
         <div class="form-group">
+          <label class="control-label col-md-3">{{trans('all.department')}}</label>
+          <div class="col-md-8">
+            <?php $departmentIds = explode(',', $vote->department); ?>
+            <select name="department_list" id="select2_department" class="form-control select2" multiple>
+              @foreach($departments as $department)
+              <option value="{{$department->id}}" {{ in_array($department->id, $departmentIds) ? 'selected' : '' }}>{{$department->name}}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
             <select name="object_vote_list" id="select2_object_vote" class="form-control select2" multiple>
@@ -254,6 +266,11 @@ jQuery(document).ready(function() {
 
   $("#select2_object_vote").select2({
     placeholder: '{{trans('all.select-object-vote')}}',
+    allowClear: true,
+  });
+
+  $("#select2_department").select2({
+    placeholder: '{{trans('all.select-department')}}',
     allowClear: true,
   });
 

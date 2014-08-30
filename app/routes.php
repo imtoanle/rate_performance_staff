@@ -713,6 +713,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@getIndex')
   );
 
+  Route::get('user-votes/quick-vote', array(
+      'as' => 'quickUserVote',
+      'uses' => 'BackendUserVoteController@getQuickVote')
+  );
+
 
 
 

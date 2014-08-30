@@ -94,7 +94,69 @@
       </table>
     </div>
     <div class="tab-pane fade" id="tab_entitled_vote">
-      
+      <table class="table table-striped table-bordered table-hover ajax-data-table" action-delete="{{route('deleteVote')}}">
+        <thead>
+        <tr>
+          <th class="table-checkbox">
+            <input type="checkbox" class="group-checkable" data-set="#ajax-data-table .checkboxes"/>
+          </th>
+          <th>{{trans('all.title')}}</th>
+          <th>{{trans('all.object-vote')}}</th>
+          <th>{{trans('all.entitled-vote')}}</th>
+          <th>{{trans('all.date-create')}}</th>
+          <th>{{trans('all.actions')}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($entitledVotes as $vote)
+        <tr class="odd gradeX" id="ajax-table-item-{{$vote->id}}">
+          <td>
+            <div class="checker">
+              <span>
+                <input type="checkbox" class="checkboxes" value="{{ $vote->id }}"/>
+              </span>
+            </div>
+          </td>
+          <td>{{$vote->title}}</td>
+          <td>
+            <?php $object_groups = explode(',', $vote->object_entitled_vote) ?>
+            @foreach($object_groups as $id)
+            {{$groups[$id]}}, 
+            @endforeach 
+          </td>
+          <td>
+            <span data-toggle="popover" data-html="true" data-trigger="hover" data-placement="bottom" data-content-selector=".popover-entitled-user-{{$vote->id}}" data-original-title="{{trans('all.entitled-vote')}}">{{trans('all.list')}}</span>
+            <div class="invi popover-entitled-user-{{$vote->id}}">
+              <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{trans('all.username')}}</th>
+                      <th>{{trans('all.full-name')}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <?php $entitled_users = explode(',', $vote->entitled_vote) ?>
+                  @foreach($entitled_users as $id)
+                  <tr>
+                    <td>{{$users[$id]['username']}}</td>
+                    <td>{{$users[$id]['full_name']}}</td>
+                  </tr>
+                  @endforeach
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </td>
+          <td>{{$vote->created_at->format('d/m/Y')}}</td>
+          <td>
+              <a href="{{route('showVote', $vote->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans('all.edit')}}</a>
+              <a item-id="{{$vote->id}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
+          </td>
+        </tr>
+        @endforeach
+        </tbody>
+      </table>
     </div>
     <div class="tab-pane fade" id="tab_old_vote">
       <p>

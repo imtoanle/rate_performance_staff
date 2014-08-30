@@ -8,6 +8,11 @@ class BackendUserVoteController extends BackendBaseController
   *
   * @return Response
   */
+  public function getQuickVote()
+  {
+    return View::make(Config::get('view.backend.user-votes-quick'));
+  }
+
   public function getIndex()
   {
     $currentUser = Sentry::getUser();

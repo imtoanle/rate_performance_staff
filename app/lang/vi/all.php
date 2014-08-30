@@ -159,6 +159,7 @@ return array(
 	'department-list' => 'Danh sách phòng ban',
 	'role' => 'Vai trò',
 	'role-list' => 'Danh sách vai trò',
+	'select-department' => 'Chọn phòng ban',
 	'select-role' => 'Chọn vai trò',
 	'select-voter' => 'Chọn người chấm điểm',
 	'select-object-vote' => 'Chọn đối tượng đánh giá',
@@ -168,6 +169,7 @@ return array(
 	'expiration-date' => 'Ngày hết hạn',
 	'participant' => 'Thành phần tham gia',
 	'loading' => 'Đang tải...',
+	'quick-vote' => 'Chấm điểm nhanh',
 
 
 

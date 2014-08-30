@@ -156,6 +156,7 @@ return array(
     'listPersionsVote' => 'votes-management',
     //user-vote
     'listUserVotes' => 'user-votes-management',
+    'quickUserVote' => 'user-votes-management',
     
     
     //servives

@@ -73,6 +73,7 @@ class BackendVoteController extends BackendBaseController
   public function getCreate()
   {
     $params['jobTitles'] = JobTitle::all();
+    $params['departments'] = Department::all();
     $params['roles'] = Role::all();
     $this->layout = View::make(Config::get('view.backend.vote-create'), $params);
     
@@ -90,6 +91,7 @@ class BackendVoteController extends BackendBaseController
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
+      'department' => Input::get('department_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
@@ -115,6 +117,7 @@ class BackendVoteController extends BackendBaseController
     
     $params['vote'] = $vote;
     $params['jobTitles'] = JobTitle::all();
+    $params['departments'] = Department::all();
     $params['roles'] = Role::all();
     return View::make(Config::get('view.backend.vote-show'), $params);
   }
@@ -133,11 +136,12 @@ class BackendVoteController extends BackendBaseController
       App::abort(500, trans('all.messages.cant-edit-closed-vote'));
     }
 
-    $voter_list = array_combine(Input::get('voter_id'), Input::get('voter_role'));
+    $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote->fill(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
+      'department' => Input::get('department_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),

@@ -20,10 +20,11 @@
   <?php $arrRoutes = array('indexDashboard'); ?>
   {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
 
-  <?php $arrRoutes = array('listVotes', 'listUserVotes', 'listRoles'); ?>
+  <?php $arrRoutes = array('listVotes', 'listUserVotes', 'listRoles', 'quickUserVote'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
     {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
     {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUserVotes', 'fa fa-signal') }}  
+    {{ BackendSideBar::create_node(trans('all.quick-vote'), 'quickUserVote', 'fa fa-check') }}  
     {{ BackendSideBar::create_node(trans('all.role'), 'listRoles', 'fa fa-star') }}  
   {{ BackendSideBar::create_root_close() }} 
 
