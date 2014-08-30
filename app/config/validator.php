@@ -63,6 +63,10 @@ return array(
       'department_name' => 'required|min:3',
     ),
 
+    'role-create' => array(
+      'role_name' => 'required|min:3',
+    ),
+
     'service-update' => array(
       'service_name' => 'required|min:3',
       'delivery_time' => 'required',

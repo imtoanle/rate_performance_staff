@@ -54,10 +54,18 @@ class BackendVoteController extends BackendBaseController
   public function getListPersion($voteId)
   {
     $vote = Vote::find($voteId);
+    
+
+    $arrayVoterId = array();
+    foreach (json_decode($vote->voter, true) as $value) {
+      $arrayVoterId[$value['user_id']] = Role::find($value['role_id'])->name;
+    }
+
+    $voter_users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayVoterId))->get();
     $entitled_vote_users = User::whereIn('id', explode(',', $vote->entitled_vote))->get();
-    $voter_users = User::whereIn('id', array_keys((array)json_decode($vote->voter)))->get();
     $params['entitledVoteUsers'] = $entitled_vote_users;
     $params['voterUsers'] = $voter_users;
+    $params['arrayVoterId'] = $arrayVoterId;
 
     return View::make(Config::get('view.backend.vote-modal-persions-list'), $params);
   }
@@ -65,6 +73,7 @@ class BackendVoteController extends BackendBaseController
   public function getCreate()
   {
     $params['jobTitles'] = JobTitle::all();
+    $params['roles'] = Role::all();
     $this->layout = View::make(Config::get('view.backend.vote-create'), $params);
     
   }
@@ -76,7 +85,7 @@ class BackendVoteController extends BackendBaseController
     {
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
     }
-    $voter_list = array_combine(Input::get('voter_id'), Input::get('voter_role'));
+    $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote = Vote::create(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
@@ -106,6 +115,7 @@ class BackendVoteController extends BackendBaseController
     
     $params['vote'] = $vote;
     $params['jobTitles'] = JobTitle::all();
+    $params['roles'] = Role::all();
     return View::make(Config::get('view.backend.vote-show'), $params);
   }
 
@@ -175,9 +185,9 @@ class BackendVoteController extends BackendBaseController
     {
       $dataArr[] = array(
         'user_id' => $voter_id[$i],
-        'role' => $voter_role[$i],
+        'role_id' => $voter_role[$i],
       );
     }
-    return json_encode($dataArr);
+    return $dataArr;
   }
 }

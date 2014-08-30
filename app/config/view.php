@@ -84,6 +84,8 @@ return array(
     'job-titles-index' => 'backend.job-title.index',
     //department
     'departments-index' => 'backend.department.index',
+    //vote roles
+    'roles-index' => 'backend.role.index',
 
     //votes
     'votes-index' => 'backend.vote.index-vote',

@@ -204,7 +204,13 @@ jQuery(document).ready(function() {
     if (user_id.length)
     {
       ajax_call_custom('GET', '{{route('listUsersSearch')}}', 'user_id='+user_id, function(result){
-        htm_tr = '<tr><td><input type="hidden" name="voter_id[]" value="'+user_id+'" /><span class="selected-voter">'+user_id+'</span></td><td>'+result[0].text+'</td><td>'+result[0].full_name+'</td><td>'+result[0].job_title_name+'</td><td>'+html_role_voter('{{trans('all.not-enter-yet')}}')+'</td><td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>';
+        select_box = '<select name="voter_role[]" class="form-control select2-role"> \
+          <option value="" disabled selected>{{trans('all.select-role')}}</option> \
+          @foreach($roles as $role)
+          <option value="{{$role->id}}">{{$role->name}}</option> \
+          @endforeach
+        </select>';
+        htm_tr = '<tr><td><input type="hidden" name="voter_id[]" value="'+user_id+'" /><span class="selected-voter">'+user_id+'</span></td><td>'+result[0].text+'</td><td>'+result[0].full_name+'</td><td>'+result[0].job_title_name+'</td><td>'+select_box+'</td><td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>';
         $('#list-voter tbody').append(htm_tr);
         $("#select2_voter").select2("val", "");
       });
@@ -217,30 +223,6 @@ jQuery(document).ready(function() {
   $('#list-voter').on('click', 'a.item-remove', function(){
     $(this).closest('tr').remove();
   });
-
-  $('#list-voter').on('click', 'span.voter-role', function(){
-    $(this).closest('td').html('<input type="text" class="input-voter-list form-control" name="voter_role[]" value="'+$(this).html()+'">');
-  });
-
-  $('#list-voter').on('focusout', 'input.input-voter-list', function(){
-    change_input_to_html($(this));
-  });
-
-  $('#list-voter').on('keydown', 'input.input-voter-list', function(e){
-    if(e.keyCode == 13){
-        change_input_to_html($(this));
-    }
-  });
-
-  function change_input_to_html(element)
-  {
-    element.closest('td').html(html_role_voter(element.val()));
-  }
-
-  function html_role_voter(text)
-  {
-    return '<input type="hidden" name="voter_role[]" value="'+text+'"/><span class="voter-role">'+text+'</span>';
-  }
 
   $("#select2_object_vote").select2({
     placeholder: '{{trans('all.select-object-vote')}}',

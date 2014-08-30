@@ -137,6 +137,12 @@ return array(
     'newDepartmentPost' => 'department-management',
     'deleteDepartment' => 'department-management',
     'putDepartment' => 'department-management',
+
+    //department
+    'listRoles' => 'role-management',
+    'newRolePost' => 'role-management',
+    'deleteRole' => 'role-management',
+    'putRole' => 'role-management',
     
     //votes
     'listVotes' => 'votes-management',

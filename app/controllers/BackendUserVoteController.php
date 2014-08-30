@@ -13,27 +13,10 @@ class BackendUserVoteController extends BackendBaseController
     $currentUser = Sentry::getUser();
     $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
     $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->get();
-    $entitledVotes = Vote::whereRaw("entitled_vote regexp '".$pattern."'")->get();
+    #$entitledVotes = Vote::whereRaw("entitled_vote regexp '".$pattern."'")->get();
     
-    //group
-    $groups = Group::all();
-    $groupArrs = array();
-    foreach ($groups as $group) {
-      $groupArrs[$group->id] = $group->name;
-    }
-
-    //user
-    $users = User::all();
-    $userArrs = array();
-    foreach ($users as $user) {
-      $userArrs[$user->id]['username'] = $user->username;
-      $userArrs[$user->id]['full_name'] = $user->full_name;
-    }
-
     $params['canVotes'] = $canVotes;
-    $params['entitledVotes'] = $entitledVotes;
-    $params['groups'] = $groupArrs;
-    $params['users'] = $userArrs;
+    #$params['entitledVotes'] = $entitledVotes;
     $this->layout = View::make(Config::get('view.backend.user-votes-index'), $params);
     
   }

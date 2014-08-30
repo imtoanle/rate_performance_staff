@@ -72,6 +72,13 @@ return array(
 		'department-not-found' => 'Không tìm thấy phòng ban này',
 		'department-delete-success' => 'Xóa phòng ban thành công',
 
+		'role-created' => 'Tạo vai trò thành công !',
+		'role-create-failed' => 'Lỗi khi tạo mới vai trò',
+		'role-updated' => 'Cập nhập vai trò thành công !',
+		'role-update-failed' => 'Lỗi khi cập nhập vai trò',
+		'role-not-found' => 'Không tìm thấy vai trò này',
+		'role-delete-success' => 'Xóa vai trò thành công',
+
 		'need-select-voter' => 'Cần chọn người chấm điểm trước',
 		),
 	
@@ -151,6 +158,8 @@ return array(
 	'department' => 'Phòng ban',
 	'department-list' => 'Danh sách phòng ban',
 	'role' => 'Vai trò',
+	'role-list' => 'Danh sách vai trò',
+	'select-role' => 'Chọn vai trò',
 	'select-voter' => 'Chọn người chấm điểm',
 	'select-object-vote' => 'Chọn đối tượng đánh giá',
 	'selected-voter-list' => 'Danh sách người chấm điểm',

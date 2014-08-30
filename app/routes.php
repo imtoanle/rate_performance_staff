@@ -614,6 +614,29 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   );
 
   /**
+   * Vote Roles routes
+   */
+  Route::get('roles', array(
+      'as' => 'listRoles',
+      'uses' => 'BackendRoleController@getIndex')
+  );
+
+  Route::post('role/new', array(
+      'as' => 'newRolePost',
+      'uses' => 'BackendRoleController@postCreate')
+  );
+
+  Route::delete('role/deleteMulti', array(
+      'as' => 'deleteRole',
+      'uses' => 'BackendRoleController@delete')
+  );
+
+  Route::put('role/{roleId}', array(
+      'as' => 'putRole',
+      'uses' => 'BackendRoleController@putShow')
+  );
+
+  /**
    * Permission routes
    */
   Route::get('permissions', array(

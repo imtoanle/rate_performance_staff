@@ -48,6 +48,7 @@
             <th>{{trans('all.username')}}</th>
             <th>{{trans('all.full-name')}}</th>
             <th>{{trans('all.job-title')}}</th>
+            <th>{{trans('all.role')}}</th>
           </tr>
           </thead>
           <tbody>
@@ -56,6 +57,7 @@
             <td>{{$user->username}}</td>
             <td>{{$user->full_name}}</td>
             <td>{{$user->job_titles_name()}}</td>
+            <td>{{$arrayVoterId[$user->id]}}</td>
           </tr>
           @endforeach
           </tbody>

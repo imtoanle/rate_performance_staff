@@ -89,8 +89,11 @@ class CustomHelper
   public static function get_users_from_voter_list($json_voter)
   {
     $decodeJson = json_decode($json_voter, true);
-    $arrayUserId = array_keys($decodeJson);
-    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', $arrayUserId)->get();
+    $arrayUserId = array();
+    foreach ($decodeJson as $value) {
+      $arrayUserId[$value['user_id']] = $value['role_id'];
+    }
+    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayUserId))->get();
     $resultArr = [];
     foreach ($users as $user) {
       $resultArr[] = array(
@@ -98,7 +101,7 @@ class CustomHelper
         'username' => $user->username,
         'full_name' => $user->full_name,
         'job_name' => $user->job_titles_name(),
-        'role' => $decodeJson[$user->id]
+        'role' => $arrayUserId[$user->id]
         );
     }
 

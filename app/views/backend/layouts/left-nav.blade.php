@@ -20,13 +20,14 @@
   <?php $arrRoutes = array('indexDashboard'); ?>
   {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
 
-  <?php $arrRoutes = array('listVotes'); ?>
+  <?php $arrRoutes = array('listVotes', 'listUserVotes', 'listRoles'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
     {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
     {{ BackendSideBar::create_node(trans('all.join-vote'), 'listUserVotes', 'fa fa-signal') }}  
+    {{ BackendSideBar::create_node(trans('all.role'), 'listRoles', 'fa fa-star') }}  
   {{ BackendSideBar::create_root_close() }} 
 
-  <?php $arrRoutes = array('newClient', 'newClient', 'listPermissions', 'listJobTitles', 'listUsers', 'listGroups'); ?>
+  <?php $arrRoutes = array('listPermissions', 'listJobTitles', 'listUsers', 'listGroups', 'listDepartments'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
     {{ BackendSideBar::create_node(trans('all.job-title'), 'listJobTitles', 'fa fa-mortar-board') }}  
