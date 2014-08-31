@@ -86,6 +86,8 @@ return array(
     'departments-index' => 'backend.department.index',
     //vote roles
     'roles-index' => 'backend.role.index',
+    //criteria
+    'criterias-index' => 'backend.criteria.index',
 
     //votes
     'votes-index' => 'backend.vote.index-vote',

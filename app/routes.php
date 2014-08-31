@@ -614,6 +614,29 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   );
 
   /**
+   * Voting Criterial routes
+   */
+  Route::get('criterias', array(
+      'as' => 'listCriterias',
+      'uses' => 'BackendCriteriaController@getIndex')
+  );
+
+  Route::post('criteria/new', array(
+      'as' => 'newCriteriaPost',
+      'uses' => 'BackendCriteriaController@postCreate')
+  );
+
+  Route::delete('criteria/deleteMulti', array(
+      'as' => 'deleteCriteria',
+      'uses' => 'BackendCriteriaController@delete')
+  );
+
+  Route::put('criteria/{criteriaId}', array(
+      'as' => 'putCriteria',
+      'uses' => 'BackendCriteriaController@putShow')
+  );
+
+  /**
    * Vote Roles routes
    */
   Route::get('roles', array(
@@ -716,6 +739,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   Route::get('user-votes/quick-vote', array(
       'as' => 'quickUserVote',
       'uses' => 'BackendUserVoteController@getQuickVote')
+  );
+
+  Route::post('user-votes/quick-vote', array(
+      'as' => 'postQuickUserVote',
+      'uses' => 'BackendUserVoteController@postQuickVote')
   );
 
 

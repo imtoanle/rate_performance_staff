@@ -23,5 +23,7 @@ return array(
     'description.max'  => "Mô tả cần ngắn hơn :max kí tự",
     "same"             => ":attribute và :other không trùng nhau.",
     "different"        => ":attribute và :other phải khác nhau.",
-    'captcha'          => "Sai mã bảo mật."
+    'captcha'          => "Sai mã bảo mật.",
+    'value.between'    => 'Giá trị lớn hơn :min nhỏ hơn :max',
+    'value.integer'    => 'Giá trị nhập vào phải là số',
 );

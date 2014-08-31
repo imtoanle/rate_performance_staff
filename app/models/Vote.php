@@ -15,7 +15,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter', 'expired_at', 'department');
+    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter', 'expired_at', 'department', 'criteria');
 
     /**
      * The attributes that aren't mass assignable.
@@ -39,5 +39,13 @@ class Vote extends Model
         $jobTitles = JobTitle::select(DB::raw("group_concat(name SEPARATOR ', ') as job_names"))
         ->whereIn('id',$idsjob)->first();
         return $jobTitles->job_names;
+    }
+
+    public function department_name()
+    {
+        $departmentIds = explode(',', $this->department);
+        $departments = Department::select(DB::raw("group_concat(name SEPARATOR ', ') as department_names"))
+        ->whereIn('id',$departmentIds)->first();
+        return $departments->department_names;
     }
 }

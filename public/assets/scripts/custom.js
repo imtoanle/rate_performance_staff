@@ -30,7 +30,8 @@ jQuery(document).ready(function() {
     e.preventDefault();
     var data = $( this ).serialize();
     $(this).find('select.select2').each(function(){
-      data += '&'+ $(this).attr('name') + '=' + $(this).val();
+      var select2_var = $(this).val() == null ? '' : $(this).val();
+      data += '&'+ $(this).attr('name') + '=' + select2_var;
     });
     
     ajax_call_custom($(this).attr('type'), $(this).attr('action'), data, function(result){

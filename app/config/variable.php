@@ -138,11 +138,17 @@ return array(
     'deleteDepartment' => 'department-management',
     'putDepartment' => 'department-management',
 
-    //department
+    //roles
     'listRoles' => 'role-management',
     'newRolePost' => 'role-management',
     'deleteRole' => 'role-management',
     'putRole' => 'role-management',
+
+    //roles
+    'listCriterias' => 'criteria-management',
+    'newCriteriaPost' => 'criteria-management',
+    'deleteCriteria' => 'criteria-management',
+    'putCriteria' => 'criteria-management',
     
     //votes
     'listVotes' => 'votes-management',
@@ -157,6 +163,7 @@ return array(
     //user-vote
     'listUserVotes' => 'user-votes-management',
     'quickUserVote' => 'user-votes-management',
+    'postQuickUserVote' => 'user-votes-management',
     
     
     //servives

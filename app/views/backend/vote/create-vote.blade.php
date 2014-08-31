@@ -66,6 +66,17 @@
         </div>
 
         <div class="form-group">
+          <label class="control-label col-md-3">{{trans('all.criteria')}}</label>
+          <div class="col-md-8">
+            <select name="criteria_list" id="select2_criteria" class="form-control select2" multiple>
+              @foreach($criterias as $criteria)
+              <option value="{{$criteria->id}}">{{$criteria->name}}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
             <select name="object_vote_list" id="select2_object_vote" class="form-control select2" multiple>
@@ -242,6 +253,11 @@ jQuery(document).ready(function() {
 
   $("#select2_department").select2({
     placeholder: '{{trans('all.select-department')}}',
+    allowClear: true,
+  });
+
+  $("#select2_criteria").select2({
+    placeholder: '{{trans('all.select-criteria')}}',
     allowClear: true,
   });
 

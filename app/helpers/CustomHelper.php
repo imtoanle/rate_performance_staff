@@ -107,4 +107,47 @@ class CustomHelper
 
     return $resultArr;
   }
+
+  public static function get_users_from_user_id_list($userIds)
+  {
+    return User::whereIn('id', $userIds)->get();
+  }
+
+  public static function get_criterias_from_id($criteriaIds)
+  {
+    return Criteria::whereIn('id', $criteriaIds)->get();
+  }
+
+  public static function get_role_current_user($voter, $userId)
+  {
+    foreach (json_decode($voter, true) as $value) {
+      if($value['user_id'] == $userId)
+      {
+        return Role::find($value['role_id'])->name;
+      }
+    }
+  }
+
+  public static function get_mark_with_criteria($vote_id, $voter_id, $entitled_vote_id, $criteria_id)
+  {
+    $voteResult = VoteResult::where('vote_id', $vote_id)
+      ->where('voter_id', $voter_id)
+      ->where('entitled_vote_id', $entitled_vote_id)
+      ->first();
+
+    if (isset($voteResult))
+    {
+      if ($criteria_id == 'content')
+      {
+        return $voteResult->content;
+      }else
+      {
+        foreach(json_decode($voteResult->mark, true) as $mark)
+        {
+          if($mark['criteria_id'] == $criteria_id) return $mark['mark'];
+        }
+      }
+    }
+    #return '';
+  }
 }

@@ -72,6 +72,13 @@ return array(
 		'department-not-found' => 'Không tìm thấy phòng ban này',
 		'department-delete-success' => 'Xóa phòng ban thành công',
 
+		'criteria-created' => 'Tạo tiêu chí thành công !',
+		'criteria-create-failed' => 'Lỗi khi tạo mới tiêu chí',
+		'criteria-updated' => 'Cập nhập tiêu chí thành công !',
+		'criteria-update-failed' => 'Lỗi khi cập nhập tiêu chí',
+		'criteria-not-found' => 'Không tìm thấy tiêu chí này',
+		'criteria-delete-success' => 'Xóa tiêu chí thành công',
+
 		'role-created' => 'Tạo vai trò thành công !',
 		'role-create-failed' => 'Lỗi khi tạo mới vai trò',
 		'role-updated' => 'Cập nhập vai trò thành công !',
@@ -170,6 +177,16 @@ return array(
 	'participant' => 'Thành phần tham gia',
 	'loading' => 'Đang tải...',
 	'quick-vote' => 'Chấm điểm nhanh',
+	'mark' => 'Điểm',
+	'content-vote' => 'Nội dung đánh giá',
+	'criteria' => 'Tiêu chí đánh giá',
+	'criteria-list' => 'Danh sách tiêu chí',
+	'select-criteria' => 'Chọn tiêu chí',
+	'input-mark' => 'Nhập điểm',
+	'not-input-yet' => 'Chưa nhập',
+	'mark-over-limit' => 'Điểm nhập quá giới hạn',
+	'cant-empty-field' => 'Không được để trống',
+	'input-vote-content' => 'Nhập nội dung đánh giá',
 
 
 

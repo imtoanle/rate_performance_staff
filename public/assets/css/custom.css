@@ -18,3 +18,5 @@ form .form-body.text-left label
 .invi{
   display: none;
 }
+
+.text-center{ text-align: center; }

@@ -74,6 +74,7 @@ class BackendVoteController extends BackendBaseController
   {
     $params['jobTitles'] = JobTitle::all();
     $params['departments'] = Department::all();
+    $params['criterias'] = Criteria::all();
     $params['roles'] = Role::all();
     $this->layout = View::make(Config::get('view.backend.vote-create'), $params);
     
@@ -92,6 +93,7 @@ class BackendVoteController extends BackendBaseController
       'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department' => Input::get('department_list'),
+      'criteria' => Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
@@ -118,6 +120,7 @@ class BackendVoteController extends BackendBaseController
     $params['vote'] = $vote;
     $params['jobTitles'] = JobTitle::all();
     $params['departments'] = Department::all();
+    $params['criterias'] = Criteria::all();
     $params['roles'] = Role::all();
     return View::make(Config::get('view.backend.vote-show'), $params);
   }
@@ -142,6 +145,7 @@ class BackendVoteController extends BackendBaseController
       'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department' => Input::get('department_list'),
+      'criteria' => Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),

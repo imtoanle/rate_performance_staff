@@ -63,6 +63,10 @@ return array(
       'department_name' => 'required|min:3',
     ),
 
+    'criteria-create' => array(
+      'criteria_name' => 'required|min:3',
+    ),
+
     'role-create' => array(
       'role_name' => 'required|min:3',
     ),
@@ -124,8 +128,13 @@ return array(
       'object_vote_list' => 'required',
       'entitled_vote' => 'required',
       'voter_id' => 'required',
+      'criteria_list' => 'required',
       'expiration_date' => 'required'
     ),
+
+    'vote-result-mark' => array(
+      'value' => 'integer|between:0,100'
+      ),
 
     'user-create' => array(
       'email' => array('required', 'email'),

@@ -10,7 +10,74 @@ class BackendUserVoteController extends BackendBaseController
   */
   public function getQuickVote()
   {
-    return View::make(Config::get('view.backend.user-votes-quick'));
+    $currentUser = Sentry::getUser();
+    $pattern = '"user_id":"'.$currentUser->id.'"';
+    $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->orderBy('vote_code', 'asc')->get();
+    $canVoteGroup = Vote::select('vote_code','title')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_code')->get();
+
+
+    $params['canVotes'] = $canVotes;
+    $params['canVoteGroup'] = $canVoteGroup;
+    $params['currentUser'] = $currentUser;
+    return View::make(Config::get('view.backend.user-votes-quick'), $params);
+  }
+
+  public function postQuickVote()
+  {
+    if(Input::get('name') == 'mark')
+    {
+      $validator = new BackendValidator(Input::all(), 'vote-result-mark');
+      if(!$validator->passes())
+      {
+          return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
+      }
+
+      $voteResult = VoteResult::firstOrNew(array(
+        'vote_id' => Input::get('vote'),
+        'voter_id' => Input::get('voter'),
+        'entitled_vote_id' => Input::get('entitled_vote'),
+        ));
+      if (empty($voteResult->mark))
+      {
+        $criteriaMark[] = array('criteria_id' => Input::get('pk'), 'mark' => Input::get('value'));
+      }else
+      {
+        $decodeMark = json_decode($voteResult->mark, true);
+        $checkExist = 0;
+        $newMark = array();
+          foreach ($decodeMark as $value) {
+            if ($value['criteria_id'] == Input::get('pk'))
+            {
+              $value['mark'] = Input::get('value');
+              $checkExist++;
+            }
+            $newMark[] = $value;
+          }
+        if ($checkExist == 0)
+        {
+          $newMark[] = array('criteria_id' => Input::get('pk'), 'mark' => Input::get('value'));
+        }
+        $criteriaMark = $newMark;
+      }
+      $voteResult->mark = json_encode($criteriaMark);
+    }
+    else if(Input::get('name') == 'content')
+    {
+      $voteResult = VoteResult::firstOrNew(array(
+        'vote_id' => Input::get('vote'),
+        'voter_id' => Input::get('voter'),
+        'entitled_vote_id' => Input::get('entitled_vote'),
+        ));
+      $voteResult->content = Input::get('value');
+    }
+
+    if($voteResult->save())
+    {
+      return Response::json(array('actionStatus' => true));
+    }else
+    {
+      return Response::json(array('actionStatus' => false));
+    }
   }
 
   public function getIndex()
