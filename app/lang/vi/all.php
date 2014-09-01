@@ -188,6 +188,10 @@ return array(
 	'cant-empty-field' => 'Không được để trống',
 	'input-vote-content' => 'Nhập nội dung đánh giá',
 	'view-vote' => 'Xem kết quả',
+	'head-department' => 'Truởng ban',
+	'info-vote-group' => 'Thông tin nhóm đánh giá',
+	'select-head-department' => 'Chọn trưởng ban',
+	'show-vote-group' => 'Sửa nhóm đánh giá',
 
 
 

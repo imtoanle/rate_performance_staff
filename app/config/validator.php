@@ -129,8 +129,23 @@ return array(
       'entitled_vote' => 'required',
       'voter_id' => 'required',
       'criteria_list' => 'required',
-      'expiration_date' => 'required'
+      'expiration_date' => 'required',
+      'head_department' => 'required',
     ),
+
+    'vote-update' => array(
+      'object_vote_list' => 'required',
+      'entitled_vote' => 'required',
+      'voter_id' => 'required',
+      'criteria_list' => 'required',
+      'expiration_date' => 'required',
+    ),
+
+    'vote-group-update' => array(
+      'vote_code' => 'required',
+      'title' => 'required',
+      'head_department' => 'required',
+      ),
 
     'vote-result-mark' => array(
       'value' => 'integer|between:0,100'

@@ -44,7 +44,12 @@ class BackendUserController extends BackendBaseController
     public function fullTextSearch()
     {
       $userArr = array();
-      if(Input::has('user_id'))
+      if(Input::has('single_user_id'))
+      {
+        $user = User::find(Input::get('single_user_id'));
+        $userArr = $this->structSelect2($user, $user->job_titles_name());
+      }
+      else if(Input::has('user_id'))
       {
         $userIds = explode(',',Input::get('user_id'));
         $users = User::whereIn('id', $userIds)->get();
