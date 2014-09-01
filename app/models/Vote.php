@@ -15,7 +15,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter', 'expired_at', 'department', 'criteria');
+    protected $fillable = array('vote_code','title','object_entitled_vote', 'entitled_vote', 'voter', 'expired_at', 'department', 'criteria', 'vote_group_id');
 
     /**
      * The attributes that aren't mass assignable.
@@ -32,6 +32,10 @@ class Vote extends Model
         return parent::save($options);
     }
     */
+    public function voteGroup()
+    {
+        return $this->belongsTo('VoteGroup');
+    }
 
     public function object_entitled_vote_name()
     {

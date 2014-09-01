@@ -18,19 +18,7 @@
     <!-- BEGIN FORM-->
     <form action="{{route('postNewVote')}}" class="form-horizontal base-ajax-form" type="POST">
       <div class="form-body">
-        <h3 class="form-section">{{trans('all.vote-info')}}</h3>
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
-          <div class="col-md-8">
-            <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
-              <input type="text" name="expiration_date" class="form-control" readonly>
-              <span class="input-group-btn">
-                <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>
-              </span>
-            </div>
-          </div>
-        </div>
+        <h3 class="form-section">{{trans('all.info-vote-group')}}</h3>
 
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.vote-code')}}</label>
@@ -45,6 +33,15 @@
             <input type="text" name="title" class="form-control" placeholder="VD: Đánh giá nhân viên tháng xx">
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>
+          <div class="col-md-8">
+            <input type="hidden" name="head_department" id="head_department" class="form-control select2">
+          </div>
+        </div>
+
+        <h3 class="form-section">{{trans('all.vote-info')}}</h3>
         <!--
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
@@ -54,6 +51,18 @@
         </div>
         -->
 
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
+          <div class="col-md-8">
+            <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
+              <input type="text" name="expiration_date" class="form-control" readonly>
+              <span class="input-group-btn">
+                <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+        
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.department')}}</label>
           <div class="col-md-8">
@@ -291,6 +300,28 @@ jQuery(document).ready(function() {
     //formatSelection: function(user){ return user.text;}, // omitted for brevity, see the source of this page
     //dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
   });
+  
+  $('#head_department').select2({
+    placeholder: "{{trans('all.select-head-department')}}",
+    minimumInputLength: 1,
+    ajax: {
+      url: "{{route('listUsersSearch')}}",
+      dataType: 'json',
+      data: function(term, page) {
+        return {
+          q: term,
+          page_limit: 10,
+        };
+      },
+      results: function (data, page) {
+        return { results: data };
+      }
+    },
+    formatResult: markup_result, // omitted for brevity, see the source of this page
+    //formatSelection: function(user){ return user.text;}, // omitted for brevity, see the source of this page
+    //dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+  });
+  
 
 });
 

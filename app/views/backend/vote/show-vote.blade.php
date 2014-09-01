@@ -31,20 +31,7 @@
             </div>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.vote-code')}}</label>
-          <div class="col-md-8">
-            <input type="text" name="vote_code" value="{{$vote->vote_code}}" class="form-control" placeholder="VD: VOTE102014">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.title')}}</label>
-          <div class="col-md-8">
-            <input type="text" name="title" value="{{$vote->title}}" class="form-control" placeholder="VD: Đánh giá nhân viên tháng xx">
-          </div>
-        </div>
+        
         <!--
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>

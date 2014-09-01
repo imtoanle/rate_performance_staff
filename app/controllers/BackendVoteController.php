@@ -11,10 +11,52 @@ class BackendVoteController extends BackendBaseController
   */
   public function getIndex()
   {
-    if(Request::Ajax() && Input::get('mode') == 'datatable')
+    if(Request::Ajax())
     {
-      $limit = Input::get('limit');
+      if (Input::get('mode') == 'datatable')
+      {
+        $limit = Input::get('limit');
+      $votes = VoteGroup::select(array('id as inputbox','id as button', 'vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+                ->limit($limit);
+      return Datatables::of($votes)
+        ->edit_column('button', '<span class="row-details row-details-close"></span>')
+        ->edit_column('head_department', function($row){
+          $user = User::find($row->head_department);
+          return is_object($user) ? $user->full_name : '';
+        })
+        ->edit_column('inputbox', 
+          '<div class="checker">
+            <span>
+              <input type="checkbox" class="checkboxes" value="{{ $inputbox }}"/>
+            </span>
+          </div>')
+        /*
+        ->edit_column('created_at', function($row){
+          return $row->created_at->format('d-m-Y');
+        })
+        */
+        ->edit_column('vote_group_id', function($row){
+          $count = Vote::where('vote_group_id', $row->vote_group_id)
+            ->where('status', Config::get("variable.vote-status.newly"))
+            ->whereOr('status', Config::get("variable.vote-status.opened"))
+            ->count();
+          if ($count > 0)
+          {
+            return '<span class="label label-success">'.trans("all.opened").'</span>';
+          }else
+          {
+            return '<span class="label label-default">'.trans("all.closed").'</span>';
+          }
+        })
+        ->edit_column('actions', '
+            <a href="{{route(\'showVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans(\'all.edit\')}}</a>
+            <a item-id="{{$actions}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans(\'all.delete\')}}</a>
+          ')
+        #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+        ->make();
 
+      /*
+      $limit = Input::get('limit');
       $votes = Vote::select(array('id as inputbox', 'vote_code', 'title', 'object_entitled_vote', 'created_at', 'status','id as actions'))
                 ->limit($limit);
       return Datatables::of($votes)
@@ -45,10 +87,57 @@ class BackendVoteController extends BackendBaseController
           ')
         ->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
         ->make();
+        */
+      }else if (Input::get('mode') == 'votes_of_group')
+      {
+        $votesArr = array();
+        $votes = Vote::where('vote_group_id', Input::get('vote_group_id'))->get();
+        foreach ($votes as $vote) {
+          switch ($vote->status) {
+            case Config::get("variable.vote-status.newly"):
+              $statusHtml = '<span class="label label-primary">'.trans("all.newly").'</span>';
+              break;
+            case Config::get("variable.vote-status.opened"):
+              $statusHtml = '<span class="label label-success">'.trans("all.opened").'</span>';
+              break;
+            
+            default:
+              $statusHtml = '<span class="label label-default">'.trans("all.closed").'</span>';
+              break;
+          }
+          $actionsHtml = '<a href="'.route('listPersionsVote', $vote->id).'" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> '.trans('all.view').'</a>
+            <a href="'.route('showVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> '.trans('all.edit').'</a>
+            <a class="btn btn-default btn-xs black" data-href="'.route('deleteVote').'" data-item-id="'.$vote->id.'" data-toggle="modal" data-target="#confirm-delete" href="#"><i class="fa fa-trash-o"></i> '.trans('all.delete').'</a>';
+            $departmentName = $vote->department_name();
+
+          $votesArr[] = array(
+            'department' => empty($departmentName) ? '' : $departmentName,
+            'created_at' => $vote->created_at->format('d-m-Y'),
+            'status' => $statusHtml,
+            'actions' => $actionsHtml,
+            );
+        }
+        return Response::json(array('actionStatus' => true, 'data' => $votesArr));
+      }
+      
     }
+    $voteGroups = VoteGroup::all();
     $votes = Vote::all();
     $params['votes'] = $votes;
+    $params['voteGroups'] = $voteGroups;
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
+  }
+
+  public function getShowGroup($voteGroupId)
+  {
+    $voteGroup = VoteGroup::find($voteGroupId);
+    if ($voteGroup->check_status() == 0)
+    {
+      App::abort(500, trans('all.messages.cant-edit-closed-vote'));
+    }
+    
+    $params['voteGroup'] = $voteGroup;
+    return View::make(Config::get('view.backend.vote-group-show'), $params);
   }
 
   public function getListPersion($voteId)
@@ -87,16 +176,22 @@ class BackendVoteController extends BackendBaseController
     {
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
     }
-    $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
-    $vote = Vote::create(array(
+    $voteGroup = VoteGroup::create(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
+      'head_department' => Input::get('head_department'),
+      ));
+
+    $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
+    $vote = new Vote;
+    $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department' => Input::get('department_list'),
       'criteria' => Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
+      'vote_group_id' => $voteGroup->id,
       ));
 
     if($vote->save())
@@ -127,7 +222,7 @@ class BackendVoteController extends BackendBaseController
 
   public function putShow($voteId)
   {
-    $validator = new BackendValidator(Input::all(), 'vote-create');
+    $validator = new BackendValidator(Input::all(), 'vote-update');
     if(!$validator->passes())
     {
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
@@ -141,8 +236,6 @@ class BackendVoteController extends BackendBaseController
 
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote->fill(array(
-      'vote_code' => Input::get('vote_code'),
-      'title' => Input::get('title'),
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department' => Input::get('department_list'),
       'criteria' => Input::get('criteria_list'),
@@ -161,6 +254,36 @@ class BackendVoteController extends BackendBaseController
     }
   }
 
+  public function putShowGroup($voteGroupId)
+  {
+    $validator = new BackendValidator(Input::all(), 'vote-group-update');
+    if(!$validator->passes())
+    {
+        return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
+    }
+    
+    $voteGroup = VoteGroup::find($voteGroupId);
+    if ($voteGroup->check_status() == 0)
+    {
+      App::abort(500, trans('all.messages.cant-edit-closed-vote'));
+    }
+
+    $voteGroup->fill(array(
+      'vote_code' => Input::get('vote_code'),
+      'title' => Input::get('title'),
+      'head_department' => Input::get('head_department'),
+      ));
+
+    if($voteGroup->save())
+    {
+      return Response::json(array('voteGroupUpdated' => true, 'message' => trans('all.messages.vote-update-success'), 'messageType' => 'success'));
+    }
+    else
+    {
+      return Response::json(array('voteGroupUpdated' => false, 'message' => trans('all.messages.vote-update-fail'), 'messageType' => 'error'));
+    }
+  }
+
   public function delete()
   {
     $voteIds = Input::get('itemIds');
@@ -170,6 +293,30 @@ class BackendVoteController extends BackendBaseController
       try
         {
           $vote = Vote::find($voteId);
+          if (in_array($vote->status, array(Config::get('variable.vote-status.closed'), Config::get('variable.vote-status.opened'))))
+          {
+            App::abort(500, trans('all.messages.only-can-delete-newly-vote'));
+          }
+          $vote->delete();
+        }
+        catch (\Cartalyst\Sentry\Votes\VoteNotFoundException $e)
+        {
+            return Response::json(array('deletedVote' => false, 'message' => trans('all.messages.vote-not-found'), 'messageType' => 'error'));
+        }
+    }
+
+    return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
+  }
+
+  public function deleteGroup()
+  {
+    $voteIds = Input::get('itemIds');
+    $voteArrays = explode(',', $voteIds);
+
+    foreach ($voteArrays as $voteId) {
+      try
+        {
+          $vote = VoteGroup::find($voteId);
           if (in_array($vote->status, array(Config::get('variable.vote-status.closed'), Config::get('variable.vote-status.opened'))))
           {
             App::abort(500, trans('all.messages.only-can-delete-newly-vote'));

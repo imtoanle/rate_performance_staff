@@ -15,26 +15,43 @@
   </div>
 </div>
 <div class="portlet-body panel-content-area">
-  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVote')}}">
+  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
   <thead>
   <tr>
     <th class="table-checkbox">
       <input type="checkbox" class="group-checkable" data-set="#ajax-data-table .checkboxes"/>
     </th>
+    <th></th>
     <th>{{trans('all.vote-code')}}</th>
     <th>{{trans('all.title')}}</th>
-    <th>{{trans('all.object-vote')}}</th>
-    <th>{{trans('all.date-create')}}</th>
+    <th>{{trans('all.head-department')}}</th>
     <th>{{trans('all.status')}}</th>
     <th>{{trans('all.actions')}}</th>
   </tr>
   </thead>
   <tbody>
-  
   </tbody>
   </table>
 </div>
 </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                {{trans('all.confirm')}}
+            </div>
+            <div class="modal-body">
+                {{trans('all.delete-confirm-notice')}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('all.close')}}</button>
+                <a href="#" class="btn btn-danger danger">{{trans('all.accept')}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- END EXAMPLE TABLE PORTLET-->
 <!-- Modal Start -->
 <div class="modal fade" id="delete-modal" tabindex="-1" role="delete-modal" aria-hidden="true">
@@ -85,8 +102,26 @@
 
 <script>
 jQuery(document).ready(function() {
-  //clear checked when close modal
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+    $('td.details_votes_of_group tr.canDeleteVote').removeClass('canDeleteVote');
+    $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));
+    $(this).find('.danger').attr('item-id', $(e.relatedTarget).data('item-id'));
+    $(e.relatedTarget).closest('tr').addClass('canDeleteVote');
+  });
 
+  $('#confirm-delete a.danger').click(function(e){
+    e.preventDefault();
+    ajax_call_custom('DELETE', $(this).attr('href'), 'itemIds='+$(this).attr('item-id'), function(result){
+      if(result.deletedVote == true)
+      {
+        $('#confirm-delete').modal('hide');
+        $('td.details_votes_of_group tr.canDeleteVote').remove();
+      }
+    });
+  });
+
+
+  //clear checked when close modal
   $('table tbody').on('click', 'a.ajax-modal', function(e){
     e.preventDefault();
     var modal = 'modal-list-persions';
@@ -102,34 +137,116 @@ jQuery(document).ready(function() {
   });
 
    // begin first table
+   /*
   $('#ajax-data-table').dataTable({
-      //'bAutoWidth': false,
-      "aoColumns": [
-        {"bSortable": false},
-        null,
-        null,
-        null,
-        null,
-        null,
-        {"bSortable": false},
+    //'bAutoWidth': false,
+    "aoColumns": [
+      {"bSortable": false},
+      null,
+      null,
+      null,
+      null,
+      {"bSortable": false},
+    ],
+    "aLengthMenu": [
+        [10, 20, 30, -1],
+        [10, 20, 30, "All"] // change per page values here
+    ],
+    // set the initial value
+    "iDisplayLength": 10,
+
+    "bServerSide": true,
+    "sAjaxSource": "<?php echo URL::route('listVotes') ?>",
+    "fnServerParams": function ( aoData ) {
+      aoData.push( { "name": "mode", "value": "datatable" } );
+    },
+    */
+
+  /* Formatting function for row details */
+  
+
+  /*
+   * Initialize DataTables, with no sorting on the 'details' column
+   */
+  var oTable = $('#ajax-data-table').dataTable( {
+      "aoColumnDefs": [
+          {"bSortable": false, "aTargets": [ 0 ] }
       ],
-      "aLengthMenu": [
-          [10, 20, 30, -1],
-          [10, 20, 30, "All"] // change per page values here
+      "aaSorting": [[1, 'asc']],
+       "aLengthMenu": [
+          [5, 15, 20, -1],
+          [5, 15, 20, "All"] // change per page values here
       ],
       // set the initial value
       "iDisplayLength": 10,
 
       "bServerSide": true,
-      "sAjaxSource": "<?php echo URL::route('listVotes') ?>",
+      "sAjaxSource": "{{route('listVotes')}}",
       "fnServerParams": function ( aoData ) {
         aoData.push( { "name": "mode", "value": "datatable" } );
       },
+      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $(nRow).attr("id",'ajax-table-item-' + $('input[type=checkbox]', aData[0]).val());
+        return nRow;
+      }
+  });
+
+  /* Add event listener for opening and closing details
+   * Note that the indicator for showing which row is open is not controlled by DataTables,
+   * rather it is done here
+   */
+  $('#ajax-data-table').on('click', ' tbody td .row-details', function () {
+      var nTr = $(this).parents('tr')[0];
+      if ( oTable.fnIsOpen(nTr) )
+      {
+        /* This row is already open - close it */
+        $(this).addClass("row-details-close").removeClass("row-details-open");
+        oTable.fnClose( nTr );
+      }
+      else
+      {
+        /* Open this row */                
+        $(this).addClass("row-details-open").removeClass("row-details-close");
+        get_vote_of_groups(oTable, nTr)
+      }
   });
 
   //jQuery('#ajax-data-table_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
   jQuery('#ajax-data-table_wrapper .dataTables_filter input').addClass("form-control input-medium"); // modify table search input
   jQuery('#ajax-data-table_wrapper .dataTables_length select').addClass("form-control input-xsmall"); // modify table per page dropdown
 });
+
+function get_vote_of_groups(oTable, nTr)
+{
+  var aData = oTable.fnGetData( nTr );
+  var vote_group_id = $('input[type=checkbox]', aData[0]).val();
+  ajax_call_custom('GET', '{{route('listVotes')}}', 'mode=votes_of_group&vote_group_id=' + vote_group_id, function(result){
+    var sOut = '\
+      <div class="table-responsive"> \
+        <table class="table table-bordered table-hover">\
+        <thead>\
+        <tr>\
+          <th style="width: 50%">{{trans('all.department')}}</th>\
+          <th style="width: 15%">{{trans('all.date-create')}}</th>\
+          <th style="width: 15%">{{trans('all.status')}}</th>\
+          <th style="width: 20%">{{trans('all.actions')}}</th>\
+        </tr>\
+        </thead>\
+        <tbody>';
+    for(var i in result.data)
+    {
+      if (result.data[i].status)
+      sOut += '<tr>';
+      sOut += '<td>'+result.data[i].department+'</td>';
+      sOut += '<td>'+result.data[i].created_at+'</td>';
+      sOut += '<td>'+result.data[i].status+'</td>';
+      sOut += '<td>'+result.data[i].actions+'</td>';
+      sOut += '</tr>';
+    }
+    sOut += '</tbody></table></div>';
+
+    oTable.fnOpen( nTr, sOut, 'details_votes_of_group');
+  });
+}
 </script>
 @stop
