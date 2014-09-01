@@ -142,9 +142,12 @@ class CustomHelper
         return $voteResult->content;
       }else
       {
-        foreach(json_decode($voteResult->mark, true) as $mark)
+        if (!empty($voteResult->mark))
         {
-          if($mark['criteria_id'] == $criteria_id) return $mark['mark'];
+          foreach(json_decode($voteResult->mark, true) as $mark)
+          {
+            if($mark['criteria_id'] == $criteria_id) return $mark['mark'];
+          }
         }
       }
     }

@@ -187,6 +187,7 @@ return array(
 	'mark-over-limit' => 'Điểm nhập quá giới hạn',
 	'cant-empty-field' => 'Không được để trống',
 	'input-vote-content' => 'Nhập nội dung đánh giá',
+	'view-vote' => 'Xem kết quả',
 
 
 
