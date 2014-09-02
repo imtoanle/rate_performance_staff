@@ -30,11 +30,6 @@ class BackendVoteController extends BackendBaseController
               <input type="checkbox" class="checkboxes" value="{{ $inputbox }}"/>
             </span>
           </div>')
-        /*
-        ->edit_column('created_at', function($row){
-          return $row->created_at->format('d-m-Y');
-        })
-        */
         ->edit_column('vote_group_id', function($row){
           $count = Vote::where('vote_group_id', $row->vote_group_id)
             ->where('status', Config::get("variable.vote-status.newly"))
@@ -49,6 +44,8 @@ class BackendVoteController extends BackendBaseController
           }
         })
         ->edit_column('actions', '
+            <a href="{{route(\'newVote\')}}/?vote_group_id={{$actions}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-plus"></i> {{trans(\'all.add\')}}</a>
+            <a href="{{route(\'copyVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-copy"></i> {{trans(\'all.copy\')}}</a>
             <a href="{{route(\'showVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans(\'all.edit\')}}</a>
             <a item-id="{{$actions}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans(\'all.delete\')}}</a>
           ')
@@ -128,6 +125,50 @@ class BackendVoteController extends BackendBaseController
     $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
   }
 
+  public function getCopyGroup($voteGroupId)
+  {
+    $params['vote_group_id'] = $voteGroupId;
+    return View::make(Config::get('view.backend.vote-group-copy'), $params);
+  }
+
+  public function postCopyGroup($voteGroupId)
+  {
+    $validator = new BackendValidator(Input::all(), 'vote-group-update');
+    if(!$validator->passes())
+    {
+        return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
+    }
+
+    $voteGroup = VoteGroup::find($voteGroupId);
+    $newVoteGroup = $voteGroup->replicate();
+    $newVoteGroup->fill(array(
+      'vote_code' => Input::get('vote_code'),
+      'title' => Input::get('title'),
+      'head_department' => Input::get('head_department'),
+      ));
+
+    if(!$newVoteGroup->save())
+    {
+      return Response::json(array('voteGroupCopied' => false, 'message' => trans('all.messages.vote-group-copy-fail'), 'messageType' => 'error'));
+    }
+    try
+    {
+      foreach ($voteGroup->votes as $vote) {
+        $newVote = $vote->replicate();
+        $newVote->vote_group_id = $newVoteGroup->id;
+        unset($newVote->created_at);
+        unset($newVote->updated_at);
+        $newVote->save();
+      }
+    }catch(\Exception $e)
+    {
+      Vote::where('vote_group_id', $newVoteGroup->id)->delete();
+      return Response::json(array('voteGroupCopied' => false, 'message' => trans('all.messages.vote-group-copy-fail'), 'messageType' => 'error'));
+    }
+    
+    return Response::json(array('voteGroupCopied' => true, 'message' => trans('all.messages.vote-group-copy-success'), 'messageType' => 'success'));
+  }
+
   public function getShowGroup($voteGroupId)
   {
     $voteGroup = VoteGroup::find($voteGroupId);
@@ -147,7 +188,8 @@ class BackendVoteController extends BackendBaseController
 
     $arrayVoterId = array();
     foreach (json_decode($vote->voter, true) as $value) {
-      $arrayVoterId[$value['user_id']] = Role::find($value['role_id'])->name;
+      $role = Role::find($value['role_id']);
+      $arrayVoterId[$value['user_id']] = is_object($role) ? $role->name : '';
     }
 
     $voter_users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayVoterId))->get();
@@ -165,22 +207,39 @@ class BackendVoteController extends BackendBaseController
     $params['departments'] = Department::all();
     $params['criterias'] = Criteria::all();
     $params['roles'] = Role::all();
-    $this->layout = View::make(Config::get('view.backend.vote-create'), $params);
-    
+    if (Input::has('vote_group_id'))
+    {
+      $params['vote_group_id'] = Input::get('vote_group_id');  
+      $views = Config::get('view.backend.only-vote-create');
+    }else
+    {
+      $views = Config::get('view.backend.vote-create');
+    }
+    $this->layout = View::make($views, $params);
   }
 
   public function postCreate()
   {
-    $validator = new BackendValidator(Input::all(), 'vote-create');
+    $validator_name = Input::has('vote_group_id') ? 'vote-update' : 'vote-create';
+
+    $validator = new BackendValidator(Input::all(), $validator_name);
     if(!$validator->passes())
     {
         return Response::json(array('voteCreated' => false, 'errorMessages' => $validator->getErrors()));
     }
-    $voteGroup = VoteGroup::create(array(
+
+    if (Input::has('vote_group_id'))
+    {
+      $vote_group_id = Input::get('vote_group_id');
+    }else
+    {
+      $voteGroup = VoteGroup::create(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
       'head_department' => Input::get('head_department'),
       ));
+      $vote_group_id = $voteGroup->id;
+    }
 
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote = new Vote;
@@ -191,7 +250,7 @@ class BackendVoteController extends BackendBaseController
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
-      'vote_group_id' => $voteGroup->id,
+      'vote_group_id' => $vote_group_id,
       ));
 
     if($vote->save())

@@ -94,6 +94,8 @@ return array(
     'vote-create' => 'backend.vote.create-vote',
     'vote-show' => 'backend.vote.show-vote',
     'vote-group-show' => 'backend.vote.show-vote-group',
+    'vote-group-copy' => 'backend.vote.copy-vote-group',
+    'only-vote-create' => 'backend.vote.create-vote-only',
     'vote-modal-persions-list' => 'backend.vote.modal-list-persions',
 
     //votes

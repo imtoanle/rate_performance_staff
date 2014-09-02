@@ -44,4 +44,9 @@ class VoteGroup extends Model
 
         return $count;
     }
+
+    public function copy_item()
+    {
+        
+    }
 }

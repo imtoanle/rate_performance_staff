@@ -708,6 +708,16 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendVoteController@getCreate')
   );
 
+  Route::get('vote-group/copy/{voteGroupId}', array(
+      'as' => 'copyVoteGroup',
+      'uses' => 'BackendVoteController@getCopyGroup')
+  );
+  
+  Route::post('vote-group/copy/{voteGroupId}', array(
+      'as' => 'postCopyVoteGroup',
+      'uses' => 'BackendVoteController@postCopyGroup')
+  );
+
   Route::post('vote/new', array(
       'as' => 'postNewVote',
       'uses' => 'BackendVoteController@postCreate')

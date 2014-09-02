@@ -56,6 +56,10 @@ return array(
 		'vote-not-found' => 'Đánh giá này không tồn tại',
 		'vote-remove-success' => 'Xóa đánh giá thành công',
 		'cant-edit-closed-vote' => 'Không thể sửa đánh giá đã đóng',
+
+		'vote-group-copy-fail' => 'Lỗi khi sao chép nhóm đánh giá',
+		'vote-group-copy-success' => 'Sao chép nhóm đánh giá thành công',
+
 		'only-can-delete-newly-vote' => 'Không thể xóa, chỉ có thể xóa đánh giá mới',
 		'page-not-found' => 'Trang yêu cầu không tồn tại.',
 		'job-title-created' => 'Tạo chức danh thành công !',
@@ -192,6 +196,8 @@ return array(
 	'info-vote-group' => 'Thông tin nhóm đánh giá',
 	'select-head-department' => 'Chọn trưởng ban',
 	'show-vote-group' => 'Sửa nhóm đánh giá',
+	'copy' => 'Chép',
+	'copy-vote-group' => 'Sao chép nhóm đánh giá',
 
 
 

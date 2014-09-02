@@ -156,6 +156,8 @@ return array(
     'postNewVote' => 'votes-management',
     'putVote' => 'votes-management',
     'putVoteGroup' => 'votes-management',
+    'copyVoteGroup' => 'votes-management',
+    'postCopyVoteGroup' => 'votes-management',
     'deleteVote' => 'votes-management',
     'deleteVoteGroup' => 'votes-management',
     'showVote' => 'votes-management',
