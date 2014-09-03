@@ -31,7 +31,6 @@
         <tr>
           <th>{{trans('all.vote-code')}}</th>
           <th>{{trans('all.title')}}</th>
-          <th>{{trans('all.head-department')}}</th>
           <th>{{trans('all.status')}}</th>
           <th>{{trans('all.actions')}}</th>
         </tr>
@@ -46,7 +45,6 @@
         <tr>
           <th>{{trans('all.vote-code')}}</th>
           <th>{{trans('all.title')}}</th>
-          <th>{{trans('all.head-department')}}</th>
           <th>{{trans('all.status')}}</th>
           <th>{{trans('all.actions')}}</th>
         </tr>

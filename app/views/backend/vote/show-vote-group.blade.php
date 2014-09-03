@@ -28,12 +28,14 @@
           </div>
         </div>
 
+        <!--
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>
           <div class="col-md-8">
-            <input type="hidden" name="head_department" id="head_department" value="{{$voteGroup->head_department}}" class="form-control select2">
+            <input type="hidden" name="can_view_results" id="can_view_results" value="{{$voteGroup->head_department}}" class="form-control select2">
           </div>
         </div>
+        -->
 
       </div>
       <div class="form-actions right">
@@ -48,7 +50,7 @@
 <script>
 jQuery(document).ready(function() {   
 
-  $('#head_department').select2({
+  $('#can_view_results').select2({
     placeholder: "{{trans('all.select-head-department')}}",
     minimumInputLength: 1,
     ajax: {

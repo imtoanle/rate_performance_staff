@@ -102,7 +102,7 @@ class BackendUserVoteController extends BackendBaseController
           $arrEntitledVoteGroupIds[] = $value['vote_group_id'];
         }
 
-        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'id as vote_group_id','id as actions'))
           ->whereIn('id', $arrEntitledVoteGroupIds);
           #->limit($limit);
         $viewVoteRoute = 'viewMyMark';
@@ -114,17 +114,13 @@ class BackendUserVoteController extends BackendBaseController
           $arrCanVoteGroupIds[] = $value['vote_group_id'];
         }
 
-        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'id as vote_group_id','id as actions'))
           ->whereIn('id', $arrCanVoteGroupIds);
           #->limit($limit);
         $viewVoteRoute = 'viewMyVote';
       }
 
       return Datatables::of($voteGroups)
-        ->edit_column('head_department', function($row){
-          $user = User::find($row->head_department);
-          return is_object($user) ? $user->full_name : '';
-        })
         ->edit_column('vote_group_id', function($row){
           $count = Vote::where('vote_group_id', $row->vote_group_id)
             ->where('status', Config::get("variable.vote-status.newly"))

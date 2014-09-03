@@ -34,19 +34,20 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>
-          <div class="col-md-8">
-            <input type="hidden" name="head_department" id="head_department" class="form-control select2">
-          </div>
-        </div>
-
         <h3 class="form-section">{{trans('all.vote-info')}}</h3>
         <!--
         <div class="form-group">
           <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
             <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>
+          <div class="col-md-8">
+            <input type="hidden" name="can_view_results" id="can_view_results" class="form-control select2">
           </div>
         </div>
         -->
@@ -301,7 +302,7 @@ jQuery(document).ready(function() {
     //dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
   });
   
-  $('#head_department').select2({
+  $('#can_view_results').select2({
     placeholder: "{{trans('all.select-head-department')}}",
     minimumInputLength: 1,
     ajax: {

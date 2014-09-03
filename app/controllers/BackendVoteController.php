@@ -16,14 +16,10 @@ class BackendVoteController extends BackendBaseController
       if (Input::get('mode') == 'datatable')
       {
         $limit = Input::get('limit');
-      $votes = VoteGroup::select(array('id as inputbox','id as button', 'vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+      $votes = VoteGroup::select(array('id as inputbox','id as button', 'vote_code', 'title', 'id as vote_group_id','id as actions'))
                 ->limit($limit);
       return Datatables::of($votes)
         ->edit_column('button', '<span class="row-details row-details-close"></span>')
-        ->edit_column('head_department', function($row){
-          $user = User::find($row->head_department);
-          return is_object($user) ? $user->full_name : '';
-        })
         ->edit_column('inputbox', 
           '<div class="checker">
             <span>

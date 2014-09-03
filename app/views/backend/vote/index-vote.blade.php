@@ -24,7 +24,6 @@
     <th></th>
     <th>{{trans('all.vote-code')}}</th>
     <th>{{trans('all.title')}}</th>
-    <th>{{trans('all.head-department')}}</th>
     <th>{{trans('all.status')}}</th>
     <th>{{trans('all.actions')}}</th>
   </tr>
@@ -170,9 +169,12 @@ jQuery(document).ready(function() {
    */
   var oTable = $('#ajax-data-table').dataTable( {
       "aoColumnDefs": [
-          {"bSortable": false, "aTargets": [ 0 ] }
+          {"bSortable": false, "aTargets": [ 0 ] },
+          {"bSortable": false, "aTargets": [ 1 ] },
+          //{"sWidth": "5%", "aTargets": [ 2 ] },
+          
       ],
-      "aaSorting": [[1, 'asc']],
+      "aaSorting": [[2, 'asc']],
        "aLengthMenu": [
           [5, 15, 20, -1],
           [5, 15, 20, "All"] // change per page values here
