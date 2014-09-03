@@ -123,7 +123,8 @@ class CustomHelper
     foreach (json_decode($voter, true) as $value) {
       if($value['user_id'] == $userId)
       {
-        return Role::find($value['role_id'])->name;
+        $role = Role::find($value['role_id']);
+        return is_object($role) ? $role->name : '';
       }
     }
   }
@@ -152,5 +153,11 @@ class CustomHelper
       }
     }
     #return '';
+  }
+
+  public static function get_role_name($roleId)
+  {
+    $role = Role::find($roleId);
+    return is_object($role) ? $role->name : '';
   }
 }

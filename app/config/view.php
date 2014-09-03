@@ -101,6 +101,7 @@ return array(
     //votes
     'user-votes-index' => 'backend.user-vote.index',
     'user-votes-quick' => 'backend.user-vote.quick',
+    'view-my-mark' => 'backend.user-vote.view-my-mark',
 
 
 

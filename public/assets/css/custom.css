@@ -15,6 +15,7 @@ form .form-body.text-left label
 .color-success{
   color: #3CC051!important;
 }
+.color-danger{ color: #d9534f!important;}
 .invi{
   display: none;
 }

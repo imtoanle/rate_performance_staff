@@ -7,6 +7,8 @@ return array(
       'closed' => 2,
         ),
 
+    'head-department-role-id' => 1,
+
 
     'order-status' => array(
     	'pending' => 1,
@@ -169,6 +171,8 @@ return array(
     'listUserVotes' => 'user-votes-management',
     'quickUserVote' => 'user-votes-management',
     'postQuickUserVote' => 'user-votes-management',
+    'viewMyMark' => 'user-votes-management',
+    'viewMyVote' => 'user-votes-management',
     
     
     //servives

@@ -769,6 +769,18 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@postQuickVote')
   );
 
+  Route::get('user-votes/view-mark/{voteGroupId}', array(
+      'as' => 'viewMyMark',
+      'uses' => 'BackendUserVoteController@getViewMyMark')
+  );
+
+  Route::get('user-votes/view-vote/{voteGroupId}', array(
+      'as' => 'viewMyVote',
+      'uses' => 'BackendUserVoteController@getViewMyVote')
+  );
+
+  
+
 
 
 

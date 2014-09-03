@@ -12,9 +12,15 @@ class BackendUserVoteController extends BackendBaseController
   {
     $currentUser = Sentry::getUser();
     $pattern = '"user_id":"'.$currentUser->id.'"';
-    $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->orderBy('vote_code', 'asc')->get();
-    $canVoteGroup = Vote::select('vote_code','title')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_code')->get();
+    $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->orderBy('vote_group_id', 'asc')->get();
 
+    $canVoteGroupId = Vote::select('vote_group_id')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+
+    $voteGroupId = array();
+    foreach ($canVoteGroupId as $value) {
+      $voteGroupId[] = $value->vote_group_id;
+    }
+    $canVoteGroup = VoteGroup::whereIn('id', $voteGroupId)->get();
 
     $params['canVotes'] = $canVotes;
     $params['canVoteGroup'] = $canVoteGroup;
@@ -82,15 +88,74 @@ class BackendUserVoteController extends BackendBaseController
 
   public function getIndex()
   {
+    if(Request::Ajax())
+    {
+      $currentUser = Sentry::getUser();
+      if(Input::get('mode') == 'view_my_point')
+      {
+        $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
+
+        #$entitledVotes = Vote::whereRaw("entitled_vote regexp '".$pattern."'")->orderBy('vote_group_id', 'asc')->get();
+        $entitledVoteGroupIds = Vote::select('vote_group_id')->whereRaw("entitled_vote regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+        $arrEntitledVoteGroupIds = array();
+        foreach ($entitledVoteGroupIds as $value) {
+          $arrEntitledVoteGroupIds[] = $value['vote_group_id'];
+        }
+
+        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+          ->whereIn('id', $arrEntitledVoteGroupIds);
+          #->limit($limit);
+        $viewVoteRoute = 'viewMyMark';
+      }else if (Input::get('mode') == 'view_my_vote') {
+        $pattern = '"user_id":"'.$currentUser->id.'"';
+        $canVoteGroupId = Vote::select('vote_group_id')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+        $arrCanVoteGroupIds = array();
+        foreach ($canVoteGroupId as $value) {
+          $arrCanVoteGroupIds[] = $value['vote_group_id'];
+        }
+
+        $voteGroups = VoteGroup::select(array('vote_code', 'title', 'head_department', 'id as vote_group_id','id as actions'))
+          ->whereIn('id', $arrCanVoteGroupIds);
+          #->limit($limit);
+        $viewVoteRoute = 'viewMyVote';
+      }
+
+      return Datatables::of($voteGroups)
+        ->edit_column('head_department', function($row){
+          $user = User::find($row->head_department);
+          return is_object($user) ? $user->full_name : '';
+        })
+        ->edit_column('vote_group_id', function($row){
+          $count = Vote::where('vote_group_id', $row->vote_group_id)
+            ->where('status', Config::get("variable.vote-status.newly"))
+            ->whereOr('status', Config::get("variable.vote-status.opened"))
+            ->count();
+          if ($count > 0)
+          {
+            return '<span class="label label-success">'.trans("all.opened").'</span>';
+          }else
+          {
+            return '<span class="label label-default">'.trans("all.closed").'</span>';
+          }
+        })
+        ->edit_column('actions', '<a href="{{route(\''.$viewVoteRoute.'\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> '.trans('all.view').'</a>')
+        #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+        ->make();
+    }
+
+    $this->layout = View::make(Config::get('view.backend.user-votes-index'));
+  }
+
+  public function getViewMyMark($voteGroupId)
+  {
     $currentUser = Sentry::getUser();
     $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
-    $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->get();
-    #$entitledVotes = Vote::whereRaw("entitled_vote regexp '".$pattern."'")->get();
-    
-    $params['canVotes'] = $canVotes;
-    #$params['entitledVotes'] = $entitledVotes;
-    $this->layout = View::make(Config::get('view.backend.user-votes-index'), $params);
-    
+    $voteGroup = VoteGroup::find($voteGroupId);
+    $votes = Vote::where('vote_group_id', $voteGroup->id)->whereRaw("entitled_vote regexp '".$pattern."'")->get();
+    $params['votes'] = $votes;
+    $params['voteGroup'] = $voteGroup;
+    $params['currentUser'] = $currentUser;
+    return View::make(Config::get('view.backend.view-my-mark'), $params);
   }
 
   public function getCreate()

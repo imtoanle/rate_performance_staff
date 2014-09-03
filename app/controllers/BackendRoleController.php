@@ -7,11 +7,11 @@ class BackendRoleController extends BackendBaseController
   */
   public function getIndex()
   {
-      $roles = Role::all();
-      $params['roles'] = $roles;
-      $this->layout = View::make(Config::get('view.backend.roles-index'), $params);
-      #$this->layout->title = trans('syntara::permissions.titles.list');
-      #$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.permissions');
+    $roles = Role::whereNotIn('id', array(Config::get('variable.head-department-role-id')))->get();
+    $params['roles'] = $roles;
+    $this->layout = View::make(Config::get('view.backend.roles-index'), $params);
+    #$this->layout->title = trans('syntara::permissions.titles.list');
+    #$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.permissions');
   }
 
   /**
@@ -19,9 +19,6 @@ class BackendRoleController extends BackendBaseController
   */
   public function postCreate()
   {
-
-    
-
     $validator = new BackendValidator(Input::all(), 'role-create');
 
     if(!$validator->passes())
@@ -39,7 +36,7 @@ class BackendRoleController extends BackendBaseController
       return Response::json(array('actionStatus' => true, 'itemId' => $role->id, 'message' => trans('all.messages.role-created'), 'messageType' => 'success'));
     }else
     {
-      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-create-failed'), 'messageType' => 'danger'));
+      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-create-failed'), 'messageType' => 'error'));
     }
   }
 
@@ -50,6 +47,7 @@ class BackendRoleController extends BackendBaseController
      */
   public function putShow($roleId)
   {
+    $this->_protect_head_department_role(Input::get('role_id'));
     try
     {
       $role = Role::find(Input::get('role_id'));
@@ -67,12 +65,12 @@ class BackendRoleController extends BackendBaseController
         return Response::json(array('actionStatus' => true, 'itemId' => $role->id, 'message' => trans('all.messages.role-updated'), 'messageType' => 'success'));
       }else
       {
-        return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-update-failed'), 'messageType' => 'danger'));
+        return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-update-failed'), 'messageType' => 'error'));
       }
 
     }catch(\Exception $e)
     {
-      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-not-found'), 'messageType' => 'danger'));
+      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.role-not-found'), 'messageType' => 'error'));
     }
   }
 
@@ -90,8 +88,9 @@ class BackendRoleController extends BackendBaseController
     foreach ($roleArrays as $roleId) {
       try
       {
-          $role = Role::find($roleId);
-          $role->delete();
+        $this->_protect_head_department_role($roleId);
+        $role = Role::find($roleId);
+        $role->delete();
       }
       catch (\Exception $e)
       {
@@ -103,4 +102,11 @@ class BackendRoleController extends BackendBaseController
       
   }
 
+  protected function _protect_head_department_role($roleId)
+  {
+    if ($roleId == Config::get('variable.head-department-role-id'))
+    {
+      App::abort(500, trans('all.messages.role-action-head-department'));
+    }
+  }
 }

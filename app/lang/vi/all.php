@@ -89,6 +89,7 @@ return array(
 		'role-update-failed' => 'Lỗi khi cập nhập vai trò',
 		'role-not-found' => 'Không tìm thấy vai trò này',
 		'role-delete-success' => 'Xóa vai trò thành công',
+		'role-action-head-department' => 'Không thể xử lý vai trò truởng ban',
 
 		'need-select-voter' => 'Cần chọn người chấm điểm trước',
 		),
@@ -161,8 +162,8 @@ return array(
 	'closed' => 'Đã chốt',
 	'list' => 'Danh sách',
 	'can-votes' => 'Có thể đánh giá',
-	'self-voting' => 'Đang được đánh giá',
-	'old-votes' => 'Đánh giá cũ',
+	'self-voting' => 'Điểm đánh giá mình',
+	'self-voter' => 'Điểm đánh giá người khác',
 	'job-title' => 'Chức vụ',
 	'cancel' => 'Hủy',
 	'job-title-list' => 'Danh sách chức vụ',
@@ -198,6 +199,7 @@ return array(
 	'show-vote-group' => 'Sửa nhóm đánh giá',
 	'copy' => 'Chép',
 	'copy-vote-group' => 'Sao chép nhóm đánh giá',
+	'final-mark' => 'Tổng điểm',
 
 
 
