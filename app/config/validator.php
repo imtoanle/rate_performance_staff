@@ -155,6 +155,7 @@ return array(
       'email' => array('required', 'email'),
       'password' => array('required', 'min:6', 'max:255'),
       'username' => array('required', 'min:3', 'max:255'),
+      'select_department' => 'required',
       'full_name' => array('min:3', 'max:255'),
     ),
     'user-update-privacy' => array(

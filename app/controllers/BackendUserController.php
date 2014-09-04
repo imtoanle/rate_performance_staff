@@ -41,6 +41,23 @@ class BackendUserController extends BackendBaseController
     }
   }
 
+  public function searchViaDepartment()
+  {
+    $departmentId = Input::get('department_id');
+    $department = Department::find($departmentId);
+    $users = $department->users();
+
+    $usersInDepartment = array();
+    foreach ($users as $user) {
+      $usersInDepartment[] = array(
+        'id' => $user->id,
+        'username' => $user->username, 
+        'full_name' => $user->full_name,
+      );
+    }
+    return Response::json(array('action' => 'add', 'departmentId' => $departmentId, 'departmentName' => Department::find($departmentId)->name, 'data' => $usersInDepartment));
+  }
+
     public function fullTextSearch()
     {
       $userArr = array();
@@ -90,12 +107,13 @@ class BackendUserController extends BackendBaseController
     public function getCreate()
     {
       $params['jobTitles'] = JobTitle::all();
-        $params['groups'] = Sentry::findAllGroups();
-        $params['permissions'] = Permission::all();
+      $params['departments'] = Department::all();
+      $params['groups'] = Sentry::findAllGroups();
+      $params['permissions'] = Permission::all();
 
-        $this->layout = View::make(Config::get('view.backend.user-create'), $params);
-        $this->layout->title = trans('syntara::users.titles.new');
-        $this->layout->breadcrumb = Config::get('syntara::breadcrumbs.create_user');
+      $this->layout = View::make(Config::get('view.backend.user-create'), $params);
+      $this->layout->title = trans('syntara::users.titles.new');
+      $this->layout->breadcrumb = Config::get('syntara::breadcrumbs.create_user');
     }
 
     /**
@@ -120,6 +138,7 @@ class BackendUserController extends BackendBaseController
                 'email'    => Input::get('email'),
                 'password' => Input::get('password'),
                 'username' => Input::get('username'),
+                'department' => Input::get('select_department'),
                 'full_name' => (string)Input::get('full_name'),
                 'job_title' => Input::get('select_job_titles'),
                 'permissions' => $permissions
@@ -274,23 +293,24 @@ class BackendUserController extends BackendBaseController
     {
         try
         {
-            $user = Sentry::findUserById($userId);
-            $throttle = Sentry::findThrottlerByUserId($userId);
-            $jobTitles = JobTitle::all();
-            $groups = Sentry::findAllGroups();
+          $user = Sentry::findUserById($userId);
+          $throttle = Sentry::findThrottlerByUserId($userId);
+          $jobTitles = JobTitle::all();
+          $groups = Sentry::findAllGroups();
 
-            // get user permissions
-            $permissions = Permission::orderBy('value')->get();
-            $userPermissions = $user->getPermissions();
+          // get user permissions
+          $permissions = Permission::orderBy('value')->get();
+          $userPermissions = $user->getPermissions();
 
-            $params['user'] = $user;
-            $params['throttle'] = $throttle;
-            $params['jobTitles'] = $jobTitles;
-            $params['groups'] = $groups;
-            $params['permissions'] = $permissions;
-            $params['userPermissions'] = array_keys($userPermissions);
+          $params['user'] = $user;
+          $params['departments'] = Department::all();
+          $params['throttle'] = $throttle;
+          $params['jobTitles'] = $jobTitles;
+          $params['groups'] = $groups;
+          $params['permissions'] = $permissions;
+          $params['userPermissions'] = array_keys($userPermissions);
 
-            return View::make(Config::Get('view.backend.user-profile'), $params);
+          return View::make(Config::Get('view.backend.user-profile'), $params);
             
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
@@ -400,6 +420,7 @@ class BackendUserController extends BackendBaseController
               }
 
               $user->job_title = Input::get('select_job_titles');
+              $user->department = Input::get('select_department');
               break;
 
             default:

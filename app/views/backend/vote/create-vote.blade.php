@@ -67,7 +67,8 @@
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.department')}}</label>
           <div class="col-md-8">
-            <select name="department_list" id="select2_department" class="form-control select2" multiple>
+            <select name="department_list" id="select2_department" class="form-control select2">
+              <option></option>
               @foreach($departments as $department)
               <option value="{{$department->id}}">{{$department->name}}</option>
               @endforeach
@@ -193,6 +194,29 @@ jQuery(document).ready(function() {
     });
     $(this).data("prev",$(this).val());
   });
+
+
+  $('#select2_department').change(function(){
+    $('optgroup[department-id]').remove();
+
+    ajax_call_custom('GET', '{{route('listUsersSearchDepartment')}}', 'department_id='+$(this).val(), function(result){
+      var html_option = '';
+      html_option += '<optgroup department-id="'+ result.departmentId +'" label="'+result.departmentName+'">';
+      for(var i in result.data)
+      {
+        if(!$('option[value='+ result.data[i].id +']').length)
+        {
+          html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
+        }
+      }
+      html_option += '</optgroup>';
+
+      $('#multi_entitled_vote').append(html_option);
+
+      $('#multi_entitled_vote').multiSelect('refresh');
+    });
+  });
+
 
   $('#multi_entitled_vote').multiSelect({
       selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='{{trans('all.search')}}...'>",

@@ -524,6 +524,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserController@searchViaJobTitle')
   );
 
+  Route::get('users/search-via-department', array(
+      'as' => 'listUsersSearchDepartment',
+      'uses' => 'BackendUserController@searchViaDepartment')
+  );
+
   /**
    * Group routes
    */

@@ -166,6 +166,7 @@ return array(
     'showVoteGroup' => 'votes-management',
     'listUsersSearch' => 'votes-management',
     'listUsersSearchJob' => 'votes-management',
+    'listUsersSearchDepartment' => 'votes-management',
     'listPersionsVote' => 'votes-management',
     //user-vote
     'listUserVotes' => 'user-votes-management',

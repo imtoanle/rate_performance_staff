@@ -9,4 +9,9 @@ class User extends SentryUserModel {
     ->whereIn('id',$idsjob)->first();
     return $jobTitles->group_name;
   }
+
+  public function department()
+  {
+      return $this->belongsTo('Department');
+  }
 }

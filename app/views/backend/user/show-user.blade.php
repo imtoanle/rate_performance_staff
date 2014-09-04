@@ -239,6 +239,19 @@
                               </div>
                             </div>
 
+
+                            <div class="form-group">
+                              <label class="control-label col-md-2">{{trans('all.department')}}</label>
+                              <div class="col-md-10">
+                                  <select id="select_department" name="select_department" class="form-control select2">
+                                    <option></option>
+                                    @foreach($departments as $department)
+                                    <option value="{{$department->id}}" {{$department->id == $user->department ? 'selected' : ''}}>{{$department->name}}</option>
+                                    @endforeach
+                                  </select>
+                              </div>
+                            </div>
+
                             <div class="form-group">
                               <label class="control-label col-md-2">{{trans('all.job-title')}}</label>
                               <div class="col-md-10">
@@ -336,6 +349,11 @@ jQuery(document).ready(function() {
 
   $('#select_groups, #select_job_titles').select2({
     placeholder: "{{trans('all.select-group')}}",
+    allowClear: true
+  });
+
+  $('#select_department').select2({
+    placeholder: "{{trans('all.department')}}",
     allowClear: true
   });
 });

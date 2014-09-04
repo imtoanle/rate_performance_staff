@@ -24,4 +24,9 @@ class Department extends Model
      */
     protected $guarded = array('id');
 
+    public function users()
+    {
+        return $this->hasMany('User', 'department');
+    }
+
 }
