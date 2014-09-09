@@ -61,10 +61,14 @@ class CustomHelper
         return $email;
     }
 
-  public static function get_users_from_job_list($jobIds)
+  public static function get_users_from_job_list($jobIds, $userInDepartment)
   {
-    $usersInJob = array();
     $existsUsers = array();
+    foreach ($userInDepartment as $user) {
+      $existsUsers[] = $user->username;
+    }
+
+    $usersInJob = array();
     foreach ($jobIds as $jobId) {
       $pattern = "^$jobId,|,$jobId,|^$jobId$|,$jobId$";
       $users = User::select('id', 'username', 'full_name')->whereRaw("job_title regexp '".$pattern."'")->get();
@@ -84,6 +88,17 @@ class CustomHelper
       $usersInJob[$jobId]['jobName'] = is_object($jobTitle) ? $jobTitle->name : '';
     }
     return $usersInJob;
+  }
+
+  public static function convert_users_job_list_to_id_array($usersinJob)
+  {
+    $arrayUserId = [];
+    foreach ($usersinJob as $jobs) {
+      foreach ($jobs['data'] as $user) {
+        $arrayUserId[] = $user['id'];
+      }
+    }
+    return $arrayUserId;
   }
 
   public static function get_users_from_voter_list($json_voter)

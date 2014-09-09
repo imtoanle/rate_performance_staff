@@ -130,7 +130,6 @@ return array(
       'voter_id' => 'required',
       'criteria_list' => 'required',
       'expiration_date' => 'required',
-      'head_department' => 'required',
     ),
 
     'vote-update' => array(
@@ -144,7 +143,6 @@ return array(
     'vote-group-update' => array(
       'vote_code' => 'required',
       'title' => 'required',
-      'head_department' => 'required',
       ),
 
     'vote-result-mark' => array(

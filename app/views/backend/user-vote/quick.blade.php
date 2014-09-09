@@ -24,7 +24,7 @@
   @foreach($canVotes as $vote)
     @if($vote->vote_group_id == $voteGroup->id)
     <tr>
-      <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{$vote->department_name()}}</td>
+      <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
       <td colspan="3"><strong>{{trans('all.role')}}:</strong> {{CustomHelper::get_role_current_user($vote->voter, $currentUser->id)}}</td>
     </tr>
       <?php $number_in_department = 1; ?>

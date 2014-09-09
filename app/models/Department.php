@@ -26,7 +26,14 @@ class Department extends Model
 
     public function users()
     {
-        return $this->hasMany('User', 'department');
+        #return User::whereDepartmentId($this->id)->get();
+        return $this->hasMany('User');
+    }
+
+
+    public function getName()
+    {
+        return $this->name;
     }
 
 }

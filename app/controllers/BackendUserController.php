@@ -43,19 +43,22 @@ class BackendUserController extends BackendBaseController
 
   public function searchViaDepartment()
   {
-    $departmentId = Input::get('department_id');
-    $department = Department::find($departmentId);
-    $users = $department->users();
-
-    $usersInDepartment = array();
-    foreach ($users as $user) {
-      $usersInDepartment[] = array(
-        'id' => $user->id,
-        'username' => $user->username, 
-        'full_name' => $user->full_name,
-      );
+    if (Input::has('department_id'))
+    {
+      $departmentId = Input::get('department_id');
+      $department = Department::find($departmentId);
+      $users = $department->users;
+      $usersInDepartment = array();
+      foreach ($users as $user) {
+        $usersInDepartment[] = array(
+          'id' => $user->id,
+          'username' => $user->username, 
+          'full_name' => $user->full_name,
+        );
+      }
+      return Response::json(array('action' => true, 'departmentId' => $departmentId, 'departmentName' => $department->name, 'data' => $usersInDepartment));
     }
-    return Response::json(array('action' => 'add', 'departmentId' => $departmentId, 'departmentName' => Department::find($departmentId)->name, 'data' => $usersInDepartment));
+    return Response::json(array('actionStatus' => false));
   }
 
     public function fullTextSearch()
@@ -138,7 +141,7 @@ class BackendUserController extends BackendBaseController
                 'email'    => Input::get('email'),
                 'password' => Input::get('password'),
                 'username' => Input::get('username'),
-                'department' => Input::get('select_department'),
+                'department_id' => Input::get('select_department'),
                 'full_name' => (string)Input::get('full_name'),
                 'job_title' => Input::get('select_job_titles'),
                 'permissions' => $permissions
@@ -242,11 +245,11 @@ class BackendUserController extends BackendBaseController
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Response::json(array('deletedUser' => false, 'message' => trans('syntara::users.messages.not-found'), 'messageType' => 'danger'));
+            return Response::json(array('deletedUser' => false, 'message' => trans('syntara::users.messages.not-found'), 'messageType' => 'error'));
         }
         catch (\Cartalyst\Sentry\Users\UserAlreadyActivatedException $e)
         {
-            return Response::json(array('deletedUser' => false, 'message' => trans('syntara::users.messages.activate-already'), 'messageType' => 'danger'));
+            return Response::json(array('deletedUser' => false, 'message' => trans('syntara::users.messages.activate-already'), 'messageType' => 'error'));
         }
 
         return Response::json(array('deletedUser' => true, 'message' => trans('syntara::users.messages.activate-success'), 'messageType' => 'success'));
@@ -420,7 +423,7 @@ class BackendUserController extends BackendBaseController
               }
 
               $user->job_title = Input::get('select_job_titles');
-              $user->department = Input::get('select_department');
+              $user->department_id = Input::get('select_department');
               break;
 
             default:
@@ -435,16 +438,16 @@ class BackendUserController extends BackendBaseController
           }
           else 
           {
-            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-update-fail'), 'messageType' => 'danger'));
+            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-update-fail'), 'messageType' => 'error'));
           }
         }
         catch(\Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-email-exists'), 'messageType' => 'danger'));
+            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-email-exists'), 'messageType' => 'error'));
         }
         catch(\Exception $e)
         {
-            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-name-exists'), 'messageType' => 'danger'));
+            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-name-exists'), 'messageType' => 'error'));
         }
     }
 

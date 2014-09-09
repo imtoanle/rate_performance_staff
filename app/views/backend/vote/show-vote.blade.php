@@ -44,10 +44,10 @@
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.department')}}</label>
           <div class="col-md-8">
-            <?php $departmentIds = explode(',', $vote->department); ?>
-            <select name="department_list" id="select2_department" class="form-control select2" multiple>
+            <select name="department_list" id="select2_department" class="form-control select2">
+              <option></option>
               @foreach($departments as $department)
-              <option value="{{$department->id}}" {{ in_array($department->id, $departmentIds) ? 'selected' : '' }}>{{$department->name}}</option>
+              <option value="{{$department->id}}" {{ $department->id == $vote->department_id ? 'selected' : '' }}>{{$department->name}}</option>
               @endforeach
             </select>
           </div>
@@ -82,13 +82,28 @@
           <div class="col-md-8">
             <?php $entitledVoteArr = explode(',', $vote->entitled_vote); ?>
             <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
-              @foreach(CustomHelper::get_users_from_job_list($objectVoteArr) as $key => $value)
+              @if(is_object($voteDepartment))
+              <optgroup department-id="{{$voteDepartment->id}}" label="{{$voteDepartment->name}}">
+                <?php $departmentUsers = $voteDepartment->users; ?>
+                @foreach($departmentUsers as $user)
+                  <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}}</option>    
+                @endforeach
+              </optgroup>
+              @endif
+
+              <?php 
+              $departmentUsers = isset($departmentUsers) ? $departmentUsers : [];
+              $usersInJob = CustomHelper::get_users_from_job_list($objectVoteArr, $departmentUsers);
+              ?>
+              @foreach($usersInJob as $key => $value)
                 <optgroup job-id="{{$key}}" label="{{$value['jobName']}}">
                   @foreach($value['data'] as $user)
                     <option value="{{$user['id']}}" {{in_array($user['id'], $entitledVoteArr) ? 'selected' : ''}}>{{$user['username']}}</option>    
                   @endforeach
                 </optgroup>
               @endforeach
+
+              
             </select>
           </div>
         </div>
@@ -199,6 +214,27 @@ jQuery(document).ready(function() {
       $('#multi_entitled_vote').multiSelect('refresh');
     });
     $(this).data("prev",$(this).val());
+  });
+
+  $('#select2_department').change(function(){
+    $('optgroup[department-id]').remove();
+
+    ajax_call_custom('GET', '{{route('listUsersSearchDepartment')}}', 'department_id='+$(this).val(), function(result){
+      var html_option = '';
+      html_option += '<optgroup department-id="'+ result.departmentId +'" label="'+result.departmentName+'">';
+      for(var i in result.data)
+      {
+        if(!$('option[value='+ result.data[i].id +']').length)
+        {
+          html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
+        }
+      }
+      html_option += '</optgroup>';
+
+      $('#multi_entitled_vote').append(html_option);
+
+      $('#multi_entitled_vote').multiSelect('refresh');
+    });
   });
 
   $('#multi_entitled_vote').multiSelect({

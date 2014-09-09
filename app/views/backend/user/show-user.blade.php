@@ -246,7 +246,7 @@
                                   <select id="select_department" name="select_department" class="form-control select2">
                                     <option></option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}" {{$department->id == $user->department ? 'selected' : ''}}>{{$department->name}}</option>
+                                    <option value="{{$department->id}}" {{$department->id == $user->department_id ? 'selected' : ''}}>{{$department->name}}</option>
                                     @endforeach
                                   </select>
                               </div>

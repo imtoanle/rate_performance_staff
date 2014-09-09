@@ -101,10 +101,10 @@ class BackendVoteController extends BackendBaseController
           $actionsHtml = '<a href="'.route('listPersionsVote', $vote->id).'" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> '.trans('all.view').'</a>
             <a href="'.route('showVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> '.trans('all.edit').'</a>
             <a class="btn btn-default btn-xs black" data-href="'.route('deleteVote').'" data-item-id="'.$vote->id.'" data-toggle="modal" data-target="#confirm-delete" href="#"><i class="fa fa-trash-o"></i> '.trans('all.delete').'</a>';
-            $departmentName = $vote->department_name();
+            $department = $vote->department;
 
           $votesArr[] = array(
-            'department' => empty($departmentName) ? '' : $departmentName,
+            'department' => is_object($department) ? $department->name : '',
             'created_at' => $vote->created_at->format('d-m-Y'),
             'status' => $statusHtml,
             'actions' => $actionsHtml,
@@ -140,7 +140,6 @@ class BackendVoteController extends BackendBaseController
     $newVoteGroup->fill(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
-      'head_department' => Input::get('head_department'),
       ));
 
     if(!$newVoteGroup->save())
@@ -232,7 +231,6 @@ class BackendVoteController extends BackendBaseController
       $voteGroup = VoteGroup::create(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
-      'head_department' => Input::get('head_department'),
       ));
       $vote_group_id = $voteGroup->id;
     }
@@ -241,7 +239,7 @@ class BackendVoteController extends BackendBaseController
     $vote = new Vote;
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_list'),
-      'department' => Input::get('department_list'),
+      'department_id' => Input::get('department_list'),
       'criteria' => Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
@@ -268,6 +266,7 @@ class BackendVoteController extends BackendBaseController
     }
     
     $params['vote'] = $vote;
+    $params['voteDepartment'] = $vote->department;
     $params['jobTitles'] = JobTitle::all();
     $params['departments'] = Department::all();
     $params['criterias'] = Criteria::all();
@@ -292,7 +291,7 @@ class BackendVoteController extends BackendBaseController
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_list'),
-      'department' => Input::get('department_list'),
+      'department_id' => Input::get('department_list'),
       'criteria' => Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
@@ -326,7 +325,6 @@ class BackendVoteController extends BackendBaseController
     $voteGroup->fill(array(
       'vote_code' => Input::get('vote_code'),
       'title' => Input::get('title'),
-      'head_department' => Input::get('head_department'),
       ));
 
     if($voteGroup->save())
