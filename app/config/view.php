@@ -103,6 +103,15 @@ return array(
     'user-votes-quick' => 'backend.user-vote.quick',
     'view-my-mark' => 'backend.user-vote.view-my-mark',
 
+    //report
+    'report-by-period-index' => 'backend.report.period-index',
+    'report-by-period-vote' => 'backend.report.period-vote',
+    'report-by-period-vote-group' => 'backend.report.period-vote-group',
+
+    'report-by-year-index' => 'backend.report.year-index',
+    'report-by-year-vote' => 'backend.report.year-vote',
+    'report-by-year-vote-group' => 'backend.report.year-vote-group',
+
 
 
 

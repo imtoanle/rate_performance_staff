@@ -21,3 +21,12 @@ form .form-body.text-left label
 }
 
 .text-center{ text-align: center; }
+
+div.td { border-right: 1px solid; display:table-cell; }
+div.td:last-child { border-right: none; }
+
+div.tr {
+  border:1px solid;
+};
+
+

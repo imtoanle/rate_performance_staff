@@ -784,6 +784,31 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@getViewMyVote')
   );
 
+
+  //report route
+  Route::get('reports-by-period', array(
+      'as' => 'listReportPeriod',
+      'uses' => 'VoteReportBackendController@getIndexPeriod')
+  );
+
+  Route::get('reports-by-period/vote/{VoteId}', array(
+      'as' => 'reportPeriodVote',
+      'uses' => 'VoteReportBackendController@getPeriodVote')
+  );
+
+  Route::get('reports-by-period/vote-group/{voteGroupId}', array(
+      'as' => 'reportPeriodVoteGroup',
+      'uses' => 'VoteReportBackendController@getPeriodVoteGroup')
+  );
+
+
+  Route::get('reports-by-year', array(
+      'as' => 'listReportYear',
+      'uses' => 'VoteReportBackendController@getIndexYear')
+  );
+
+
+
   
 
 

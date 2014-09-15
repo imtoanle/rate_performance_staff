@@ -29,6 +29,12 @@
     {{ BackendSideBar::create_node(trans('all.criteria'), 'listCriterias', 'fa fa-trophy') }}  
   {{ BackendSideBar::create_root_close() }} 
 
+  <?php $arrRoutes = array('listReportPeriod', 'listReportYear'); ?>
+  {{ BackendSideBar::create_root_open(trans('all.report'), $arrRoutes, 'fa fa-line-chart')}}  
+    {{ BackendSideBar::create_node(trans('all.reports-by-period'), 'listReportPeriod', 'fa fa-list') }}  
+    {{ BackendSideBar::create_node(trans('all.reports-by-year'), 'listReportYear', 'fa fa-list') }}  
+  {{ BackendSideBar::create_root_close() }} 
+
   <?php $arrRoutes = array('listPermissions', 'listJobTitles', 'listUsers', 'listGroups', 'listDepartments'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  

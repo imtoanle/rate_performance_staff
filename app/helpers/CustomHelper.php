@@ -175,4 +175,11 @@ class CustomHelper
     $role = Role::find($roleId);
     return is_object($role) ? $role->name : '';
   }
+
+  public static function get_user_name($userId)
+  {
+    $user = User::find($userId);
+    return is_object($user) ? $user->full_name : '';
+  }
+
 }

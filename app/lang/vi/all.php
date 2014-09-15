@@ -200,8 +200,12 @@ return array(
 	'copy' => 'Chép',
 	'copy-vote-group' => 'Sao chép nhóm đánh giá',
 	'final-mark' => 'Tổng điểm',
-
-
+	'report' => 'Báo cáo',
+	'reports-by-period' => 'Báo cáo theo kỳ',
+	'reports-by-year' => 'Báo cáo theo năm',
+	'general-results' => 'Tổng hợp kết quả',
+	'select-report-type' => 'Chọn loại báo cáo',
+	'select-year' => 'Chọn năm',
 
 
 

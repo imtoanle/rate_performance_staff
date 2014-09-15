@@ -49,4 +49,10 @@ class Vote extends Model
     {
         return $this->belongsTo('Department');
     }
+
+    public function get_department_name()
+    {
+        $department = $this->department;
+        return is_object($department) ? $department->name : '';
+    }
 }

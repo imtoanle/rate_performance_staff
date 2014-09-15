@@ -174,6 +174,20 @@ return array(
     'postQuickUserVote' => 'user-votes-management',
     'viewMyMark' => 'user-votes-management',
     'viewMyVote' => 'user-votes-management',
+
+    //reports
+    'listReportPeriod' => 'vote-reports-manager',
+    'reportPeriodVote' => 'vote-reports-manager',
+    'reportPeriodVoteGroup' => 'vote-reports-manager',
+
+    'listReportYear' => 'vote-reports-manager',
+    'reportYearVote' => 'vote-reports-manager',
+    'reportYearVoteGroup' => 'vote-reports-manager',
+    
+
+
+
+
     
     
     //servives
