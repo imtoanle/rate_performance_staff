@@ -1,9 +1,12 @@
 <?php
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 class Setting extends Model
 {
+    use SoftDeletingTrait;
 
+    protected $dates = ['deleted_at'];
+    
     /**
      * Model 'Order' table
      * @var string

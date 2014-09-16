@@ -1,9 +1,12 @@
 <?php
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 class JobTitle extends Model
 {
+    use SoftDeletingTrait;
 
+    protected $dates = ['deleted_at'];
+    
     /**
      * Model 'JobTitle' table
      * @var string
@@ -24,9 +27,11 @@ class JobTitle extends Model
      */
     protected $guarded = array('id');
 
-    public function getName()
+    public function users()
     {
-        return 'dssda';
+        $value = $this->id;
+        $pattern = "^$value,|,$value,|^$value$|,$value$";
+        return User::whereRaw("job_title regexp '".$pattern."'")->get();
     }
 
 }

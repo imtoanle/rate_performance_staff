@@ -12,38 +12,13 @@ class DatabaseSeeder extends Seeder {
 		Eloquent::unguard();
 
 		$this->call('PermissionsTableSeeder');
-		#$this->call('PermissionTableSeeder');
 		$this->call('GroupTableSeeder');
+		$this->call('DepartmentTableSeeder');
+		$this->call('JobTitleTableSeeder');
 		$this->call('UserTableSeeder');
-
-		$this->call('SettingsTableSeeder');
-		$this->call('SourceCatsTableSeeder');
-		$this->call('SourceServicesTableSeeder');
-
-		$this->call('ServiceCatsTableSeeder');
-		$this->call('ServicesTableSeeder');
-
-		$this->call('PricingsTableSeeder');
-
-
-		$this->call('ApiTableSeeder');
-		$this->call('BlogTableSeeder');		
-
-		$this->call('ClientGroupTableSeeder');		
-		$this->call('ClientTableSeeder');		
-		$this->call('CommentTableSeeder');		
-		$this->call('FeedBackTableSeeder');		
-		$this->call('InvoiceTableSeeder');		
-		
-		$this->call('PagesTableSeeder');
-		$this->call('PaymentsTableSeeder');
-		
-		$this->call('SuppliersTableSeeder');
-		$this->call('StatementTableSeeder');
-
-		$this->call('LoginLogTableSeeder');
-		$this->call('OrderTableSeeder');
-		
+		$this->call('VoteGroupTableSeeder');
+		$this->call('CriteriaTableSeeder');
+		$this->call('RoleTableSeeder');
 	}
 
 }

@@ -1,9 +1,12 @@
 <?php
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 class Permission extends Model
 {
+    use SoftDeletingTrait;
 
+    protected $dates = ['deleted_at'];
+    
     /**
      * Model 'Permission' table
      * @var string

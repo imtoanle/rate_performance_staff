@@ -1,9 +1,12 @@
 <?php
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 use Illuminate\Database\Eloquent\Model;
-
 class Department extends Model
 {
+    use SoftDeletingTrait;
 
+    protected $dates = ['deleted_at'];
+    
     /**
      * Model 'JobTitle' table
      * @var string

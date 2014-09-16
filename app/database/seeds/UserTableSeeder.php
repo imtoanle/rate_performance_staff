@@ -6,9 +6,16 @@ class UserTableSeeder extends Seeder {
   {
     $faker = Faker\Factory::create();
 
-    for ($i=1;$i<=5;$i++)
+    for ($i=1;$i<=400;$i++)
     {
       $username = $i==1 ? 'admin' : $faker->userName;
+      $jobIds = '';
+      $job_titles = JobTitle::orderByRaw("RAND()")->take(3)->get();
+      foreach ($job_titles as $job) {
+        $jobIds .= $job->id.',';
+      }
+
+      $jobIds = trim($jobIds, ',');
 
       $user = Sentry::createUser(array(
         'id' => $i,
@@ -19,6 +26,8 @@ class UserTableSeeder extends Seeder {
         'full_name' => $faker->name($gender = NULL),
         'phone_num' => $faker->phoneNumber,
         'birth_date' => $faker->dateTimeThisCentury($max = 'now'),
+        'department_id' => Department::orderByRaw("RAND()")->first()->id,
+        'job_title' => $jobIds,
         ));
 
       $idGroup = $i==1 ? 1 : $faker->numberBetween($min = 1, $max = 2);

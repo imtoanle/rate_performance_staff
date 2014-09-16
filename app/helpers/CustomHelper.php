@@ -182,4 +182,10 @@ class CustomHelper
     return is_object($user) ? $user->full_name : '';
   }
 
+  public static function get_users_from_job_id($jobId)
+  {
+    $pattern = "^$jobId,|,$jobId,|^$jobId$|,$jobId$";
+    return User::whereRaw("job_title regexp '".$pattern."'")->get();
+  }
+
 }
