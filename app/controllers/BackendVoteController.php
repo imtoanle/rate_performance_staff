@@ -3,7 +3,7 @@ use Validators\Backend as BackendValidator;
 use Carbon\Carbon;
 class BackendVoteController extends BackendBaseController 
 {
-
+ 
   /**
   * Display a list of all votes
   *

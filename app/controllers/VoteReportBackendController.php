@@ -16,10 +16,10 @@ class VoteReportBackendController extends BackendBaseController
       if (Input::get('mode') == 'datatable')
       {
         $limit = Input::get('limit');
-      $votes = VoteGroup::select(array('id as button', 'vote_code', 'title', 'id as vote_group_id','id as actions'))
+        $votes = VoteGroup::select(array('id as button', 'vote_code', 'title', 'id as vote_group_id','id as actions'))
                 ->limit($limit);
       return Datatables::of($votes)
-        ->edit_column('button', '<span class="row-details row-details-close"></span>')
+        ->edit_column('button', '<span class="row-details row-details-close"><input type="hidden" value="{{$button}}" /></span>')
         ->edit_column('vote_group_id', function($row){
           $count = Vote::where('vote_group_id', $row->vote_group_id)
             ->where('status', Config::get("variable.vote-status.newly"))

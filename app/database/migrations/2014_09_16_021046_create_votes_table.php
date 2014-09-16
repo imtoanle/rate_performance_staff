@@ -15,11 +15,11 @@ class CreateVotesTable extends Migration {
 		Schema::create('votes', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('object_entitled_vote');
-			$table->string('entitled_vote');
-			$table->string('voter');
+			$table->text('object_entitled_vote');
+			$table->text('entitled_vote');
+			$table->text('voter');
 			$table->integer('status')->default(0);
-			$table->string('criteria');
+			$table->text('criteria');
 			$table->integer('vote_group_id');
 			$table->integer('department_id');
 			$table->softDeletes();

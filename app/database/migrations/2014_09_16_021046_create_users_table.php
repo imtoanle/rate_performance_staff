@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration {
 			$table->string('phone_num', 20);
 			$table->date('birth_date');
 			$table->string('address');
-			$table->string('job_title');
+			$table->text('job_title');
 			$table->integer('department_id');
 			$table->softDeletes();
 			$table->timestamps();

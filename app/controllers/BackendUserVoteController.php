@@ -16,10 +16,12 @@ class BackendUserVoteController extends BackendBaseController
 
     $canVoteGroupId = Vote::select('vote_group_id')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
 
-    $voteGroupId = array();
+    $voteGroupId = [];
     foreach ($canVoteGroupId as $value) {
       $voteGroupId[] = $value->vote_group_id;
     }
+
+    $voteGroupId = empty($voteGroupId) ? [''] : $voteGroupId;
     $canVoteGroup = VoteGroup::whereIn('id', $voteGroupId)->get();
 
     $params['canVotes'] = $canVotes;

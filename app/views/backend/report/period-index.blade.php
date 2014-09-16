@@ -167,11 +167,10 @@ jQuery(document).ready(function() {
   var oTable = $('#ajax-data-table').dataTable( {
       "aoColumnDefs": [
           {"bSortable": false, "aTargets": [ 0 ] },
-          {"bSortable": false, "aTargets": [ 1 ] },
           //{"sWidth": "5%", "aTargets": [ 2 ] },
           
       ],
-      "aaSorting": [[2, 'asc']],
+      "aaSorting": [[1, 'asc']],
        "aLengthMenu": [
           [5, 15, 20, -1],
           [5, 15, 20, "All"] // change per page values here
@@ -185,7 +184,7 @@ jQuery(document).ready(function() {
         aoData.push( { "name": "mode", "value": "datatable" } );
       },
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        $(nRow).attr("id",'ajax-table-item-' + $('input[type=checkbox]', aData[0]).val());
+        $(nRow).attr("id",'ajax-table-item-' + $('input[type=hidden]', aData[0]).val());
         return nRow;
       }
   });
@@ -218,7 +217,7 @@ jQuery(document).ready(function() {
 function get_vote_of_groups(oTable, nTr)
 {
   var aData = oTable.fnGetData( nTr );
-  var vote_group_id = $('input[type=checkbox]', aData[0]).val();
+  var vote_group_id = $('input[type=hidden]', aData[0]).val();
   ajax_call_custom('GET', '{{route('listReportPeriod')}}', 'mode=votes_of_group&vote_group_id=' + vote_group_id, function(result){
     var sOut = '\
       <div class="table-responsive"> \
