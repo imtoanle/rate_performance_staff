@@ -1,7 +1,7 @@
-<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
-@include(Config::get('view.backend.header-css'))
-<!-- END PAGE LEVEL PLUGIN STYLES -->
+@extends(Config::get('view.backend.master'))
+@section('content')
 
+@foreach($votes as $vote)
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet box light-grey">
 <div class="portlet-title">
@@ -23,16 +23,16 @@
       <th rowspan="3">STT</th>
       <th rowspan="3">{{trans('all.full-name')}}</th>
       <th rowspan="3">{{trans('all.job-title')}}</th>
-      <th colspan="{{count($voterArr)*2}}">{{trans('all.participant')}}</th>
+      <th colspan="{{count($voterArr[$vote->id])*2}}">{{trans('all.participant')}}</th>
       <th rowspan="3">{{trans('all.general-results')}}</th>
     </tr>
     <tr>
-      @foreach($voterArr as $key => $value)
+      @foreach($voterArr[$vote->id] as $key => $value)
         <td colspan="2">{{CustomHelper::get_role_name($key)}}</td>  
       @endforeach
     </tr>
     <tr>
-      @foreach($voterArr as $key => $value)
+      @foreach($voterArr[$vote->id] as $key => $value)
         <td>{{trans('all.mark')}}</td>
         <td>{{trans('all.content-vote')}}</td>
       @endforeach
@@ -40,7 +40,7 @@
   </thead>
   <tbody>
     <tr>
-      <td colspan="{{4+count($voterArr)*2}}"><strong>{{trans('all.department')}}</strong>: {{$vote->get_department_name()}}</td>
+      <td colspan="{{4+count($voterArr[$vote->id])*2}}"><strong>{{trans('all.department')}}</strong>: {{$vote->get_department_name()}}</td>
     </tr>
 
     <!--
@@ -73,12 +73,13 @@
 
   <?php $countEntitled = 1; ?>
   @foreach(explode(',', $vote->entitled_vote) as $userId)
+
   <?php $entitledUser = User::find($userId); ?>
     <tr>
-      <td rowspan="{{$maxVoter}}">{{$countEntitled}}</td>
-      <td rowspan="{{$maxVoter}}">{{$entitledUser->full_name}}</td>
-      <td rowspan="{{$maxVoter}}">{{$entitledUser->job_titles_name()}}</td>
-      @foreach($voterArr as $voteGroupId => $voterIdArr)
+      <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$countEntitled}}</td>
+      <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
+      <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
+      @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
       <td>
         @foreach(explode(',', $vote->criteria) as $criteriaId)
           {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
@@ -86,18 +87,18 @@
       </td>
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
       @endforeach
-      <td rowspan="{{$maxVoter}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
+      <td rowspan="{{$maxVoterArr[$vote->id]}}">8</td>
     </tr>
-    @for($i=1; $i < $maxVoter; $i++)
+    @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
     <tr>
-      @foreach($voterArr as $voteGroupId => $voterIdArr)
+      @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
         @if(isset($voterIdArr[$i]))
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, $criteriaId) }} <br />
+            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
+          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
         @else
           <td colspan="2"></td>
         @endif
@@ -112,5 +113,11 @@
   </table>
 </div>
 </div>
+@endforeach
 
-@include(Config::get('view.backend.footer-js'))
+<script>
+jQuery(document).ready(function() {
+  
+}
+</script>
+@stop

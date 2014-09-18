@@ -7,7 +7,7 @@ return array(
       'closed' => 2,
         ),
 
-    'head-department-role-id' => 1,
+    'head-department-role-id' => 2,
 
 
     'order-status' => array(
@@ -172,6 +172,9 @@ return array(
     'listUserVotes' => 'user-votes-management',
     'quickUserVote' => 'user-votes-management',
     'postQuickUserVote' => 'user-votes-management',
+    'headGradingUserVote' => 'user-votes-management',
+    'detailHeadGradingUserVote' => 'user-votes-management',
+    'postQuickHeadGradingUserVote' => 'user-votes-management',
     'viewMyMark' => 'user-votes-management',
     'viewMyVote' => 'user-votes-management',
 
@@ -181,6 +184,7 @@ return array(
     'reportPeriodVoteGroup' => 'vote-reports-manager',
 
     'listReportYear' => 'vote-reports-manager',
+    'postReportYear' => 'vote-reports-manager',
     'reportYearVote' => 'vote-reports-manager',
     'reportYearVoteGroup' => 'vote-reports-manager',
     

@@ -135,7 +135,20 @@ class VoteReportBackendController extends BackendBaseController
 
   public function getIndexYear()
   {
-    $params = [];
+    $departments = Department::all();
+    $params['departments'] = $departments;
     return View::make(Config::get('view.backend.report-by-year-index'), $params);
+  }
+
+  public function postYearVote()
+  {
+    $thisYear = array(Carbon::createFromDate(Input::get('year'), 1 , 1)->startOfYear(), Carbon::createFromDate(Input::get('year'), 1 , 1)->endOfYear());
+
+    if(Input::get('vote_type') == 1)
+    {
+      $votes = Vote::where('department_id', Input::get('select2_department'))->whereBetween('created_at', $thisYear)->get();
+      $params['votes'] = $votes;
+      return View::make(Config::get('view.backend.report-by-year-department'), $params);
+    }
   }
 }

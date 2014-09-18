@@ -101,7 +101,10 @@ return array(
     //votes
     'user-votes-index' => 'backend.user-vote.index',
     'user-votes-quick' => 'backend.user-vote.quick',
+    'head-grading-index' => 'backend.user-vote.head-grading-index',
+    'head-grading-vote' => 'backend.user-vote.head-grading-vote',
     'view-my-mark' => 'backend.user-vote.view-my-mark',
+    'view-my-vote' =>  'backend.user-vote.view-my-vote',
 
     //report
     'report-by-period-index' => 'backend.report.period-index',
@@ -111,6 +114,7 @@ return array(
     'report-by-year-index' => 'backend.report.year-index',
     'report-by-year-vote' => 'backend.report.year-vote',
     'report-by-year-vote-group' => 'backend.report.year-vote-group',
+    'report-by-year-department' => 'backend.report.year-department',
 
 
 

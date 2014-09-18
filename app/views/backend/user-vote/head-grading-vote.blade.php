@@ -42,35 +42,6 @@
     <tr>
       <td colspan="{{4+count($voterArr)*2}}"><strong>{{trans('all.department')}}</strong>: {{$vote->get_department_name()}}</td>
     </tr>
-
-    <!--
-    <tr>
-    <th rowspan="4">1</th>
-    <th rowspan="4">2</th>
-    <th rowspan="4">3</th>
-    
-    <th colspan="2">4</th>
-    <th colspan="2">5</th>
-    <th rowspan="4">6</th>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>10</td>
-  </tr>
-  <tr>
-    <td colspan="2">11</td>
-    <td colspan="2">12</td>
-  </tr>
-  <tr>
-    <td>13</td>
-    <td>14</td>
-    <td>15</td>
-    <td>16</td>
-  </tr>
-  -->
-
   <?php $countEntitled = 1; ?>
   @foreach(explode(',', $vote->entitled_vote) as $userId)
   <?php $entitledUser = User::find($userId); ?>
@@ -86,7 +57,11 @@
       </td>
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
       @endforeach
-      <td rowspan="{{$maxVoter}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
+      <td rowspan="{{$maxVoter}}">
+        <a href="#" class="general-result" data-type="text" data-pk="{{$vote->id}}" data-entitled-vote="{{$userId}}" data-name="mark" data-placement="left" data-placeholder="{{trans('all.input-mark')}}" data-title="{{trans('all.general-results')}}">
+          {{CustomHelper::get_general_result($vote->id, $userId)}}
+        </a>
+      </td>
     </tr>
     @for($i=1; $i < $maxVoter; $i++)
     <tr>
@@ -114,3 +89,24 @@
 </div>
 
 @include(Config::get('view.backend.footer-js'))
+
+<script>
+jQuery(document).ready(function() {   
+$('a.general-result').editable({
+    params: function (params) {  //params already contain `name`, `value` and `pk`
+      params.entitled_vote = $(this).data('entitled-vote');
+      return params;
+    },
+    url: '{{route('postQuickHeadGradingUserVote')}}',
+    success: function(result, newValue) {
+      if(typeof(result.errorMessages) != 'undefined')
+      {
+        return result.errorMessages.value[0];
+      }
+    },
+    inputclass: 'form-control input-small',
+    emptytext: '{{trans('all.not-input-yet')}}',
+  });
+
+});
+</script>

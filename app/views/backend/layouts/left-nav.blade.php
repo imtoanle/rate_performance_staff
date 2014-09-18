@@ -23,11 +23,18 @@
   <?php $arrRoutes = array('listVotes', 'listUserVotes', 'listRoles', 'quickUserVote', 'listCriterias'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
     {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
-    {{ BackendSideBar::create_node(trans('all.view-vote'), 'listUserVotes', 'fa fa-signal') }}  
-    {{ BackendSideBar::create_node(trans('all.quick-vote'), 'quickUserVote', 'fa fa-check') }}  
+    {{ BackendSideBar::create_node(trans('all.view-vote'), 'listUserVotes', 'fa fa-signal') }}      
+    
     {{ BackendSideBar::create_node(trans('all.role'), 'listRoles', 'fa fa-star') }}  
     {{ BackendSideBar::create_node(trans('all.criteria'), 'listCriterias', 'fa fa-trophy') }}  
   {{ BackendSideBar::create_root_close() }} 
+
+  <?php $arrRoutes = array('quickUserVote', 'headGradingUserVote'); ?>
+  {{ BackendSideBar::create_root_open(trans('all.grading'), $arrRoutes, 'fa fa-paint-brush')}}  
+    {{ BackendSideBar::create_node(trans('all.quick-vote'), 'quickUserVote', 'fa fa-check') }}  
+    {{ BackendSideBar::create_node(trans('all.head-of-grading'), 'headGradingUserVote', 'fa fa-legal') }}  
+  {{ BackendSideBar::create_root_close() }} 
+
 
   <?php $arrRoutes = array('listReportPeriod', 'listReportYear'); ?>
   {{ BackendSideBar::create_root_open(trans('all.report'), $arrRoutes, 'fa fa-line-chart')}}  

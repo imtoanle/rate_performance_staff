@@ -1,9 +1,9 @@
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup', 'listReportYear')))
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/select2/select2_conquer.css')}}"/>
 <link rel="stylesheet" type="text/css" href="assets/plugins/select2/select2_conquer.css"/>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listReportPeriod')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listReportPeriod', 'headGradingUserVote')))
 <link rel="stylesheet" href="{{asset('assets/plugins/data-tables/DT_bootstrap.css')}}"/>
 @endif
 
@@ -21,7 +21,7 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-datepicker/css/datepicker.css')}}"/>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('quickUserVote')))
+@if(in_array(Route::currentRouteName(), array('quickUserVote', 'headGradingUserVote')))
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}}"/>
 @endif
 

@@ -88,7 +88,7 @@
       </td>
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
       @endforeach
-      <td rowspan="{{$maxVoterArr[$vote->id]}}">8</td>
+      <td rowspan="{{$maxVoterArr[$vote->id]}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
     </tr>
     @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
     <tr>
@@ -96,10 +96,10 @@
         @if(isset($voterIdArr[$i]))
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
+            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
+          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
         @else
           <td colspan="2"></td>
         @endif

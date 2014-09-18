@@ -188,4 +188,35 @@ class CustomHelper
     return User::whereRaw("job_title regexp '".$pattern."'")->get();
   }
 
+  public static function get_general_result($voteId, $entitledUser)
+  {
+    $result = GeneralResult::where('user_id', $entitledUser)->where('vote_id', $voteId)->first();
+    if(is_object($result))
+    {
+      return $result->mark;
+    }else
+    {
+      return CustomHelper::get_min_general_results($voteId, $entitledUser);
+    }
+  }
+
+  public static function get_min_general_results($voteId, $entitledUser)
+  {
+    $minArr = [];
+    $voteResults = VoteResult::select('mark')->where('vote_id', $voteId)->where('entitled_vote_id', $entitledUser)->get();
+    foreach ($voteResults as $result) {
+      $minArr[] = CustomHelper::find_min_mark_from_criterias($result->mark);
+    }
+    if(empty($minArr)) return '';
+    return min($minArr);
+  }
+
+  public static function find_min_mark_from_criterias($markString)
+  {
+    $minArr = [];
+    foreach (json_decode($markString, true) as $mark) {
+        $minArr[] = $mark['mark'];
+    }
+    return min($minArr);
+  }
 }

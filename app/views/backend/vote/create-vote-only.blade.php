@@ -155,7 +155,7 @@ jQuery(document).ready(function() {
         html_option += '<optgroup job-id="'+ result.jobId +'" label="'+result.jobTitleName+'">';
         for(var i in result.data)
         {
-          if(!$('option[value='+ result.data[i].id +']').length)
+          if(!$('#multi_entitled_vote option[value='+ result.data[i].id +']').length)
           {
             html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
           }
@@ -180,7 +180,7 @@ jQuery(document).ready(function() {
       html_option += '<optgroup department-id="'+ result.departmentId +'" label="'+result.departmentName+'">';
       for(var i in result.data)
       {
-        if(!$('option[value='+ result.data[i].id +']').length)
+        if(!$('#multi_entitled_vote option[value='+ result.data[i].id +']').length)
         {
           html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
         }

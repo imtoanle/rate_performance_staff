@@ -30,6 +30,88 @@ class BackendUserVoteController extends BackendBaseController
     return View::make(Config::get('view.backend.user-votes-quick'), $params);
   }
 
+  public function getIndexHeadGradingVote()
+  {
+    if (Request::Ajax())
+    {
+      if (Input::get('mode') == 'datatable')
+      {
+        $currentUser = Sentry::getUser();
+        $pattern = '"user_id":"'.$currentUser->id.'","role_id":"'.Config::get('variable.head-department-role-id').'"';
+        
+        $votes = Vote::select(array('vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("voter regexp '".$pattern."'");
+      return Datatables::of($votes)
+        ->remove_column('vote_group_id', 'department_id')
+        ->edit_column('vote_code', function($row){
+          return $row->voteGroup->vote_code;
+        })
+        ->edit_column('title', function($row){
+          return $row->voteGroup->title;
+        })
+        ->edit_column('department_name', function($row){
+          return $row->department->name;
+        })
+        ->edit_column('actions', '
+            <a href="{{route(\'detailHeadGradingUserVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.grading\')}}</a>
+          ')
+        #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+        ->make();
+      }
+    }
+    
+    return View::make(Config::get('view.backend.head-grading-index'));
+  }
+
+  public function getDetailHeadGradingVote($voteId)
+  {
+    $vote = Vote::find($voteId);
+    $voterArr = [];
+    foreach (json_decode($vote->voter) as $value) {
+      $voterArr[$value->role_id][] = $value->user_id;
+    }
+
+    //find max voter
+    $maxVoter = 0;
+    foreach ($voterArr as $value) {
+      if(count($value) > $maxVoter)
+      {
+        $maxVoter = count($value);
+      }
+    }
+    $params['voterArr'] = $voterArr;
+    $params['maxVoter'] = $maxVoter;
+    $params['vote'] = $vote;
+
+    return View::make(Config::get('view.backend.head-grading-vote'), $params);
+  }
+
+  public function postQuickDetailHeadGradingVote()
+  {
+    if(Input::get('name') == 'mark')
+    {
+      $validator = new BackendValidator(Input::all(), 'vote-result-mark');
+      if(!$validator->passes())
+      {
+          return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
+      }
+
+      $generalResult = GeneralResult::firstOrNew(array(
+        'vote_id' => Input::get('pk'),
+        'user_id' => Input::get('entitled_vote'),
+      ));
+
+      $generalResult->mark = Input::get('value');
+    }
+
+    if($generalResult->save())
+    {
+      return Response::json(array('actionStatus' => true));
+    }else
+    {
+      return Response::json(array('actionStatus' => false));
+    }
+  }
+
   public function postQuickVote()
   {
     if(Input::get('name') == 'mark')
@@ -154,6 +236,19 @@ class BackendUserVoteController extends BackendBaseController
     $params['voteGroup'] = $voteGroup;
     $params['currentUser'] = $currentUser;
     return View::make(Config::get('view.backend.view-my-mark'), $params);
+  }
+
+  public function getViewMyVote($voteGroupId)
+  {
+    $currentUser = Sentry::getUser();
+    $pattern = '"user_id":"'.$currentUser->id.'"';
+    $voteGroup = VoteGroup::find($voteGroupId);
+    $votes = Vote::where('vote_group_id', $voteGroup->id)->whereRaw("voter regexp '".$pattern."'")->get();
+    $params['votes'] = $votes;
+    $params['voteGroup'] = $voteGroup;
+    $params['currentUser'] = $currentUser;
+
+    return View::make(Config::get('view.backend.view-my-vote'), $params); 
   }
 
   public function getCreate()

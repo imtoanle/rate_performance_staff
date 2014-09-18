@@ -182,6 +182,8 @@ return array(
 	'participant' => 'Thành phần tham gia',
 	'loading' => 'Đang tải...',
 	'quick-vote' => 'Chấm điểm nhanh',
+	'grading' => 'Chấm điểm',
+	'head-of-grading' => 'Trưởng ban chốt điểm',
 	'mark' => 'Điểm',
 	'content-vote' => 'Nội dung đánh giá',
 	'criteria' => 'Tiêu chí đánh giá',

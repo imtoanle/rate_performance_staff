@@ -3,11 +3,11 @@
 
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup', 'listReportYear')))
 <script type="text/javascript" src="{{asset('assets/plugins/select2/select2.min.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listReportPeriod')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listReportPeriod', 'headGradingUserVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/jquery.dataTables.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/DT_bootstrap.js')}}"></script>
 @endif
@@ -29,7 +29,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('quickUserVote')))
+@if(in_array(Route::currentRouteName(), array('quickUserVote', 'headGradingUserVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js')}}"></script>
 @endif
 <!-- END PAGE LEVEL PLUGINS -->
