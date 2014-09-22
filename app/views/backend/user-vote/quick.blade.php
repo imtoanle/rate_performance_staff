@@ -1,15 +1,39 @@
 @extends(Config::get('view.backend.master'))
 @section('content')
 
+<form class="form-horizontal base-ajax-form">
+  <div class="form-body">
+    <div class="form-group">
+      <label class="control-label col-md-3">{{trans('all.department')}}</label>
+      <div class="col-md-6">
+        <select name="department_list" id="department_list" class="form-control select2">
+          <option></option>
+          @foreach($canVoteGroup as $voteGroup)
+          <optgroup label="{{$voteGroup->vote_code}} - {{$voteGroup->title}}">
+            @foreach($canVotes as $vote)
+              @if($vote->vote_group_id == $voteGroup->id)
+                <option value="{{$voteGroup->id}},{{$vote->id}}">{{$vote->department->name}}</option>
+              @endif
+            @endforeach
+          </optgroup>
+          @endforeach
+        </select>
+      </div>
+    </div>
+  </div>
+</form>
+
 @foreach($canVoteGroup as $voteGroup)
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-<div class="portlet box light-grey">
+<div id="vote-group-id-{{$voteGroup->id}}" class="portlet box light-grey hide">
 <div class="portlet-title">
   <div class="caption">
     <i class="fa fa-list"></i>{{$voteGroup->vote_code}} - {{$voteGroup->title}}
   </div>
 </div>
 <div class="portlet-body panel-content-area">
+  
+
   <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVote')}}">
   <thead class="text-center">
     <tr>
@@ -23,27 +47,27 @@
   <tbody>
   @foreach($canVotes as $vote)
     @if($vote->vote_group_id == $voteGroup->id)
-    <tr>
+    <tr class="vote-id-{{$vote->id}} hide">
       <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
       <td colspan="3"><strong>{{trans('all.role')}}:</strong> {{CustomHelper::get_role_current_user($vote->voter, $currentUser->id)}}</td>
     </tr>
       <?php $number_in_department = 1; ?>
       @foreach(CustomHelper::get_users_from_user_id_list(explode(',', $vote->entitled_vote)) as $user)
-      <tr>
+      <tr class="vote-id-{{$vote->id}} hide">
         <td>{{$number_in_department}}</td>
         <td>{{$user->full_name}}</td>
         <td>{{$user->job_titles_name()}}</td>
         <td>
           @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
           <p>
-            {{$criteria->name}}: <a href="#" class="criteria-mark" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$criteria->id}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="{{$criteria->name}}">
+            {{$criteria->name}}: <a href="#" class="criteria-mark editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$criteria->id}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="{{$criteria->name}}">
             {{CustomHelper::get_mark_with_criteria($vote->id, $currentUser->id, $user->id, $criteria->id)}}
             </a>
           </p>
           @endforeach
         </td>
         <td>
-          <a href="#" class="vote-content" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
+          <a href="#" class="vote-content editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
             {{CustomHelper::get_mark_with_criteria($vote->id, $currentUser->id, $user->id, 'content')}}
           </a>
         </td>
@@ -141,6 +165,21 @@ jQuery(document).ready(function() {
     },
     url: '{{route('postQuickUserVote')}}',
     emptytext: '{{trans('all.not-input-yet')}}',
+  });
+
+  $("#department_list").select2({
+    placeholder: '{{trans('all.select-department')}}',
+    allowClear: true,
+  });
+
+  $('#department_list').change(function(){
+    dataArr = $(this).val().split(',');
+    //hide all data
+    $('div[id^="vote-group-id-"]').addClass('hide');
+    $('div[id^="vote-id-"]').addClass('hide');
+    //show current data
+    $('#vote-group-id-' + dataArr[0]).removeClass('hide');
+    $('.vote-id-' + dataArr[1]).removeClass('hide');
   });
 });
 </script>

@@ -438,3 +438,22 @@ Route::group(array('prefix' => Config::get('variable.backend.uri-config')), func
         'uses' => 'BackendUserController@getActivate')
     );
 });
+
+
+//enable breadcrumb
+View::composer(Config::get('view.backend.breadcrumbs'), function($view)
+{
+  /*
+  $array_disable = array('indexHome');
+  $array_dynamic = array('view-blog', 'detail-imei-service');
+  if (!in_array(Route::currentRouteName(), $array_disable))
+  {
+    $view->with('enableBreadcrumb', true);
+    if (!in_array(Route::currentRouteName(), $array_dynamic))
+      $view->with('dataBreadcrumb', Config::get('breadcrumbs.'.Route::currentRouteName()));
+  }
+  */
+  $menuData = Config::get('breadcrumbs.'.Route::currentRouteName());
+  $menuData = isset($menuData) ? $menuData : [];
+  $view->with('dataBreadcrumb', $menuData);
+});

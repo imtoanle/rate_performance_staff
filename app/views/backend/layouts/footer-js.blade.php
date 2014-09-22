@@ -3,7 +3,7 @@
 
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup', 'listReportYear')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup', 'listReportYear', 'quickUserVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/select2/select2.min.js')}}"></script>
 @endif
 
@@ -31,5 +31,9 @@
 
 @if(in_array(Route::currentRouteName(), array('quickUserVote', 'headGradingUserVote')))
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js')}}"></script>
+@endif
+
+@if(in_array(Route::currentRouteName(), array('reportPeriodVote', 'reportPeriodVoteGroup')))
+<script type="text/javascript" src="{{asset('assets/plugins/jquery.battatech.excelexport.min.js')}}"></script>
 @endif
 <!-- END PAGE LEVEL PLUGINS -->

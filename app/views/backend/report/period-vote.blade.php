@@ -6,70 +6,41 @@
 <div class="portlet box light-grey">
 <div class="portlet-title">
   <div class="caption">
-    <i class="fa fa-list"></i>{{$vote->voteGroup->title}}
+    <?php $thisVoteGroup = $vote->voteGroup; ?>
+    <i class="fa fa-list"></i>{{$thisVoteGroup->title}}
   </div>
   <div class="actions">
-    <a href="{{route('newVote')}}" class="btn btn-info ajaxify-child-page"><i class="fa fa-pencil"></i> {{trans('all.add')}}</a>
-    <a href="#delete-modal" data-toggle="modal" class="btn btn-danger"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
-    
-    <a class="btn btn-warning" href="table_managed.html#"><i class="fa fa-print"></i> Print</a>
+    <a data-file-name="{{camel_case($thisVoteGroup->vote_code)}}-{{$vote->id}}.xls" data-vote-id="{{$vote->id}}" class="btn btn-info export-excel"><i class="fa fa-pencil"></i> {{trans('all.export-excel')}}</a>
   </div>
 </div>
 <div class="portlet-body panel-content-area">
 
-  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
+  <table class="table table-striped table-bordered table-hover" id="vote-data-table-{{$vote->id}}" action-delete="{{route('deleteVoteGroup')}}">
   <thead>
     <tr>
       <th rowspan="3">STT</th>
       <th rowspan="3">{{trans('all.full-name')}}</th>
       <th rowspan="3">{{trans('all.job-title')}}</th>
-      <th colspan="{{count($voterArr)*2}}">{{trans('all.participant')}}</th>
+      <th colspan="{{count($voterArr)*3}}">{{trans('all.participant')}}</th>
       <th rowspan="3">{{trans('all.general-results')}}</th>
     </tr>
     <tr>
       @foreach($voterArr as $key => $value)
-        <td colspan="2">{{CustomHelper::get_role_name($key)}}</td>  
+        <td colspan="3">{{CustomHelper::get_role_name($key)}}</td>  
       @endforeach
     </tr>
     <tr>
       @foreach($voterArr as $key => $value)
+        <td>{{trans('all.voter')}}</td>
         <td>{{trans('all.mark')}}</td>
-        <td>{{trans('all.content-vote')}}</td>
+        <td>{{trans('all.content')}}</td>
       @endforeach
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td colspan="{{4+count($voterArr)*2}}"><strong>{{trans('all.department')}}</strong>: {{$vote->get_department_name()}}</td>
+      <td colspan="{{4+count($voterArr)*3}}"><strong>{{trans('all.department')}}</strong>: {{$vote->get_department_name()}}</td>
     </tr>
-
-    <!--
-    <tr>
-    <th rowspan="4">1</th>
-    <th rowspan="4">2</th>
-    <th rowspan="4">3</th>
-    
-    <th colspan="2">4</th>
-    <th colspan="2">5</th>
-    <th rowspan="4">6</th>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>8</td>
-    <td>9</td>
-    <td>10</td>
-  </tr>
-  <tr>
-    <td colspan="2">11</td>
-    <td colspan="2">12</td>
-  </tr>
-  <tr>
-    <td>13</td>
-    <td>14</td>
-    <td>15</td>
-    <td>16</td>
-  </tr>
-  -->
 
   <?php $countEntitled = 1; ?>
   @foreach(explode(',', $vote->entitled_vote) as $userId)
@@ -79,12 +50,13 @@
       <td rowspan="{{$maxVoter}}">{{$entitledUser->full_name}}</td>
       <td rowspan="{{$maxVoter}}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr as $voteGroupId => $voterIdArr)
+      <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}</td>
       <td>
         @foreach(explode(',', $vote->criteria) as $criteriaId)
           {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
         @endforeach
       </td>
-      <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
       @endforeach
       <td rowspan="{{$maxVoter}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
     </tr>
@@ -92,14 +64,15 @@
     <tr>
       @foreach($voterArr as $voteGroupId => $voterIdArr)
         @if(isset($voterIdArr[$i]))
+          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}</td>
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
             {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}: {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
         @else
-          <td colspan="2"></td>
+          <td colspan="3"></td>
         @endif
       @endforeach
     </tr>
@@ -114,3 +87,18 @@
 </div>
 
 @include(Config::get('view.backend.footer-js'))
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("a.export-excel").click(function () {
+      var table_id = 'vote-data-table-' + $(this).data('vote-id');
+      var uri = $("#" + table_id).btechco_excelexport({
+          containerid: table_id
+          , datatype: $datatype.Table
+          , returnUri: true
+      });
+
+      $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+    });
+  });
+</script>

@@ -47,6 +47,7 @@ return array(
     'footer-js' => 'backend.layouts.footer-js',
     'custom-js' => 'backend.layouts.custom-js',
     'header' => 'backend.layouts.header',
+    'breadcrumbs' => 'backend.layouts.breadcrumbs',
 
 
     'chat' => 'backend.layouts.dashboard.chat',

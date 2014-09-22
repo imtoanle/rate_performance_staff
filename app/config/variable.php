@@ -9,6 +9,13 @@ return array(
 
     'head-department-role-id' => 2,
 
+    'breadcrumbs' => array(
+        'listVotes' => trans('all.votes'),  
+        'listUserVotes' => trans('all.vote-manage'),  
+        'listRoles' => trans('all.role'),  
+        'quickUserVote' => '',  
+        'listCriterias' => '',
+        ),
 
     'order-status' => array(
     	'pending' => 1,

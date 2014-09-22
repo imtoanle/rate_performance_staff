@@ -208,6 +208,11 @@ return array(
 	'general-results' => 'Tổng hợp kết quả',
 	'select-report-type' => 'Chọn loại báo cáo',
 	'select-year' => 'Chọn năm',
+	'export-excel' => 'Xuất Excel',
+	'vote-open' => 'Mở đánh giá',
+	'vote-close' => 'Đóng đánh giá',
+	'vote-group' => 'Nhóm đánh giá',
+	'select-vote-group' => 'Chọn nhóm đánh giá',
 
 
 
