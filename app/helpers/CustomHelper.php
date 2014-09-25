@@ -219,4 +219,15 @@ class CustomHelper
     }
     return min($minArr);
   }
+
+  public static function get_array_user_id_from_voter($voterString)
+  {
+    $decodeJson = json_decode($voterString, true);
+    $arrayUserId = []; 
+
+    foreach ($decodeJson as $value) {
+      $arrayUserId[] = $value['user_id'];
+    }
+    return $arrayUserId;
+  }
 }

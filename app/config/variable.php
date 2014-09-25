@@ -163,6 +163,8 @@ return array(
     'listVotes' => 'votes-management',
     'newVote' => 'votes-management',
     'postNewVote' => 'votes-management',
+    'postUnlockVote' => 'votes-management',
+    'postCloseVote' => 'votes-management',
     'putVote' => 'votes-management',
     'putVoteGroup' => 'votes-management',
     'copyVoteGroup' => 'votes-management',
@@ -194,120 +196,9 @@ return array(
     'postReportYear' => 'vote-reports-manager',
     'reportYearVote' => 'vote-reports-manager',
     'reportYearVoteGroup' => 'vote-reports-manager',
-    
 
-
-
-
-    
-    
-    //servives
-    'indexImeiServices' => 'imei-service-management',
-    'quickEditImeiServices' => 'imei-service-management',
-    'updateQuickEditImeiServices' => 'imei-service-management',
-    'editImeiServices' => 'imei-service-management',
-
-    //little edit
-    'editImeiServiceApi'=> 'imei-service-management',
-    'updateApiImeiServices'=> 'imei-service-management',
-    'editImeiServicePromotion'=> 'imei-service-management',
-    'editImeiServiceSettings'=> 'imei-service-management',
-    'editImeiServiceDiscountedUsers'=> 'imei-service-management',
-    'editImeiServiceCustomerReview'=> 'imei-service-management',
-
-    'updateImeiServices' => 'imei-service-management',
-    'newImeiServices' => 'imei-service-management',
-    'createImeiServices' => 'imei-service-management',
-    'deleteServices' => 'imei-service-management',
-
-    'indexImeiServiceGroups' => 'imei-service-management',
-    'editImeiServiceGroups' => 'imei-service-management',
-    'updateImeiServiceGroup' => 'imei-service-management',
-    'newImeiServiceGroup'  => 'imei-service-management',
-    'createImeiServiceGroup' => 'imei-service-management', 
-    'deleteImeiServiceGroup' => 'imei-service-management', 
-    
-    //supplier
-    'indexSupplier' => 'supplier-management',
-    'editSupplier' => 'supplier-management',
-    'updateSupplier' => 'supplier-management',
-    'newSupplier' => 'supplier-management',
-    'createSupplier' => 'supplier-management',
-    'deleteSupplier' => 'supplier-management',
-
-    //client
-    'indexClient' => 'client-management',
-    'editClient' => 'client-management',
-    'editClientResetPass' => 'client-management',
-    'editClientFinancial' => 'client-management',
-    'addCreditClientFinancial' => 'client-management',
-    'rebateCreditClientFinancial' => 'client-management',
-    'editClientProfile' => 'client-management',
-    'updateClientProfile' => 'client-management',
-    'editClientApi' => 'client-management',
-    'editClientBindLogin' => 'client-management',
-    'updateClientBindLogin' => 'client-management',
-    'editClientSetPricing' => 'client-management',
-    'editClientOrder' => 'client-management',
-    'editClientInvoice' => 'client-management',
-    'editClientMail' => 'client-management',
-    'editClientStatement' => 'client-management',
-    'editClientSubscription' => 'client-management',
-    'editClientActivityLog' => 'client-management',
-    'updateClient' => 'client-management',
-    'updateMultiClient' => 'client-management',
-    'newClient' => 'client-management',
-    'createClient' => 'client-management',
-    'deleteClient' => 'client-management',
-    'indexClientInvoices' => 'client-management',
-    'deleteClientInvoices' => 'client-management',
-    'indexClientStatements' => 'client-management',
-    'deleteClientStatements' => 'client-management',
-    
-    //invoice
-    'editInvoice' => 'invoice-management',
-    'updateInvoice' => 'invoice-management',
-
-    //clientgroup
-    'indexClientGroup' => 'client-group-management',
-    'memberClientGroup' => 'client-group-management',
-    'editClientGroup' => 'client-group-management',
-    'updateClientGroup' => 'client-group-management',
-    'newClientGroup' => 'client-group-management',
-    'createClientGroup' => 'client-group-management',
-    'deleteClientGroup' => 'client-group-management',
-    'editClientGroupPricing' => 'client-group-management',
-    'updateClientGroupPricing' => 'client-group-management',
-
-    //order
-    'indexImeiOrders' => 'order-management',
-    'quickAcceptImeiOrders' => 'order-management',
-    'updateQuickAcceptImeiOrders' => 'order-management',
-    'serviceAcceptImeiOrders' => 'order-management',
-    'quickReplyImeiOrders' => 'order-management',
-    'bulkReplyImeiOrders' => 'order-management',
-    'verificationImeiOrders' => 'order-management',
-    'historyImeiOrders' => 'order-management',
-    'editHistoryImeiOrders' => 'order-management',
-    'pendingPaymentImeiOrders' => 'order-management',
-    'manualReplyImeiOrders' => 'order-management',
-
-    //settings
-    'generalSetting' => 'setting-management',
-
-    'apiSetting' => 'setting-management',
-    'editApiSetting' => 'setting-management',
-    'updateApiSetting'  => 'setting-management',
-    'updateSynApiSetting' => 'setting-management',
-
-
-    'newImeiServices' => 'create-imei-service',
-    'showImeiServices' => 'show-imei-service',
-    'deleteImeiServices' => 'delete-imei-service',
-    'listImeiServiceGroup' => 'ime-service-group-management',
-    'ImeiServiceGroupNew' => 'ime-service-group-new-management',
-    'ImeiServiceGroupShow' => 'ime-service-group-new-management',
-    'deleteServiceGroup' => 'ime-service-group-delete-management'
+    //notify
+    'getNotify' => 'notify-view',
   ),
 
 );

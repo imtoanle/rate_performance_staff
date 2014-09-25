@@ -34,7 +34,7 @@
 <div class="portlet-body panel-content-area">
   
 
-  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVote')}}">
+  <table class="table table-striped table-bordered table-hover">
   <thead class="text-center">
     <tr>
       <th style="width: 5%">#</th>

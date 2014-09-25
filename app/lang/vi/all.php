@@ -92,6 +92,11 @@ return array(
 		'role-action-head-department' => 'Không thể xử lý vai trò truởng ban',
 
 		'need-select-voter' => 'Cần chọn người chấm điểm trước',
+		'vote-open-success' => 'Mở đánh giá thành công',
+		'vote-open-fail' => 'Mở đánh giá thất bại',
+
+		'vote-close-success' => 'Chốt đánh giá thành công',
+		'vote-close-fail' => 'Chốt đánh giá thất bại',
 		),
 	
 	'notification' => 'Thông báo',
@@ -210,9 +215,18 @@ return array(
 	'select-year' => 'Chọn năm',
 	'export-excel' => 'Xuất Excel',
 	'vote-open' => 'Mở đánh giá',
-	'vote-close' => 'Đóng đánh giá',
+	'vote-close' => 'Chốt đánh giá',
 	'vote-group' => 'Nhóm đánh giá',
 	'select-vote-group' => 'Chọn nhóm đánh giá',
+	'you-have-notify' => 'Bạn có :count thông báo mới',
+	'see-all-notifications' => 'Xem tất cả thông báo',
+	'profile' => 'Hồ sơ',
+
+	'notifys' => [
+		'open-vote-entitled-vote' => 'Bạn được cho điểm trong đánh giá #:voteId',
+		'open-vote-voter' => 'Bạn có quyền chấm điểm trong đánh giá #:voteId',
+		'close-vote' => 'Đánh giá có mặt bạn đã đóng #:voteId',
+	],
 
 
 

@@ -16,7 +16,7 @@
 						<div class="panel-title">{{trans('all.account-info')}}</div>
 						
 						<div class="panel-options">
-							<a data-rel="collapse" href="index.html#"><i class="entypo-down-open"></i></a>
+							<a data-rel="collapse" href="#"><i class="entypo-down-open"></i></a>
 						</div>
 					</div>
 					

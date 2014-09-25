@@ -11,7 +11,7 @@
     <a href="{{route('newVote')}}" class="btn btn-info ajaxify-child-page"><i class="fa fa-pencil"></i> {{trans('all.add')}}</a>
     <a href="#delete-modal" data-toggle="modal" class="btn btn-danger"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
     <div class="btn-group">
-      <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">{{trans('all.actions')}} <i class="fa fa-angle-down"></i>
+      <button class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cogs"></i> {{trans('all.actions')}} <i class="fa fa-angle-down"></i>
       </button>
       <ul class="dropdown-menu pull-right">
         <li>
@@ -33,7 +33,7 @@
     </th>
     <th></th>
     <th>{{trans('all.vote-code')}}</th>
-    <th>{{trans('all.title')}}</th>
+    <th style="width:20%">{{trans('all.title')}}</th>
     <th>{{trans('all.status')}}</th>
     <th>{{trans('all.actions')}}</th>
   </tr>
@@ -130,6 +130,7 @@ jQuery(document).ready(function() {
   });
 
 
+
   //clear checked when close modal
   $('table tbody').on('click', 'a.ajax-modal', function(e){
     e.preventDefault();
@@ -144,35 +145,6 @@ jQuery(document).ready(function() {
       }
     });
   });
-
-   // begin first table
-   /*
-  $('#ajax-data-table').dataTable({
-    //'bAutoWidth': false,
-    "aoColumns": [
-      {"bSortable": false},
-      null,
-      null,
-      null,
-      null,
-      {"bSortable": false},
-    ],
-    "aLengthMenu": [
-        [10, 20, 30, -1],
-        [10, 20, 30, "All"] // change per page values here
-    ],
-    // set the initial value
-    "iDisplayLength": 10,
-
-    "bServerSide": true,
-    "sAjaxSource": "<?php echo URL::route('listVotes') ?>",
-    "fnServerParams": function ( aoData ) {
-      aoData.push( { "name": "mode", "value": "datatable" } );
-    },
-    */
-
-  /* Formatting function for row details */
-  
 
   /*
    * Initialize DataTables, with no sorting on the 'details' column
@@ -201,6 +173,20 @@ jQuery(document).ready(function() {
         $(nRow).attr("id",'ajax-table-item-' + $('input[type=checkbox]', aData[0]).val());
         return nRow;
       }
+  });
+
+  $('table tbody').on('click', 'a.unlock-vote-btn', function(e){
+    ajax_call_custom('POST', '{{route('postUnlockVote')}}', 'vote_id=' + $(this).data('item-id'), function(result){
+      oTable.fnDraw();
+      toastr[result.messageType](result.message);
+    });
+  });
+
+  $('table tbody').on('click', 'a.close-vote-btn', function(e){
+    ajax_call_custom('POST', '{{route('postCloseVote')}}', 'vote_id=' + $(this).data('item-id'), function(result){
+      oTable.fnDraw();
+      toastr[result.messageType](result.message);
+    });
   });
 
   /* Add event listener for opening and closing details
@@ -238,10 +224,10 @@ function get_vote_of_groups(oTable, nTr)
         <table class="table table-bordered table-hover">\
         <thead>\
         <tr>\
-          <th style="width: 50%">{{trans('all.department')}}</th>\
+          <th style="width: 30%">{{trans('all.department')}}</th>\
           <th style="width: 15%">{{trans('all.date-create')}}</th>\
           <th style="width: 15%">{{trans('all.status')}}</th>\
-          <th style="width: 20%">{{trans('all.actions')}}</th>\
+          <th style="width: 40%">{{trans('all.actions')}}</th>\
         </tr>\
         </thead>\
         <tbody>';

@@ -18,4 +18,14 @@ class User extends SentryUserModel {
   {
       return $this->belongsTo('Department');
   }
+
+  public function notifys()
+  {
+      return $this->hasMany('Notify')->orderBy('created_at', 'desc');
+  }
+
+  public function unreadNotifys()
+  {
+      return $this->hasMany('Notify')->where('status', 0)->orderBy('created_at', 'desc')->limit(10);
+  }
 }

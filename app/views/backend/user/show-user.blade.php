@@ -123,6 +123,7 @@
                           <div class="tab-pane active" id="tab_1_1_1">
                             <div class="scroller" data-height="290px" data-always-visible="1" data-rail-visible1="1">
                               <ul class="feeds">
+                                @foreach($user->notifys as $notify)
                                 <li>
                                   <div class="col1">
                                     <div class="cont">
@@ -143,10 +144,11 @@
                                   </div>
                                   <div class="col2">
                                     <div class="date">
-                                       Just now
+                                       {{$notify->created_at->diffForHumans()}}
                                     </div>
                                   </div>
                                 </li>
+                                @endforeach
                                 
                               </ul>
                             </div>

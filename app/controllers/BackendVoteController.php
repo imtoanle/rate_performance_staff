@@ -89,19 +89,25 @@ class BackendVoteController extends BackendBaseController
           switch ($vote->status) {
             case Config::get("variable.vote-status.newly"):
               $statusHtml = '<span class="label label-primary">'.trans("all.newly").'</span>';
+              $actionVote = '<a class="btn btn-default btn-xs purple unlock-vote-btn" data-item-id="'.$vote->id.'"><i class="fa fa-unlock"></i> '.trans('all.vote-open').'</a>';
               break;
             case Config::get("variable.vote-status.opened"):
               $statusHtml = '<span class="label label-success">'.trans("all.opened").'</span>';
+              $actionVote = '<a class="btn btn-default btn-xs purple close-vote-btn" data-item-id="'.$vote->id.'"><i class="fa fa-lock"></i> '.trans('all.vote-close').'</a>';
               break;
             
             default:
               $statusHtml = '<span class="label label-default">'.trans("all.closed").'</span>';
+              $actionVote = '';
               break;
           }
-          $actionsHtml = '<a href="'.route('listPersionsVote', $vote->id).'" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> '.trans('all.view').'</a>
-            <a href="'.route('showVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> '.trans('all.edit').'</a>
+
+          $actionsHtml = '<a href="'.route('listPersionsVote', $vote->id).'" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> '.trans('all.view').'</a> ';
+          $actionsHtml .= $actionVote;
+          $actionsHtml .= ' <a href="'.route('showVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> '.trans('all.edit').'</a>
             <a class="btn btn-default btn-xs black" data-href="'.route('deleteVote').'" data-item-id="'.$vote->id.'" data-toggle="modal" data-target="#confirm-delete" href="#"><i class="fa fa-trash-o"></i> '.trans('all.delete').'</a>';
-            $department = $vote->department;
+
+          $department = $vote->department;
 
           $votesArr[] = array(
             'department' => is_object($department) ? $department->name : '',
@@ -383,6 +389,70 @@ class BackendVoteController extends BackendBaseController
     }
 
     return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
+  }
+
+  public function postUnlock()
+  {
+    $vote = Vote::find(Input::get('vote_id'));
+    $vote->status = Config::get('variable.vote-status.opened');
+
+    if ($vote->save())
+    {
+      //entitled user notify
+      foreach (explode(',', $vote->entitled_vote) as $userId) {
+        Notify::create([
+          'user_id' => $userId,
+          'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-entitled-vote', ['voteId' => $vote->id]),
+          'link' => route('viewMyMark', $vote->vote_group_id),
+          ]);
+      }
+
+      //voter notify
+      foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
+        Notify::create([
+          'user_id' => $userId,
+          'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-voter', ['voteId' => $vote->id]),
+          'link' => route('quickUserVote'),
+          ]);
+      }
+
+      return Response::json(array('actionStatus' => true, 'message' => trans('all.messages.vote-open-success'), 'messageType' => 'success'));
+    }else
+    {
+      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.vote-open-fail'), 'messageType' => 'error'));
+    }
+  }
+
+  public function postClose()
+  {
+    $vote = Vote::find(Input::get('vote_id'));
+    $vote->status = Config::get('variable.vote-status.closed');
+
+    if ($vote->save())
+    {
+      //entitled user notify
+      foreach (explode(',', $vote->entitled_vote) as $userId) {
+        Notify::create([
+          'user_id' => $userId,
+          'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
+          'link' => route('viewMyMark', $vote->vote_group_id),
+          ]);
+      }
+
+      //voter notify
+      foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
+        Notify::create([
+          'user_id' => $userId,
+          'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
+          'link' => route('viewMyVote', $vote->vote_group_id),
+          ]);
+      }
+
+      return Response::json(array('actionStatus' => true, 'message' => trans('all.messages.vote-close-success'), 'messageType' => 'success'));
+    }else
+    {
+      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.vote-close-fail'), 'messageType' => 'error'));
+    }
   }
 
   protected function _convert_voter_list($voter_id, $voter_role)

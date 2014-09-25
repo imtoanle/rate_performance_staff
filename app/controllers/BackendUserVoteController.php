@@ -185,7 +185,7 @@ class BackendUserVoteController extends BackendBaseController
         foreach ($entitledVoteGroupIds as $value) {
           $arrEntitledVoteGroupIds[] = $value['vote_group_id'];
         }
-
+        $arrEntitledVoteGroupIds = empty($arrEntitledVoteGroupIds) ? [''] : $arrEntitledVoteGroupIds;
         $voteGroups = VoteGroup::select(array('vote_code', 'title', 'id as vote_group_id','id as actions'))
           ->whereIn('id', $arrEntitledVoteGroupIds);
           #->limit($limit);
@@ -197,7 +197,7 @@ class BackendUserVoteController extends BackendBaseController
         foreach ($canVoteGroupId as $value) {
           $arrCanVoteGroupIds[] = $value['vote_group_id'];
         }
-
+        $arrCanVoteGroupIds = empty($arrCanVoteGroupIds) ? [''] : $arrCanVoteGroupIds;
         $voteGroups = VoteGroup::select(array('vote_code', 'title', 'id as vote_group_id','id as actions'))
           ->whereIn('id', $arrCanVoteGroupIds);
           #->limit($limit);

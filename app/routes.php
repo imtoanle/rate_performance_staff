@@ -296,6 +296,16 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendVoteController@postCreate')
   );
 
+  Route::post('vote/unlock', array(
+      'as' => 'postUnlockVote',
+      'uses' => 'BackendVoteController@postUnlock')
+  );
+
+  Route::post('vote/close', array(
+      'as' => 'postCloseVote',
+      'uses' => 'BackendVoteController@postClose')
+  );
+
   Route::get('vote/{voteId}', array(
       'as' => 'showVote',
       'uses' => 'BackendVoteController@getShow')
@@ -395,6 +405,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'VoteReportBackendController@postYearVote')
   );
 
+  Route::get('notify/{notifyId}', array(
+      'as' => 'getNotify',
+      'uses' => 'NotifyBackendController@getNotify')
+  );
+
   
 
 
@@ -457,3 +472,4 @@ View::composer(Config::get('view.backend.breadcrumbs'), function($view)
   $menuData = isset($menuData) ? $menuData : [];
   $view->with('dataBreadcrumb', $menuData);
 });
+

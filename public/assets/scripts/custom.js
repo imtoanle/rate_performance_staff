@@ -99,6 +99,13 @@ jQuery(document).ready(function() {
     toggleCheckbox($(this));
   });
 
+  $('a.view-notify-btn').click(function(e){
+    e.preventDefault();
+    ajax_call_custom('GET', $(this).attr('href'), '', function(result){
+      redirect_url_ajax(result.redirectUrl);
+    });
+  });
+
   
 });
 
