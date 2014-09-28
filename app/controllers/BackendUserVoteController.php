@@ -170,6 +170,69 @@ class BackendUserVoteController extends BackendBaseController
     }
   }
 
+  public function postQuickMultiVote()
+  {
+    $vote = Vote::find(Input::get('vote_id'));
+    $entitledUserIds = array_unique(explode(',', Input::get('entitled_user')));
+    try
+    {
+      foreach ($entitledUserIds as $userId) {
+        $voteResult = VoteResult::firstOrNew(array(
+        'vote_id' => Input::get('vote_id'),
+        'voter_id' => Input::get('voter_id'),
+        'entitled_vote_id' => $userId,
+        ));
+
+        if(Input::get('mode') == 'mark')
+        {
+          $criteriaIds = explode(',',$vote->criteria);
+          $criteriaMark = [];
+          if (empty($voteResult->mark))
+          {
+            foreach ($criteriaIds as $criteriaId) {
+              $criteriaMark[] = array('criteria_id' => $criteriaId, 'mark' => Input::get('form_mark'));
+            }
+          }else
+          {
+            $decodeMark = json_decode($voteResult->mark, true);
+
+            foreach ($criteriaIds as $criteriaId) {
+              $pattern = '/"criteria_id":"'.$criteriaId.'"/';
+              $pattern1 = '/"criteria_id":"'.$criteriaId.'","mark":""/';
+              if (!preg_match($pattern, $voteResult->mark))
+              {
+                $newMark = array('criteria_id' => $criteriaId, 'mark' => Input::get('form_mark'));
+                $decodeMark = array_merge($decodeMark, $newMark);
+              }else if(preg_match($pattern1, $voteResult->mark))
+              {
+                foreach ($decodeMark as &$value) {
+                  if($value['criteria_id'] == $criteriaId)
+                  {
+                    $value['mark'] = Input::get('form_mark');
+                  }
+                }
+              }
+            }
+              
+            $criteriaMark = $decodeMark;
+          }
+          $voteResult->mark = json_encode($criteriaMark);
+        }else
+        {
+          if(empty($voteResult->content))
+          {
+            $voteResult->content = Input::get('form_content');
+          }
+        }
+        $voteResult->save();
+      }
+      return Response::json(array('actionStatus' => true, 'message' => trans('all.messages.quick-multi-vote-success'), 'messageType' => 'success'));
+    }catch(\Exception $e)
+    {
+      return Response::json(array('actionStatus' => false, 'message' => trans('all.messages.quick-multi-vote-fail'), 'messageType' => 'error'));
+    }
+  }
+
   public function getIndex()
   {
     if(Request::Ajax())

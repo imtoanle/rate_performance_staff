@@ -144,13 +144,8 @@ class CustomHelper
     }
   }
 
-  public static function get_mark_with_criteria($vote_id, $voter_id, $entitled_vote_id, $criteria_id)
+  public static function get_mark_with_criteria($voteResult, $criteria_id)
   {
-    $voteResult = VoteResult::where('vote_id', $vote_id)
-      ->where('voter_id', $voter_id)
-      ->where('entitled_vote_id', $entitled_vote_id)
-      ->first();
-
     if (isset($voteResult))
     {
       if ($criteria_id == 'content')
@@ -229,5 +224,11 @@ class CustomHelper
       $arrayUserId[] = $value['user_id'];
     }
     return $arrayUserId;
+  }
+
+  public static function check_voted_of_vote($voteResult)
+  {
+    if (is_object($voteResult) && !empty($voteResult->mark) && !empty($voteResult->content)) return true;
+    return false;
   }
 }

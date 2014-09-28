@@ -97,6 +97,8 @@ return array(
 
 		'vote-close-success' => 'Chốt đánh giá thành công',
 		'vote-close-fail' => 'Chốt đánh giá thất bại',
+		'quick-multi-vote-success' => 'Chấm điểm nhanh thành công',
+		'quick-multi-vote-fail' => 'Có lỗi xảy ra. Vui lòng refresh để cập nhập lại !',
 		),
 	
 	'notification' => 'Thông báo',

@@ -181,6 +181,7 @@ return array(
     'listUserVotes' => 'user-votes-management',
     'quickUserVote' => 'user-votes-management',
     'postQuickUserVote' => 'user-votes-management',
+    'postQuickMultiUserVote' => 'user-votes-management',
     'headGradingUserVote' => 'user-votes-management',
     'detailHeadGradingUserVote' => 'user-votes-management',
     'postQuickHeadGradingUserVote' => 'user-votes-management',

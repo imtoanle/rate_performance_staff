@@ -367,6 +367,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@postQuickVote')
   );
 
+  Route::post('user-votes/quick-multi-vote', array(
+      'as' => 'postQuickMultiUserVote',
+      'uses' => 'BackendUserVoteController@postQuickMultiVote')
+  );
+
   Route::get('user-votes/view-mark/{voteGroupId}', array(
       'as' => 'viewMyMark',
       'uses' => 'BackendUserVoteController@getViewMyMark')
