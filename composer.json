@@ -11,7 +11,8 @@
 		"johntaa/captcha": "dev-master",
 		"fzaninotto/faker": "1.3.*@dev",
 		"orangehill/iseed": "dev-master",
-		"xethron/migrations-generator": "dev-master"
+		"xethron/migrations-generator": "dev-master",
+		"maatwebsite/excel": "1.*"
 	},
 	"autoload": {
 		"classmap": [

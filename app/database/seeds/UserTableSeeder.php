@@ -6,7 +6,7 @@ class UserTableSeeder extends Seeder {
   {
     $faker = Faker\Factory::create();
 
-    for ($i=1;$i<=400;$i++)
+    for ($i=1;$i<=1;$i++)
     {
       $username = $i==1 ? 'admin' : $faker->userName;
       $jobIds = '';

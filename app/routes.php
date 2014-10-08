@@ -97,6 +97,16 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserController@searchViaDepartment')
   );
 
+  Route::get('users/import', array(
+      'as' => 'importUsers',
+      'uses' => 'BackendUserController@getImportUser')
+  );
+
+  Route::post('users/import', array(
+      'as' => 'importUsers',
+      'uses' => 'BackendUserController@postImportUser')
+  );
+
   /**
    * Group routes
    */

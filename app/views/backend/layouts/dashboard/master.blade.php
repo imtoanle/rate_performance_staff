@@ -37,7 +37,7 @@
   
   <!-- TS1398827429: Neon - Responsive Admin Template created by Laborator -->
 </head>
-<body class="page-body {{isset($bodyClass) ? $bodyClass : ''}}" data-url="{{route('indexHome')}}">
+<body class="page-body {{isset($bodyClass) ? $bodyClass : ''}}">
 
 <div class="page-container">    
   <div class="sidebar-menu">

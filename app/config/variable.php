@@ -120,6 +120,7 @@ return array(
     'showGroup' => 'groups-management',
     'putGroup' => 'groups-management',
     'listUsers' => 'view-users-list',
+    'importUsers' => 'import-users',
     'users_list' => 'view-users-list',
     'deleteUsers' => 'delete-user',
     'newUser' => 'create-user',

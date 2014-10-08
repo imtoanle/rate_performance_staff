@@ -230,6 +230,11 @@ return array(
 		'close-vote' => 'Đánh giá có mặt bạn đã đóng #:voteId',
 	],
 
+	'import-users' => 'Nhập thành viên',
+	'file-data' => 'Tập tin dữ liệu',
+	'select-file' => 'Chọn file',
+	'change' => 'Thay đổi',
+
 
 
 

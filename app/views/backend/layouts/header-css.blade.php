@@ -25,4 +25,8 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}}"/>
 @endif
 
+@if(in_array(Route::currentRouteName(), array('importUsers')))
+<link href="{{asset('assets/plugins/jquery-file-upload/css/jquery.fileupload-ui.css')}}" rel="stylesheet"/>
+@endif
+
 <link rel="stylesheet" type="text/css" href="{{asset('assets/plugins/bootstrap-toastr/toastr.min.css')}}"/>

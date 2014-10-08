@@ -75,11 +75,13 @@ return array(
 
     // users
     'users-index' => 'backend.user.index-user',
+    'users-import' => 'backend.user.import-user',
     'users-list' => 'backend.user.list-users',
     'user-create' => 'backend.user.new-user',
     'user-informations' => 'backend.user.user-informations',
     'user-profile' => 'backend.user.show-user',
     'user-activation' => 'backend.user.activation',
+
 
     //votes
     'job-titles-index' => 'backend.job-title.index',

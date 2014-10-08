@@ -36,4 +36,8 @@
 @if(in_array(Route::currentRouteName(), array('reportPeriodVote', 'reportPeriodVoteGroup')))
 <script type="text/javascript" src="{{asset('assets/plugins/jquery.battatech.excelexport.min.js')}}"></script>
 @endif
+
+@if(in_array(Route::currentRouteName(), array('importUsers')))
+<script type="text/javascript" src="{{asset('assets/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+@endif
 <!-- END PAGE LEVEL PLUGINS -->

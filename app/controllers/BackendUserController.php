@@ -11,6 +11,64 @@ class BackendUserController extends BackendBaseController
     * @return Response
     */
 
+  public function getImportUser()
+  {
+    return View::make(Config::get('view.backend.users-import'));
+  }
+
+  public function postImportUser()
+  {
+    $faker = Faker\Factory::create();
+
+    $file = Input::file('users_data_file');
+    $users = Excel::selectSheetsByIndex(0)->load($file)->get();
+    $usersDepartment = [];
+    foreach ($users as $user) {
+      $usersDepartment[$user->phongban][] = $user;
+    }
+
+    try
+    {
+      $randomGroup = Sentry::findGroupById(1);
+      foreach ($usersDepartment as $departmentName => $users) {
+        $department = Department::where('name', 'LIKE', '%'.$departmentName.'%')->first();
+        if(!is_object($department))
+        {
+          $department = Department::create(array('name' => $departmentName));
+        }
+        foreach ($users as $user) {
+          $job = JobTitle::where('name', 'LIKE', '%'.$user->chucvu.'%')->first();
+          if(!is_object($job))
+          {
+            $job = JobTitle::create(array('name' => $user->chucvu));
+          }
+          if(!User::where('username', $user->sohieu)->exists())
+          {
+            $userCreatd = User::create(array(
+            'username' => $user->sohieu,
+            'email' => $faker->email,
+            'password' => '123123',
+            'activated' => true,
+            'full_name' => $user->hovaten,
+            'birth_date' => Carbon::createFromDate($user->namsinh),
+            'job_title' => $job->id,
+            'department_id' => $department->id,
+            ));
+
+
+            $userCreatd->addGroup($randomGroup);
+          }
+          
+        }
+      }
+    }catch(\Exception $e)
+    {
+      return Response::json(array('actionStatus' => false, 'message' => 'Có lỗi xảy ra khi import thành viên !', 'messageType' => 'error'));
+    }
+    
+    return Response::json(array('actionStatus' => false, 'message' => 'Import thành viên thành công !', 'messageType' => 'success'));
+  }
+
   public function searchViaJobTitle()
   {
     $str_old_value = Input::get('old_object_vote') == 'null' ? '' : Input::get('old_object_vote');

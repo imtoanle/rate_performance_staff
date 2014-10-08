@@ -45,6 +45,7 @@
   <?php $arrRoutes = array('listPermissions', 'listJobTitles', 'listUsers', 'listGroups', 'listDepartments'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
+    {{ BackendSideBar::create_node(trans('all.import-users'), 'importUsers', 'fa fa-users') }}  
     {{ BackendSideBar::create_node(trans('all.job-title'), 'listJobTitles', 'fa fa-mortar-board') }}  
     {{ BackendSideBar::create_node(trans('all.department'), 'listDepartments', 'fa fa-sitemap') }}  
     {{ BackendSideBar::create_node(trans('all.group'), 'listGroups', 'fa fa-group') }}  

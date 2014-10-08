@@ -126,6 +126,7 @@ return array(
 		'Way\Generators\GeneratorsServiceProvider',
 		'Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider',
 		'Orangehill\Iseed\IseedServiceProvider',
+		'Maatwebsite\Excel\ExcelServiceProvider',
 	),
 
 	/*
@@ -194,7 +195,8 @@ return array(
 		'Sentry' 					=> 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 		'Datatables'      => 'Bllim\Datatables\Datatables',
 		'GeoIP' 					=> 'Torann\GeoIP\GeoIPFacade',
-		'Captcha' => 'Johntaa\Captcha\Facades\Captcha',
+		'Captcha' 				=> 'Johntaa\Captcha\Facades\Captcha',
+		'Excel' 					=> 'Maatwebsite\Excel\Facades\Excel',
 
 	),
 
