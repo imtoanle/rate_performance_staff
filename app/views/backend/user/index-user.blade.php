@@ -31,46 +31,7 @@
   </tr>
   </thead>
   <tbody>
-  @foreach($users as $user)
-  <?php
-    $throttle = Sentry::findThrottlerByUserId($user->getId());
-  ?>
-  <tr class="odd gradeX" id="ajax-table-item-{{$user->id}}">
-    <td>
-      <div class="checker">
-        <span>
-          <input type="checkbox" class="checkboxes" value="{{ $user->id }}"/>
-        </span>
-      </div>
-    </td>
-    <td>{{$user->username}}</td>
-    <td>{{$user->full_name}}</td>
-    <td>{{$user->email}}</td>
-    <td>
-      @foreach($user->getGroups()->toArray() as $key => $group)
-        {{ $group['name'] }},
-      @endforeach
-    </td>
-    <td>
-      @foreach(array_keys($user->getPermissions()) as $permision)
-        {{($permision)}},
-      @endforeach
-    </td>
-    <td>
-      @if ($throttle->isBanned())
-        <span class="label label-default">{{trans('all.active')}}</span>
-      @elseif ($user->isActivated())
-        <span class="label label-success">{{trans('all.active')}}</span>
-      @else
-        <span class="label label-danger">{{trans('all.inactive')}}</span>
-      @endif
-    </td>
-    <td>
-        <a href="{{route('showUser', $user->id)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans('all.edit')}}</a>
-        <a item-id="{{$user->id}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
-    </td>
-  </tr>
-  @endforeach
+  
   </tbody>
   </table>
 </div>
@@ -122,13 +83,10 @@ jQuery(document).ready(function() {
       // set the initial value
       "iDisplayLength": 10,
       "sPaginationType": "bootstrap",
-      "oLanguage": {
-          "sProcessing": '<i class="fa fa-coffee"></i>&nbsp;{{trans('all.please-wait')}}',
-          "sLengthMenu": "_MENU_ records",
-          "oPaginate": {
-              "sPrevious": "Prev",
-              "sNext": "Next"
-          }
+      "bServerSide": true,
+      "sAjaxSource": "{{route('listUsers')}}",
+      "fnServerParams": function ( aoData ) {
+        aoData.push( { "name": "mode", "value": "datatable" } );
       },
   });
 

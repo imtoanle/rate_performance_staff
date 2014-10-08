@@ -154,9 +154,56 @@ class BackendUserController extends BackendBaseController
     }
     public function getIndex()
     {
+      if (Request::Ajax())
+      {
+        if (Input::get('mode') == 'datatable')
+        {
+          $users = User::select(array('id', 'activated', 'id as checkbox','username', 'full_name', 'email', 'id as groups', 'permissions', 'id as status', 'id as actions'));
+          return Datatables::of($users)
+          ->remove_column('id')
+          ->remove_column('activated')
+          ->edit_column('checkbox',
+            '<div class="checker">
+              <span>
+                <input type="checkbox" class="checkboxes" value="{{ $checkbox }}"/>
+              </span>
+            </div>')
+          ->edit_column('groups', function($row){
+            $groupsName = '';
+            foreach($row->getGroups()->toArray() as $key => $group)
+            {
+              $groupsName .= $group['name'].',';
+            }
+            return rtrim($groupsName, ',');
+          })
+          ->edit_column('permissions', function($row){
+            $permissionsName = '';
+            foreach(array_keys($row->getPermissions()) as $permision)
+            {
+              $permissionsName .= $permision;
+            }
+            return rtrim($permissionsName, ',');
+          })
+          ->edit_column('status', function($row){
+            $throttle = Sentry::findThrottlerByUserId($row->id);
+            if ($throttle->isBanned())
+            return '<span class="label label-default">'.trans('all.active').'</span>';
+            else if ($row->isActivated())
+            return '<span class="label label-success">'.trans('all.active').'</span>';
+            else
+            return '<span class="label label-danger">'.trans('all.inactive').'</span>';
+          })
+          ->edit_column('actions', 
+            '<a href="{{route(\'showUser\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> {{trans(\'all.edit\')}}</a>
+            <a item-id="{{$actions}}" class="btn btn-default btn-xs black remove-item"><i class="fa fa-trash-o"></i> {{trans(\'all.delete\')}}</a>')
+          ->make();
+        }
+      }
+
         // get alls users
         $params['users'] = Sentry::findAllUsers();
         
+
         $this->layout = View::make(Config::get('view.backend.users-index'), $params);
         //$this->layout->title = trans('syntara::users.titles.list');
         //$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.users');
