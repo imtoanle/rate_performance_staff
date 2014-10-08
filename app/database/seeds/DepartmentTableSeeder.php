@@ -4,6 +4,7 @@ class DepartmentTableSeeder extends Seeder {
  
   public function run()
   {
+    /*
     Department::create(array('name' => 'Kế toán'));
     Department::create(array('name' => 'Nhân sự'));
     Department::create(array('name' => 'IT'));
@@ -15,6 +16,7 @@ class DepartmentTableSeeder extends Seeder {
     Department::create(array('name' => 'Kế hoạch - Thị trường'));
     Department::create(array('name' => 'KSC'));
     Department::create(array('name' => 'Bao bì'));
+    */
   }
  
 }

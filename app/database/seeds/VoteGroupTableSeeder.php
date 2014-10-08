@@ -4,6 +4,7 @@ class VoteGroupTableSeeder extends Seeder {
  
   public function run()
   {
+    /*
     $faker = Faker\Factory::create();
 
     for ($i=1;$i<=50;$i++)
