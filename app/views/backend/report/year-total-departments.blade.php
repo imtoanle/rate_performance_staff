@@ -7,8 +7,14 @@
       <label class="control-label col-md-3">{{trans('all.vote-group')}}</label>
       <div class="col-md-6">
         <select name="department_list" id="department_list" class="form-control select2">
+          <option></option>
           @foreach($voteGroups as $voteGroup)
-            <option value="{{$voteGroup->id}}">{{$voteGroup->vote_code}} - {{$voteGroup->title}}</option>
+            <optgroup label="{{$voteGroup->vote_code}} - {{$voteGroup->title}}">
+              <option value="all-{{$voteGroup->id}}">Tất cả</option>
+              @foreach($voteGroup->votes as $vote)
+                <option value="{{$vote->id}}">{{$vote->department->name}}</option>
+              @endforeach
+            </optgroup>
           @endforeach
         </select>
       </div>
@@ -19,7 +25,7 @@
 @foreach($votes as $vote)
   <?php $voteGroup = $vote->voteGroup; ?>
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-<div class="portlet box light-grey">
+<div class="portlet box light-grey vote-group-id-{{$voteGroup->id}}" id="vote-id-{{$vote->id}}">
 <div class="portlet-title">
   <div class="caption">
     <i class="fa fa-list"></i>{{$voteGroup->title}}
@@ -116,6 +122,24 @@
       });
 
       $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+    });
+
+    $('#department_list').change(function(){
+      dataArr = $(this).val().split('-');
+      if(dataArr[0] == 'all') 
+      {
+        
+        //hide all
+        $('div[id^="vote-id-"]').addClass('hide');
+        //show only
+        $('.vote-group-id-' + dataArr[1]).removeClass('hide');
+      }else
+      {
+        //hide all
+        $('div[id^="vote-id-"]').addClass('hide');
+        //show only
+        $('#vote-id-' + dataArr).removeClass('hide');
+      }
     });
   });
 </script>
