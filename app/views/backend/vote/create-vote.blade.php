@@ -67,7 +67,7 @@
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.department')}}</label>
           <div class="col-md-8">
-            <select name="department_list" id="select2_department" class="form-control select2">
+            <select name="department_list" id="select2_department" class="form-control select2" multiple>
               <option></option>
               @foreach($departments as $department)
               <option value="{{$department->id}}">{{$department->name}}</option>

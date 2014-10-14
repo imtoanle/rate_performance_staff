@@ -1,6 +1,21 @@
 @extends(Config::get('view.backend.master'))
 @section('content')
 
+<form class="form-horizontal base-ajax-form">
+  <div class="form-body">
+    <div class="form-group">
+      <label class="control-label col-md-3">{{trans('all.vote-group')}}</label>
+      <div class="col-md-6">
+        <select name="department_list" id="department_list" class="form-control select2">
+          @foreach($voteGroups as $voteGroup)
+            <option value="{{$voteGroup->id}}">{{$voteGroup->vote_code}} - {{$voteGroup->title}}</option>
+          @endforeach
+        </select>
+      </div>
+    </div>
+  </div>
+</form>
+
 @foreach($votes as $vote)
   <?php $voteGroup = $vote->voteGroup; ?>
 <!-- BEGIN EXAMPLE TABLE PORTLET-->

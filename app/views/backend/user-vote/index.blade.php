@@ -10,8 +10,6 @@
   <div class="actions">
     <a href="{{route('newVote')}}" class="btn btn-info ajaxify-child-page"><i class="fa fa-pencil"></i> {{trans('all.add')}}</a>
     <a href="#delete-modal" data-toggle="modal" class="btn btn-danger"><i class="fa fa-trash-o"></i> {{trans('all.delete')}}</a>
-    
-    <a class="btn btn-warning" href="table_managed.html#"><i class="fa fa-print"></i> Print</a>
   </div>
 </div>
 <div class="portlet-body panel-content-area">

@@ -118,6 +118,7 @@ return array(
     'report-by-year-vote' => 'backend.report.year-vote',
     'report-by-year-vote-group' => 'backend.report.year-vote-group',
     'report-by-year-department' => 'backend.report.year-department',
+    'report-by-year-total-departments' => 'backend.report.year-total-departments',
 
 
 

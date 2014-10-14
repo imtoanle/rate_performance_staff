@@ -51,27 +51,29 @@
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
+      <?php $voteResult = VoteResult::whereVoteId($vote->id)->whereVoterId($voterIdArr[0])->whereEntitledVoteId($entitledUser->id)->first(); ?>
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}</td>
       <td>
         @foreach(explode(',', $vote->criteria) as $criteriaId)
-          {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
+          {{ CustomHelper::get_mark_with_criteria($voteResult, $criteriaId) }} <br />
         @endforeach
       </td>
-      <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_criteria($voteResult, 'content') }}</td>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
     </tr>
     @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
     <tr>
       @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
+        <?php $voteResult = VoteResult::whereVoteId($vote->id)->whereVoterId($voterIdArr[0])->whereEntitledVoteId($entitledUser->id)->first(); ?>
         @if(isset($voterIdArr[$i]))
           <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}</td>
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, $criteriaId) }} <br />
+            {{ CustomHelper::get_mark_with_criteria($voteResult, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_criteria($voteResult, 'content') }}</td>
         @else
           <td colspan="3"></td>
         @endif

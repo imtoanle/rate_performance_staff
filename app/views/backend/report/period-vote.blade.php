@@ -43,34 +43,36 @@
     </tr>
 
   <?php $countEntitled = 1; ?>
-  @foreach(explode(',', $vote->entitled_vote) as $userId)
+  @foreach(explode(',', $vote->entitled_vote) as $userId)  
   <?php $entitledUser = User::find($userId); ?>
     <tr>
       <td rowspan="{{$maxVoter}}">{{$countEntitled}}</td>
       <td rowspan="{{$maxVoter}}">{{$entitledUser->full_name}}</td>
       <td rowspan="{{$maxVoter}}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr as $voteGroupId => $voterIdArr)
+      <?php $voteResult = VoteResult::whereVoteId($vote->id)->whereVoterId($voterIdArr[0])->whereEntitledVoteId($userId)->first(); ?>
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}</td>
       <td>
         @foreach(explode(',', $vote->criteria) as $criteriaId)
-          {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, $criteriaId) }} <br />
+          {{ CustomHelper::get_mark_with_criteria($voteResult, $criteriaId) }} <br />
         @endforeach
       </td>
-      <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[0], $entitledUser->id, 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_criteria($voteResult, 'content') }}</td>
       @endforeach
       <td rowspan="{{$maxVoter}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
     </tr>
     @for($i=1; $i < $maxVoter; $i++)
     <tr>
       @foreach($voterArr as $voteGroupId => $voterIdArr)
+      <?php $voteResult = VoteResult::whereVoteId($vote->id)->whereVoterId($voterIdArr[0])->whereEntitledVoteId($userId)->first(); ?>
         @if(isset($voterIdArr[$i]))
           <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}</td>
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, $criteriaId) }} <br />
+            {{ CustomHelper::get_mark_with_criteria($voteResult, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_mark_with_criteria($vote->id, $voterIdArr[$i], $entitledUser->id, 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_criteria($voteResult, 'content') }}</td>
         @else
           <td colspan="3"></td>
         @endif

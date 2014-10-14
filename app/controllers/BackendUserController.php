@@ -180,7 +180,7 @@ class BackendUserController extends BackendBaseController
             $permissionsName = '';
             foreach(array_keys($row->getPermissions()) as $permision)
             {
-              $permissionsName .= $permision;
+              $permissionsName .= $permision.',';
             }
             return rtrim($permissionsName, ',');
           })

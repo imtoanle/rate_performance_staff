@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group hide" id="form-select-department">
         <label class="col-md-3 control-label">{{trans('all.select-department')}}</label>
         <div class="col-md-8">
           <select name="select2_department" class="form-control select2">
@@ -78,6 +78,16 @@ jQuery(document).ready(function() {
     allowClear: true,
   });
  
+});
+
+$('select[name=vote_type]').change(function(){
+  if($(this).val() == '1')
+  {
+    $('#form-select-department').removeClass('hide');
+  }else
+  {
+    $('#form-select-department').addClass('hide');
+  }
 });
 
 

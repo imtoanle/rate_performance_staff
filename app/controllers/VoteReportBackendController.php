@@ -147,8 +147,65 @@ class VoteReportBackendController extends BackendBaseController
     if(Input::get('vote_type') == 1)
     {
       $votes = Vote::where('department_id', Input::get('select2_department'))->whereBetween('created_at', $thisYear)->get();
+      $voterArr = [];
+      $maxVoterArr = [];
+
+
+      foreach ($votes as $vote) {
+        
+        foreach (json_decode($vote->voter) as $value) {
+          $voterArr[$vote->id][$value->role_id][] = $value->user_id;
+        }
+
+        //find max voter
+        $maxVoterArr[$vote->id] = 0;
+        foreach ($voterArr[$vote->id] as $value) {
+          if(count($value) > $maxVoterArr[$vote->id])
+          {
+            $maxVoterArr[$vote->id] = count($value);
+          }
+        }
+      }
+
       $params['votes'] = $votes;
+      $params['voterArr'] = $voterArr;
+      $params['maxVoterArr'] = $maxVoterArr;
+
       return View::make(Config::get('view.backend.report-by-year-department'), $params);
+    }else
+    {
+      $voteGroups = VoteGroup::whereBetween('created_at', $thisYear)->get();
+      $voteGroupIds = [];
+      foreach ($voteGroups as $voteGroup) {
+        $voteGroupIds[] = $voteGroup->id;
+      }
+
+      $votes = Vote::whereIn('vote_group_id', $voteGroupIds)->orderBy('vote_group_id')->get();
+      $voterArr = [];
+      $maxVoterArr = [];
+
+
+      foreach ($votes as $vote) {
+        
+        foreach (json_decode($vote->voter) as $value) {
+          $voterArr[$vote->id][$value->role_id][] = $value->user_id;
+        }
+
+        //find max voter
+        $maxVoterArr[$vote->id] = 0;
+        foreach ($voterArr[$vote->id] as $value) {
+          if(count($value) > $maxVoterArr[$vote->id])
+          {
+            $maxVoterArr[$vote->id] = count($value);
+          }
+        }
+      }
+
+      $params['voteGroups'] = $voteGroups;
+      $params['votes'] = $votes;
+      $params['voterArr'] = $voterArr;
+      $params['maxVoterArr'] = $maxVoterArr;
+      return View::make(Config::get('view.backend.report-by-year-total-departments'), $params);
     }
   }
 }

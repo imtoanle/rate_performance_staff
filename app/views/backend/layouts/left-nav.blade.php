@@ -42,7 +42,7 @@
     {{ BackendSideBar::create_node(trans('all.reports-by-year'), 'listReportYear', 'fa fa-list') }}  
   {{ BackendSideBar::create_root_close() }} 
 
-  <?php $arrRoutes = array('listPermissions', 'listJobTitles', 'listUsers', 'listGroups', 'listDepartments'); ?>
+  <?php $arrRoutes = array('listPermissions', 'listJobTitles', 'listUsers', 'listGroups', 'listDepartments', 'importUsers'); ?>
   {{ BackendSideBar::create_root_open(trans('all.user-manager'), $arrRoutes, 'fa fa-user')}}  
     {{ BackendSideBar::create_node(trans('all.user'), 'listUsers', 'fa fa-user') }}  
     {{ BackendSideBar::create_node(trans('all.import-users'), 'importUsers', 'fa fa-users') }}  
