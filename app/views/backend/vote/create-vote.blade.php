@@ -103,6 +103,13 @@
           <label class="control-label col-md-3">{{trans('all.entitled-vote')}}</label>
           <div class="col-md-8">
             <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
+              @foreach($departments as $department)
+                <optgroup label="{{$department->name}}">
+                  @foreach($department->users as $user)
+                    <option value="{{$user->id}}">{{$user->username}} ({{$user->full_name}})</option>
+                  @endforeach
+                </optgroup>
+              @endforeach
             </select>
           </div>
         </div>
