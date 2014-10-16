@@ -36,12 +36,7 @@
 
         <h3 class="form-section">{{trans('all.vote-info')}}</h3>
         <!--
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
-          <div class="col-md-8">
-            <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
-          </div>
-        </div>
+        
 
 
         <div class="form-group">
@@ -87,7 +82,7 @@
             </select>
           </div>
         </div>
-        -->
+        
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
@@ -96,6 +91,14 @@
               <option value="{{$job->id}}">{{$job->name}}</option>
               @endforeach
             </select>
+          </div>
+        </div>
+        -->
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
+          <div class="col-md-8">
+            <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
           </div>
         </div>
 
@@ -168,8 +171,10 @@
 @include(Config::get('view.backend.footer-js'))
 <script>
 jQuery(document).ready(function() {   
+  /*
   var sel = $("#select2_object_vote");
   sel.data("prev",sel.val());
+  */
 
   if (jQuery().datepicker) {
     $('.date-picker').datepicker({
@@ -178,6 +183,7 @@ jQuery(document).ready(function() {
     });
   }
 
+  /*
   $('#select2_object_vote').change(function(){
     ajax_call_custom('GET', '{{route('listUsersSearchJob')}}', 'old_object_vote='+$(this).data('prev')+'&new_object_vote='+$(this).val(), function(result){
       if (result.action == 'add')
@@ -202,7 +208,6 @@ jQuery(document).ready(function() {
     });
     $(this).data("prev",$(this).val());
   });
-
 
   $('#select2_department').change(function(){
     $('optgroup[department-id]').remove();
@@ -229,9 +234,8 @@ jQuery(document).ready(function() {
         $('#multi_entitled_vote').multiSelect('refresh');
       });
     }
-
-
   });
+*/
 
 
   $('#multi_entitled_vote').multiSelect({

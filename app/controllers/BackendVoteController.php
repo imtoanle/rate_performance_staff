@@ -244,7 +244,7 @@ class BackendVoteController extends BackendBaseController
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote = new Vote;
     $vote->fill(array(
-      'object_entitled_vote' => Input::get('object_vote_list'),
+      'object_entitled_vote' => Input::get('object_vote_title'),
       'department_id' => Input::get('department_list'),
       'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
@@ -296,7 +296,7 @@ class BackendVoteController extends BackendBaseController
 
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
     $vote->fill(array(
-      'object_entitled_vote' => Input::get('object_vote_list'),
+      'object_entitled_vote' => Input::get('object_vote_title'),
       'department_id' => Input::get('department_list'),
       'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),

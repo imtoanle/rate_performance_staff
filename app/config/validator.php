@@ -125,18 +125,18 @@ return array(
     'vote-create' => array(
       'vote_code' => 'required',
       'title' => 'required',
-      'object_vote_list' => 'required',
+      'object_vote_title' => 'required',
       'entitled_vote' => 'required',
       'voter_id' => 'required',
-      'criteria_list' => 'required',
+      //'criteria_list' => 'required',
       'expiration_date' => 'required',
     ),
 
     'vote-update' => array(
-      'object_vote_list' => 'required',
+      'object_vote_title' => 'required',
       'entitled_vote' => 'required',
       'voter_id' => 'required',
-      'criteria_list' => 'required',
+      //'criteria_list' => 'required',
       'expiration_date' => 'required',
     ),
 

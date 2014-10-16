@@ -33,12 +33,7 @@
         </div>
         
         <!--
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
-          <div class="col-md-8">
-            <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
-          </div>
-        </div>
+
         -->
 
         <div class="form-group">
@@ -52,7 +47,7 @@
             </select>
           </div>
         </div>
-
+        <!--
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.criteria')}}</label>
           <div class="col-md-8">
@@ -64,7 +59,15 @@
             </select>
           </div>
         </div>
+        -->
 
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
+          <div class="col-md-8">
+            <input type="text" name="object_vote_title" class="form-control" value="{{$vote->object_entitled_vote}}" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
+          </div>
+        </div>
+        <!--
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
@@ -76,34 +79,20 @@
             </select>
           </div>
         </div>
+        -->
 
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.entitled-vote')}}</label>
           <div class="col-md-8">
             <?php $entitledVoteArr = explode(',', $vote->entitled_vote); ?>
             <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
-              @if(is_object($voteDepartment))
-              <optgroup department-id="{{$voteDepartment->id}}" label="{{$voteDepartment->name}}">
-                <?php $departmentUsers = $voteDepartment->users; ?>
-                @foreach($departmentUsers as $user)
-                  <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}}</option>    
-                @endforeach
-              </optgroup>
-              @endif
-
-              <?php 
-              $departmentUsers = isset($departmentUsers) ? $departmentUsers : [];
-              $usersInJob = CustomHelper::get_users_from_job_list($objectVoteArr, $departmentUsers);
-              ?>
-              @foreach($usersInJob as $key => $value)
-                <optgroup job-id="{{$key}}" label="{{$value['jobName']}}">
-                  @foreach($value['data'] as $user)
-                    <option value="{{$user['id']}}" {{in_array($user['id'], $entitledVoteArr) ? 'selected' : ''}}>{{$user['username']}}</option>    
+              @foreach($departments as $department)
+                <optgroup label="{{$department->name}}">
+                  @foreach($department->users as $user)
+                    <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}} ({{$user->full_name}})</option>
                   @endforeach
                 </optgroup>
               @endforeach
-
-              
             </select>
           </div>
         </div>
@@ -181,8 +170,10 @@
 @include(Config::get('view.backend.footer-js'))
 <script>
 jQuery(document).ready(function() {   
+  /*
   var sel = $("#select2_object_vote");
   sel.data("prev",sel.val());
+  */
 
   if (jQuery().datepicker) {
     $('.date-picker').datepicker({
@@ -191,6 +182,7 @@ jQuery(document).ready(function() {
     });
   }
 
+  /*
   $('#select2_object_vote').change(function(){
     ajax_call_custom('GET', '{{route('listUsersSearchJob')}}', 'old_object_vote='+$(this).data('prev')+'&new_object_vote='+$(this).val(), function(result){
       if (result.action == 'add')
@@ -236,6 +228,7 @@ jQuery(document).ready(function() {
       $('#multi_entitled_vote').multiSelect('refresh');
     });
   });
+*/
 
   $('#multi_entitled_vote').multiSelect({
       selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='{{trans('all.search')}}...'>",
