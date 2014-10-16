@@ -67,15 +67,16 @@
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.department')}}</label>
           <div class="col-md-8">
-            <select name="department_list" id="select2_department" class="form-control select2" multiple>
+            <select name="department_list" id="select2_department" class="form-control select2">
               <option></option>
+              <option value="all">Trưởng / Phó chi nhánh</option>
               @foreach($departments as $department)
               <option value="{{$department->id}}">{{$department->name}}</option>
               @endforeach
             </select>
           </div>
         </div>
-
+        <!--
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.criteria')}}</label>
           <div class="col-md-8">
@@ -86,7 +87,7 @@
             </select>
           </div>
         </div>
-
+        -->
         <div class="form-group">
           <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
@@ -199,22 +200,30 @@ jQuery(document).ready(function() {
   $('#select2_department').change(function(){
     $('optgroup[department-id]').remove();
 
-    ajax_call_custom('GET', '{{route('listUsersSearchDepartment')}}', 'department_id='+$(this).val(), function(result){
-      var html_option = '';
-      html_option += '<optgroup department-id="'+ result.departmentId +'" label="'+result.departmentName+'">';
-      for(var i in result.data)
-      {
-        if(!$('#multi_entitled_vote option[value='+ result.data[i].id +']').length)
-        {
-          html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
-        }
-      }
-      html_option += '</optgroup>';
-
-      $('#multi_entitled_vote').append(html_option);
+    if($(this).val() == 'all')
+    {
 
       $('#multi_entitled_vote').multiSelect('refresh');
-    });
+    }else
+    {
+      ajax_call_custom('GET', '{{route('listUsersSearchDepartment')}}', 'department_id='+$(this).val(), function(result){
+        var html_option = '';
+        html_option += '<optgroup department-id="'+ result.departmentId +'" label="'+result.departmentName+'">';
+        for(var i in result.data)
+        {
+          if(!$('#multi_entitled_vote option[value='+ result.data[i].id +']').length)
+          {
+            html_option += '<option value="'+result.data[i].id+'">'+result.data[i].username+' ('+result.data[i].full_name+')</option>';  
+          }
+        }
+        html_option += '</optgroup>';
+  
+        $('#multi_entitled_vote').append(html_option);
+        $('#multi_entitled_vote').multiSelect('refresh');
+      });
+    }
+
+
   });
 
 
@@ -290,10 +299,12 @@ jQuery(document).ready(function() {
     allowClear: true,
   });
 
+/*
   $("#select2_criteria").select2({
     placeholder: '{{trans('all.select-criteria')}}',
     allowClear: true,
   });
+*/
 
   $('#select2_voter').select2({
     placeholder: "{{trans('all.select-voter')}}",

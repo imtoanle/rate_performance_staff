@@ -246,7 +246,7 @@ class BackendVoteController extends BackendBaseController
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department_id' => Input::get('department_list'),
-      'criteria' => Input::get('criteria_list'),
+      'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
@@ -298,7 +298,7 @@ class BackendVoteController extends BackendBaseController
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_list'),
       'department_id' => Input::get('department_list'),
-      'criteria' => Input::get('criteria_list'),
+      'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
