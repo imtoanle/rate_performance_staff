@@ -36,7 +36,7 @@
         <td>
           @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
           <p>
-            {{$criteria->name}}: {{CustomHelper::get_mark_with_criteria($vote->id, $currentUser->id, $user->id, $criteria->id)}}
+            {{CustomHelper::get_mark_with_criteria($vote->id, $currentUser->id, $user->id, $criteria->id)}}
           </p>
           @endforeach
         </td>

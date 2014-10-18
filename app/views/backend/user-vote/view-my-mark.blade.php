@@ -25,7 +25,7 @@
   <tbody>
   @foreach($votes as $vote)
     <tr>
-      <td colspan="7"><strong>{{trans('all.department')}}:</strong> {{$vote->department_name()}}</td>
+      <td colspan="7"><strong>{{trans('all.department')}}:</strong> {{$vote->get_department_name()}}</td>
     </tr>
       <?php $number_in_department = 1; ?>
       @foreach(CustomHelper::get_users_from_voter_list($vote->voter) as $user)
@@ -38,7 +38,6 @@
         <td>
           @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
           <?php $mark = CustomHelper::get_mark_with_criteria($vote->id, $user['id'], $currentUser->id, $criteria->id) ?>
-          {{$criteria->name}}: 
             @if(empty($mark))
             <strong class="color-danger">...</strong><br />
             @else

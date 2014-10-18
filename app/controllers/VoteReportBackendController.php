@@ -22,8 +22,7 @@ class VoteReportBackendController extends BackendBaseController
         ->edit_column('button', '<span class="row-details row-details-close"><input type="hidden" value="{{$button}}" /></span>')
         ->edit_column('vote_group_id', function($row){
           $count = Vote::where('vote_group_id', $row->vote_group_id)
-            ->where('status', Config::get("variable.vote-status.newly"))
-            ->whereOr('status', Config::get("variable.vote-status.opened"))
+            ->whereIn('status', [Config::get("variable.vote-status.newly"), Config::get("variable.vote-status.opened")])
             ->count();
           if ($count > 0)
           {

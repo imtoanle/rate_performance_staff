@@ -273,8 +273,7 @@ class BackendUserVoteController extends BackendBaseController
       return Datatables::of($voteGroups)
         ->edit_column('vote_group_id', function($row){
           $count = Vote::where('vote_group_id', $row->vote_group_id)
-            ->where('status', Config::get("variable.vote-status.newly"))
-            ->whereOr('status', Config::get("variable.vote-status.opened"))
+            ->whereIn('status', [Config::get("variable.vote-status.newly"), Config::get("variable.vote-status.opened")])
             ->count();
           if ($count > 0)
           {
