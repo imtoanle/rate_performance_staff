@@ -45,6 +45,7 @@
           <div class="col-md-8">
             <select name="department_list" id="select2_department" class="form-control select2">
               <option></option>
+              <option value="all">Trưởng / Phó chi nhánh</option>
               @foreach($departments as $department)
               <option value="{{$department->id}}">{{$department->name}}</option>
               @endforeach
@@ -53,24 +54,9 @@
         </div>
 
         <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.criteria')}}</label>
+          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
           <div class="col-md-8">
-            <select name="criteria_list" id="select2_criteria" class="form-control select2" multiple>
-              @foreach($criterias as $criteria)
-              <option value="{{$criteria->id}}">{{$criteria->name}}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
-          <div class="col-md-8">
-            <select name="object_vote_list" id="select2_object_vote" class="form-control select2" multiple>
-              @foreach($jobTitles as $job)
-              <option value="{{$job->id}}">{{$job->name}}</option>
-              @endforeach
-            </select>
+            <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
           </div>
         </div>
 
@@ -78,6 +64,13 @@
           <label class="control-label col-md-3">{{trans('all.entitled-vote')}}</label>
           <div class="col-md-8">
             <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
+              @foreach($departments as $department)
+                <optgroup label="{{$department->name}}">
+                  @foreach($department->users as $user)
+                    <option value="{{$user->id}}">{{$user->username}} ({{$user->full_name}})</option>
+                  @endforeach
+                </optgroup>
+              @endforeach
             </select>
           </div>
         </div>
@@ -137,8 +130,10 @@
 @include(Config::get('view.backend.footer-js'))
 <script>
 jQuery(document).ready(function() {   
+  /*
   var sel = $("#select2_object_vote");
   sel.data("prev",sel.val());
+  */
 
   if (jQuery().datepicker) {
     $('.date-picker').datepicker({
@@ -147,6 +142,7 @@ jQuery(document).ready(function() {
     });
   }
 
+  /*
   $('#select2_object_vote').change(function(){
     ajax_call_custom('GET', '{{route('listUsersSearchJob')}}', 'old_object_vote='+$(this).data('prev')+'&new_object_vote='+$(this).val(), function(result){
       if (result.action == 'add')
@@ -192,7 +188,7 @@ jQuery(document).ready(function() {
       $('#multi_entitled_vote').multiSelect('refresh');
     });
   });
-
+  */
   $('#multi_entitled_vote').multiSelect({
       selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='{{trans('all.search')}}...'>",
       selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='{{trans('all.search')}}...'>",
@@ -265,10 +261,6 @@ jQuery(document).ready(function() {
     allowClear: true,
   });
 
-  $("#select2_criteria").select2({
-    placeholder: '{{trans('all.select-criteria')}}',
-    allowClear: true,
-  });
 
   $('#select2_voter').select2({
     placeholder: "{{trans('all.select-voter')}}",
