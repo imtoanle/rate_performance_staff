@@ -27,7 +27,10 @@ class BackendUserVoteController extends BackendBaseController
     $params['canVotes'] = $canVotes;
     $params['canVoteGroup'] = $canVoteGroup;
     $params['currentUser'] = $currentUser;
-    return View::make(Config::get('view.backend.user-votes-quick'), $params);
+    if(Request::Ajax())
+      return View::make(Config::get('view.backend.user-votes-quick-little'), $params);
+    else
+      return View::make(Config::get('view.backend.user-votes-quick'), $params);
   }
 
   public function getIndexHeadGradingVote()

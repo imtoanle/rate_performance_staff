@@ -94,6 +94,7 @@ return array(
 
     //votes
     'votes-index' => 'backend.vote.index-vote',
+    'votes-little-index' => 'backend.vote.little-index',
     'vote-create' => 'backend.vote.create-vote',
     'vote-show' => 'backend.vote.show-vote',
     'vote-group-show' => 'backend.vote.show-vote-group',
@@ -104,6 +105,7 @@ return array(
     //votes
     'user-votes-index' => 'backend.user-vote.index',
     'user-votes-quick' => 'backend.user-vote.quick',
+    'user-votes-quick-little' => 'backend.user-vote.quick-little',
     'head-grading-index' => 'backend.user-vote.head-grading-index',
     'head-grading-vote' => 'backend.user-vote.head-grading-vote',
     'view-my-mark' => 'backend.user-vote.view-my-mark',

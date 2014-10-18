@@ -124,7 +124,10 @@ class BackendVoteController extends BackendBaseController
     $votes = Vote::all();
     $params['votes'] = $votes;
     $params['voteGroups'] = $voteGroups;
-    $this->layout = View::make(Config::get('view.backend.votes-index'), $params);
+    if(Request::Ajax())
+      return View::make(Config::get('view.backend.votes-little-index'), $params);
+    else
+      return View::make(Config::get('view.backend.votes-index'), $params);
   }
 
   public function getCopyGroup($voteGroupId)
