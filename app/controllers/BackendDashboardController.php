@@ -9,10 +9,23 @@ class BackendDashboardController extends BackendBaseController
     */
     public function getIndex()
     {
-        if(Route::currentRouteName() == 'indexDashboardLittle')
-            return View::make(Config::get('view.backend.dashboard-index-little'));
+        $currentUser = Sentry::getUser();
+
+        $patternVoter = '"user_id":"'.$currentUser->id.'"';
+        $patternEntitled = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
+
+        $canVoter = Vote::whereRaw("voter regexp '".$patternVoter."'")->where('status', Config::get('variable.vote-status.opened'))->get();
+        $canEntitled = Vote::whereRaw("entitled_vote regexp '".$patternVoter."'")->where('status', Config::get('variable.vote-status.opened'))->get();
+
+
+        $params['canVoter'] = $canVoter;
+        $params['canEntitled'] = $canEntitled;
+        $params['notifys'] = $currentUser->notifys;
+
+        if(Request::Ajax())
+            return View::make(Config::get('view.backend.dashboard-index-little'), $params);
         else                        
-            return View::make(Config::get('view.backend.dashboard-index'));
+            return View::make(Config::get('view.backend.dashboard-index'), $params);
         //$this->layout->tilte = trans('syntara::all.titles.index');
         //$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.dashboard');
     }

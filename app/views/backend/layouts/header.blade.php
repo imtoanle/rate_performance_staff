@@ -35,15 +35,17 @@
   <!-- BEGIN TOP NAVIGATION BAR -->
   <div class="header-inner">
     <!-- BEGIN LOGO -->
-    <a class="navbar-brand" href="index.html">
+    <a class="navbar-brand" href="/">
     <img src="{{asset('assets/img/logo.png')}}" alt="logo" class="img-responsive"/>
     </a>
+    <!--disable search
     <form class="search-form search-form-header" role="form" action="index.html">
       <div class="input-icon right">
         <i class="fa fa-search"></i>
         <input type="text" class="form-control input-medium input-sm" name="query" placeholder="{{trans('all.search')}}...">
       </div>
     </form>
+    -->
     <!-- END LOGO -->
     <!-- BEGIN RESPONSIVE MENU TOGGLER -->
     <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
