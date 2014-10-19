@@ -141,7 +141,7 @@ class VoteReportBackendController extends BackendBaseController
 
   public function postYearVote()
   {
-    $thisYear = array(Carbon::createFromDate(Input::get('year'), 1 , 1)->startOfYear(), Carbon::createFromDate(Input::get('year'), 1 , 1)->endOfYear());
+    $thisYear = array(Carbon::createFromDate(Input::get('year'), Input::get('month') , 1)->startOfMonth(), Carbon::createFromDate(Input::get('year'), Input::get('month') , 1)->endOfMonth());
 
     if(Input::get('vote_type') == 1)
     {
@@ -179,6 +179,7 @@ class VoteReportBackendController extends BackendBaseController
         $voteGroupIds[] = $voteGroup->id;
       }
 
+      $voteGroupIds = empty($voteGroupIds) ? [''] : $voteGroupIds;
       $votes = Vote::whereIn('vote_group_id', $voteGroupIds)->orderBy('vote_group_id')->get();
       $voterArr = [];
       $maxVoterArr = [];

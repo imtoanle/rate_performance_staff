@@ -12,11 +12,18 @@
   <form action="{{route('postReportYear')}}" class="form-horizontal" method="POST">
     <div class="form-body">
       <div class="form-group">
-        <label class="col-md-3 control-label">{{trans('all.select-year')}}</label>
-        <div class="col-md-8">
-          <select name="year" class="form-control">
-            <option value="2014">2014</option>
+        <label class="col-md-3 control-label">Thời gian</label>
+        <div class="col-md-2">
+          <select name="month" class="form-control">
+            <option disabled="disabled" selected="">Chọn tháng</option>
+            @for ($i=1;$i<13;$i++)
+              <option value="{{$i}}">{{$i}}</option>
+            @endfor
           </select>
+        </div>
+
+        <div class="col-md-2">
+          <input type="text" class="form-control" name="year" placeholder="Nhập năm" />
         </div>
       </div>
 
