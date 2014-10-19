@@ -12,9 +12,9 @@ class BackendUserVoteController extends BackendBaseController
   {
     $currentUser = Sentry::getUser();
     $pattern = '"user_id":"'.$currentUser->id.'"';
-    $canVotes = Vote::whereRaw("voter regexp '".$pattern."'")->orderBy('vote_group_id', 'asc')->get();
+    $canVotes = Vote::where('status', Config::get("variable.vote-status.opened"))->whereRaw("voter regexp '".$pattern."'")->orderBy('vote_group_id', 'asc')->get();
 
-    $canVoteGroupId = Vote::select('vote_group_id')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+    $canVoteGroupId = Vote::select('vote_group_id')->where('status', Config::get("variable.vote-status.opened"))->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
 
     $voteGroupId = [];
     foreach ($canVoteGroupId as $value) {
