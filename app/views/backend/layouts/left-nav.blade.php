@@ -22,11 +22,15 @@
 
   <?php $arrRoutes = array('listVotes', 'listUserVotes', 'listRoles', 'listCriterias'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
-    {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
-    {{ BackendSideBar::create_node(trans('all.view-vote'), 'listUserVotes', 'fa fa-signal') }}      
+    @if ( $currentUser->hasAnyAccess(['user-votes-management']) )
+      {{ BackendSideBar::create_node(trans('all.view-vote'), 'listUserVotes', 'fa fa-signal') }}      
+    @endif
+    @if ( $currentUser->hasAnyAccess(['superuser']) )
+      {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
     
     {{ BackendSideBar::create_node(trans('all.role'), 'listRoles', 'fa fa-star') }}  
     {{ BackendSideBar::create_node(trans('all.criteria'), 'listCriterias', 'fa fa-trophy') }}  
+    @endif
   {{ BackendSideBar::create_root_close() }} 
 
   <?php $arrRoutes = array('quickUserVote', 'headGradingUserVote'); ?>
@@ -36,7 +40,9 @@
   {{ BackendSideBar::create_root_close() }} 
 
 
+  @if ( $currentUser->hasAnyAccess(['superuser']) )
   <?php $arrRoutes = array('listReportPeriod', 'listReportYear'); ?>
+
   {{ BackendSideBar::create_root_open(trans('all.report'), $arrRoutes, 'fa fa-line-chart')}}  
     {{ BackendSideBar::create_node(trans('all.reports-by-period'), 'listReportPeriod', 'fa fa-list') }}  
     {{ BackendSideBar::create_node(trans('all.reports-by-year'), 'listReportYear', 'fa fa-list') }}  
@@ -51,6 +57,7 @@
     {{ BackendSideBar::create_node(trans('all.group'), 'listGroups', 'fa fa-group') }}  
     {{ BackendSideBar::create_node(trans('all.permission'), 'listPermissions', 'fa fa-database') }}  
   {{ BackendSideBar::create_root_close() }} 
+  @endif
 </ul>
 <!-- END SIDEBAR MENU -->
 
