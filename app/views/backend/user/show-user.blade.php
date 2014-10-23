@@ -230,6 +230,18 @@
                         <form action="{{route('putUser', $user->id)}}" type="PUT" class="form-horizontal base-ajax-form">
                           <div class="form-body text-left">
                             <div class="form-group">
+                              <label class="col-md-2 control-label">{{trans('all.username')}}</label>
+                              <div class="col-md-10">
+                                <div class="input-group">
+                                  <span class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                  </span>
+                                  <input type="text" class="form-control" name="username" value="{{$user->username}}" placeholder="{{trans('all.username')}}">
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
                               <label class="col-md-2 control-label">{{trans('all.password')}}</label>
                               <div class="col-md-10">
                                 <div class="input-group">

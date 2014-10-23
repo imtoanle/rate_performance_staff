@@ -159,7 +159,7 @@ return array(
     'user-update-privacy' => array(
       //'email' => array('required', 'email'),
       'password' => array('min:6', 'max:255'),
-      //'username' => array('required', 'min:3', 'max:255'),
+      'username' => array('required', 'min:3', 'max:255'),
       //'full_name' => array('min:3', 'max:255'),
     ),
     'user-update-personal' => array(

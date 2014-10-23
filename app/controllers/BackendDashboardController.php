@@ -12,14 +12,14 @@ class BackendDashboardController extends BackendBaseController
         $currentUser = Sentry::getUser();
 
         $patternVoter = '"user_id":"'.$currentUser->id.'"';
-        $patternEntitled = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
+        //$patternEntitled = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
 
         $canVoter = Vote::whereRaw("voter regexp '".$patternVoter."'")->where('status', Config::get('variable.vote-status.opened'))->get();
-        $canEntitled = Vote::whereRaw("entitled_vote regexp '".$patternVoter."'")->where('status', Config::get('variable.vote-status.opened'))->get();
+        //$canEntitled = Vote::whereRaw("entitled_vote regexp '".$patternVoter."'")->where('status', Config::get('variable.vote-status.opened'))->get();
 
 
         $params['canVoter'] = $canVoter;
-        $params['canEntitled'] = $canEntitled;
+        //$params['canEntitled'] = $canEntitled;
         $params['notifys'] = $currentUser->notifys;
 
         if(Request::Ajax())

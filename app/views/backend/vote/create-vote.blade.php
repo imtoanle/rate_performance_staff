@@ -64,7 +64,6 @@
           <div class="col-md-8">
             <select name="department_list" id="select2_department" class="form-control select2">
               <option></option>
-              <option value="all">Trưởng / Phó chi nhánh</option>
               @foreach($departments as $department)
               <option value="{{$department->id}}">{{$department->name}}</option>
               @endforeach

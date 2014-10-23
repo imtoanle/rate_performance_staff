@@ -112,6 +112,7 @@ return array(
     'view-my-vote' =>  'backend.user-vote.view-my-vote',
 
     //report
+    'report-details-child' => 'backend.report.report-details-child',
     'report-by-period-index' => 'backend.report.period-index',
     'report-by-period-vote' => 'backend.report.period-vote',
     'report-by-period-vote-group' => 'backend.report.period-vote-group',

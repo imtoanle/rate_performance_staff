@@ -6,7 +6,7 @@
         <select name="department_list" id="department_list" class="form-control select2">
           <option></option>
           <optgroup label="Lựa chọn cơ bản">
-            <option value="all">Tất cả</option>
+            <option value="all" selected="selected">Tất cả</option>
             <option value="voted">Đã đánh giá</option>
             <option value="unvote">Chưa đánh giá</option>
           </optgroup>
@@ -28,7 +28,7 @@
 
 @foreach($canVoteGroup as $voteGroup)
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
-<div id="vote-group-id-{{$voteGroup->id}}" class="portlet box light-grey hide">
+<div id="vote-group-id-{{$voteGroup->id}}" class="portlet box light-grey">
 <div class="portlet-title">
   <div class="caption">
     <i class="fa fa-list"></i>{{$voteGroup->vote_code}} - {{$voteGroup->title}}
@@ -50,7 +50,7 @@
   <tbody>
   @foreach($canVotes as $vote)
     @if($vote->vote_group_id == $voteGroup->id)
-    <tr class="vote-id-{{$vote->id}} hide">
+    <tr class="vote-id-{{$vote->id}}">
       <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}<br /><strong>{{trans('all.role')}}:</strong> {{CustomHelper::get_role_current_user($vote->voter, $currentUser->id)}}</td>
       <td>
         <form class="form-horizontal quick-ajax-form" data-form-name="mark">
@@ -89,7 +89,7 @@
           ->where('entitled_vote_id', $user->id)
           ->first();
       ?>
-      <tr class="vote-id-{{$vote->id}} hide {{CustomHelper::check_voted_of_vote($voteResult) ? 'voted' : ''}}">
+      <tr class="vote-id-{{$vote->id}} {{CustomHelper::check_voted_of_vote($voteResult) ? 'voted' : ''}}">
         <td>{{$number_in_department}}</td>
         <td>{{$user->full_name}}</td>
         <td>{{$user->job_titles_name()}}</td>

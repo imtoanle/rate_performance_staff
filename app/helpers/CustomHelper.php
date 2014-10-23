@@ -208,6 +208,10 @@ class CustomHelper
 
   public static function find_min_mark_from_criterias($markString)
   {
+    if (empty($markString))
+    {
+      return 100;
+    }
     $minArr = [];
     foreach (json_decode($markString, true) as $mark) {
         $minArr[] = $mark['mark'];
@@ -230,5 +234,15 @@ class CustomHelper
   {
     if (is_object($voteResult) && !empty($voteResult->mark) && !empty($voteResult->content)) return true;
     return false;
+  }
+
+  public static function get_array_vote_result_of_entitled_user($voteId, $entitledUser)
+  {
+    $voteResults = VoteResult::whereVoteId($voteId)->whereEntitledVoteId($entitledUser)->get();
+    $results = [];
+    foreach ($voteResults as $value) {
+      $results[$value['voter_id']] = $value;
+    }
+    return $results;
   }
 }
