@@ -93,6 +93,7 @@ return array(
     'criterias-index' => 'backend.criteria.index',
 
     //votes
+    'little-new-vote-form' => 'backend.vote.little-new-vote-form',
     'votes-index' => 'backend.vote.index-vote',
     'votes-little-index' => 'backend.vote.little-index',
     'vote-create' => 'backend.vote.create-vote',

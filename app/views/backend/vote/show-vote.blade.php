@@ -315,18 +315,11 @@ jQuery(document).ready(function() {
       dataType: 'json',
       data: function(term, page) {
         var selected_voter = $('#list-voter tbody .selected-voter').map(function(){ return $(this).html(); }).get();
-        if (selected_voter.length)
-        {
-          selected_user = $('#multi_entitled_vote').val() + ',' + selected_voter;
-        }else
-        {
-          selected_user = $('#multi_entitled_vote').val();
-        }
         return {
           q: term,
           page_limit: 10,
           select_id: $(this).attr('id'),
-          entitled_user: selected_user,
+          selected_voter: selected_voter,
         };
       },
       results: function (data, page) {

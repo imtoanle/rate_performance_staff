@@ -139,10 +139,11 @@ class BackendUserController extends BackendBaseController
       {
         $query = Input::get('q');
         $select_id = Input::get('select_id');
-        $notIn = is_array(Input::get('entitled_user')) ? Input::get('entitled_user') : explode(',', Input::get('entitled_user'));
+        //$notIn = is_array(Input::get('entitled_user')) ? Input::get('entitled_user') : explode(',', Input::get('entitled_user'));
+        $notIn = Input::get('selected_voter') == null ? [''] : Input::get('selected_voter');
         $users = User::select('id','username', 'full_name', 'job_title')
           ->whereRaw("(username LIKE '%$query%' OR full_name LIKE '%$query%')")
-          //->whereNotIn('id', $notIn)
+          ->whereNotIn('id', $notIn)
           ->paginate(Input::get('page_limit'));
 
         $userArr = array();

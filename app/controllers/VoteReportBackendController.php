@@ -87,12 +87,8 @@ class VoteReportBackendController extends BackendBaseController
 
   public function getPeriodVoteGroup($voteGroupId)
   {
-    $voteGroup = VoteGroup::find($voteGroupId);
-    $votes = $voteGroup->votes;
-
+    $votes = Vote::whereVoteGroupId($voteGroupId)->get();
     $params = $this->_get_params_reports($votes);
-   
-    $params['voteGroup'] = $voteGroup;
 
     return View::make(Config::get('view.backend.report-details-child'), $params);
   }

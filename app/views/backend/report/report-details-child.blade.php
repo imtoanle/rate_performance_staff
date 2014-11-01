@@ -49,14 +49,15 @@
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
+        <?php $firstVoterInRow = isset($voteResult[$voterIdArr[0]]) ? $voteResult[$voterIdArr[0]] : null; ?>
       
       <td>{{ CustomHelper::get_user_name($voterIdArr[0]) }}</td>
       <td>
         @foreach(explode(',', $vote->criteria) as $criteriaId)
-          {{ CustomHelper::get_mark_with_criteria($voteResult[$voterIdArr[0]], $criteriaId) }} <br />
+          {{ CustomHelper::get_mark_with_criteria($firstVoterInRow, $criteriaId) }} <br />
         @endforeach
       </td>
-      <td>{{ CustomHelper::get_mark_with_criteria($voteResult[$voterIdArr[0]], 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_criteria($firstVoterInRow, 'content') }}</td>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
     </tr>
@@ -64,13 +65,14 @@
     <tr>
       @foreach($voterArr[$vote->id] as $voteGroupId => $voterIdArr)
         @if(isset($voterIdArr[$i]))
+          <?php $currentVoterInRow = isset($voteResult[$voterIdArr[$i]]) ? $voteResult[$voterIdArr[$i]] : null; ?>
           <td>{{ CustomHelper::get_user_name($voterIdArr[$i]) }}</td>
           <td>
           @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($voteResult[$voterIdArr[$i]], $criteriaId) }} <br />
+            {{ CustomHelper::get_mark_with_criteria($currentVoterInRow, $criteriaId) }} <br />
           @endforeach
           </td>
-          <td>{{ CustomHelper::get_mark_with_criteria($voteResult[$voterIdArr[$i]], 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_criteria($currentVoterInRow, 'content') }}</td>
         @else
           <td colspan="3"></td>
         @endif

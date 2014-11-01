@@ -110,8 +110,10 @@ class CustomHelper
     }
     $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayUserId))->get();
     $resultArr = [];
+    $finalResult = [];
+
     foreach ($users as $user) {
-      $resultArr[] = array(
+      $resultArr[$arrayUserId[$user->id]][] = array(
         'id' => $user->id,
         'username' => $user->username,
         'full_name' => $user->full_name,
@@ -120,7 +122,11 @@ class CustomHelper
         );
     }
 
-    return $resultArr;
+    foreach (array_unique(array_values($arrayUserId)) as $roleId) {
+      $finalResult = array_merge($finalResult, $resultArr[$roleId]) ;
+    }
+
+    return $finalResult;
   }
 
   public static function get_users_from_user_id_list($userIds)

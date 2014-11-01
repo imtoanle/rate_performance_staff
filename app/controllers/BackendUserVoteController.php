@@ -246,7 +246,7 @@ class BackendUserVoteController extends BackendBaseController
         $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
 
         #$entitledVotes = Vote::whereRaw("entitled_vote regexp '".$pattern."'")->orderBy('vote_group_id', 'asc')->get();
-        $entitledVoteGroupIds = Vote::select('vote_group_id')->whereRaw("entitled_vote regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+        $entitledVoteGroupIds = Vote::select('vote_group_id')->whereStatus(Config::get('variable.vote-status.closed'))->whereRaw("entitled_vote regexp '".$pattern."'")->groupBy('vote_group_id')->get();
         $arrEntitledVoteGroupIds = array();
         foreach ($entitledVoteGroupIds as $value) {
           $arrEntitledVoteGroupIds[] = $value['vote_group_id'];
@@ -258,7 +258,7 @@ class BackendUserVoteController extends BackendBaseController
         $viewVoteRoute = 'viewMyMark';
       }else if (Input::get('mode') == 'view_my_vote') {
         $pattern = '"user_id":"'.$currentUser->id.'"';
-        $canVoteGroupId = Vote::select('vote_group_id')->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
+        $canVoteGroupId = Vote::select('vote_group_id')->whereStatus(Config::get('variable.vote-status.closed'))->whereRaw("voter regexp '".$pattern."'")->groupBy('vote_group_id')->get();
         $arrCanVoteGroupIds = array();
         foreach ($canVoteGroupId as $value) {
           $arrCanVoteGroupIds[] = $value['vote_group_id'];
@@ -296,7 +296,7 @@ class BackendUserVoteController extends BackendBaseController
     $currentUser = Sentry::getUser();
     $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
     $voteGroup = VoteGroup::find($voteGroupId);
-    $votes = Vote::where('vote_group_id', $voteGroup->id)->whereRaw("entitled_vote regexp '".$pattern."'")->get();
+    $votes = Vote::whereStatus(Config::get('variable.vote-status.closed'))->where('vote_group_id', $voteGroup->id)->whereRaw("entitled_vote regexp '".$pattern."'")->get();
     $params['votes'] = $votes;
     $params['voteGroup'] = $voteGroup;
     $params['currentUser'] = $currentUser;
@@ -308,7 +308,7 @@ class BackendUserVoteController extends BackendBaseController
     $currentUser = Sentry::getUser();
     $pattern = '"user_id":"'.$currentUser->id.'"';
     $voteGroup = VoteGroup::find($voteGroupId);
-    $votes = Vote::where('vote_group_id', $voteGroup->id)->whereRaw("voter regexp '".$pattern."'")->get();
+    $votes = Vote::whereStatus(Config::get('variable.vote-status.closed'))->where('vote_group_id', $voteGroup->id)->whereRaw("voter regexp '".$pattern."'")->get();
     $params['votes'] = $votes;
     $params['voteGroup'] = $voteGroup;
     $params['currentUser'] = $currentUser;
