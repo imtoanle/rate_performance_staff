@@ -27,6 +27,11 @@ Route::group(array('before' => 'basicAuth', 'prefix' => Config::get('variable.ba
         'uses' => 'BackendDashboardController@getIndex')
     );
 
+    Route::get('notify/{notifyId}', array(
+      'as' => 'getNotify',
+      'uses' => 'NotifyBackendController@getNotify')
+    );  
+
     Route::get('logout', array(
         'as' => 'logout',
         'uses' => 'BackendDashboardController@getLogout')
@@ -420,10 +425,7 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'VoteReportBackendController@postYearVote')
   );
 
-  Route::get('notify/{notifyId}', array(
-      'as' => 'getNotify',
-      'uses' => 'NotifyBackendController@getNotify')
-  );
+  
 
   
 
