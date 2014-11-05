@@ -29,7 +29,7 @@
             <td>{{$voteGroup->title}}</td>
             <td>{{$vote->department->name}}</td>
             <td>
-              <a href="{{route('quickUserVote')}}" class="btn btn-default btn-xs">2Chấm điểm</a>
+              <a href="{{route('quickUserVote')}}" class="btn btn-default btn-xs">Chấm điểm</a>
             </td>
           </tr>
           @endforeach
