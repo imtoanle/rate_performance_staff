@@ -23,7 +23,7 @@
     <th>{{trans('all.full-name')}}</th>
     <th>{{trans('all.email')}}</th>
     <th>{{trans('all.group')}}</th>
-    <th>{{trans('all.permission')}}</th>
+    <th>{{trans('all.department')}}</th>
     <th>{{trans('all.status')}}</th>
     <th>{{trans('all.actions')}}</th>
   </tr>
@@ -62,7 +62,7 @@
 jQuery(document).ready(function() {   
   
    // begin first table
-  $('#ajax-data-table').dataTable({
+  table = $('#ajax-data-table').dataTable({
       //'bAutoWidth': false,
       "aoColumns": [
         {"bSortable": false},
@@ -70,7 +70,7 @@ jQuery(document).ready(function() {
         null,
         null,
         null,
-        null,
+        {"bSortable": false}, 
         null,
         {"bSortable": false, 'bSearchable': false},
       ],
@@ -86,6 +86,24 @@ jQuery(document).ready(function() {
       "fnServerParams": function ( aoData ) {
         aoData.push( { "name": "mode", "value": "datatable" } );
       },
+  });
+
+  table.columnFilter({
+      "sPlaceHolder" : "head:after",
+      aoColumns: [
+          null,
+          null,
+          null,
+          null,
+          null,
+          { type: "select",  values: [
+          @foreach(Department::all() as $department)
+          { value: '{{$department->id}}', label: '{{$department->name}}'},
+          @endforeach
+          ] },
+          null,
+          null
+      ]
   });
 
   //jQuery('#ajax-data-table_wrapper .dataTables_length select').select2(); // initialize select2 dropdown

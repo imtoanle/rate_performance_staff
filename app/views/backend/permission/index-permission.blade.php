@@ -5,32 +5,7 @@
           <div class="portlet box light-grey">
             <div class="portlet-title">
               <div class="caption">
-                <i class="fa fa-globe"></i>Managed Table
-              </div>
-              <div class="actions">
-                <a href="table_managed.html#" class="btn btn-info"><i class="fa fa-pencil"></i> Add</a>
-                <div class="btn-group">
-                  <a class="btn btn-success dropdown-toggle" href="table_managed.html#" data-toggle="dropdown">
-                  <i class="fa fa-cogs"></i> Tools <i class="fa fa-angle-down"></i>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                    <li>
-                      <a href="table_managed.html#"><i class="fa fa-pencil"></i> Edit</a>
-                    </li>
-                    <li>
-                      <a href="table_managed.html#"><i class="fa fa-trash-o"></i> Delete</a>
-                    </li>
-                    <li>
-                      <a href="table_managed.html#"><i class="fa fa fa-ban"></i> Ban</a>
-                    </li>
-                    <li class="divider">
-                    </li>
-                    <li>
-                      <a href="table_managed.html#"><i class="i"></i> Make admin</a>
-                    </li>
-                  </ul>
-                </div>
-                <a class="btn btn-warning" href="table_managed.html#"><i class="fa fa-print"></i> Print</a>
+                <i class="fa fa-globe"></i>Danh sách quyền
               </div>
             </div>
             <div class="portlet-body">

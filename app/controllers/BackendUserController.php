@@ -159,7 +159,9 @@ class BackendUserController extends BackendBaseController
       {
         if (Input::get('mode') == 'datatable')
         {
-          $users = User::select(array('id', 'activated', 'id as checkbox','username', 'full_name', 'email', 'id as groups', 'permissions', 'id as status', 'id as actions'));
+          $department = Input::has('sSearch_5') ? 'department_id='.Input::get('sSearch_5') : 'deleted_at is null';
+          $users = User::select(array('id', 'activated', 'id as checkbox','username', 'full_name', 'email', 'id as groups', 'department_id', 'id as status', 'id as actions'))
+            ->whereRaw($department);
           return Datatables::of($users)
           ->remove_column('id')
           ->remove_column('activated')
@@ -177,6 +179,11 @@ class BackendUserController extends BackendBaseController
             }
             return rtrim($groupsName, ',');
           })
+          ->edit_column('department_id', function($row){
+            $department = $row->department;
+            return is_object($department) ? $department->name : '';
+          })
+          /*
           ->edit_column('permissions', function($row){
             $permissionsName = '';
             foreach(array_keys($row->getPermissions()) as $permision)
@@ -185,6 +192,7 @@ class BackendUserController extends BackendBaseController
             }
             return rtrim($permissionsName, ',');
           })
+          */
           ->edit_column('status', function($row){
             $throttle = Sentry::findThrottlerByUserId($row->id);
             if ($throttle->isBanned())
