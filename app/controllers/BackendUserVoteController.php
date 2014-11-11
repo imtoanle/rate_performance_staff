@@ -296,7 +296,12 @@ class BackendUserVoteController extends BackendBaseController
     $currentUser = Sentry::getUser();
     $pattern = '^'.$currentUser->id.',|,'.$currentUser->id.',|,'.$currentUser->id.'$';
     $voteGroup = VoteGroup::find($voteGroupId);
+    if(!is_object($voteGroup))
+    {
+      App::abort(500, 'Dánh giá không tồn tại'); 
+    }
     $votes = Vote::whereStatus(Config::get('variable.vote-status.closed'))->where('vote_group_id', $voteGroup->id)->whereRaw("entitled_vote regexp '".$pattern."'")->get();
+
     $params['votes'] = $votes;
     $params['voteGroup'] = $voteGroup;
     $params['currentUser'] = $currentUser;
