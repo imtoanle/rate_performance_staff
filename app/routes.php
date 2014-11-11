@@ -473,7 +473,7 @@ Route::group(array('prefix' => Config::get('variable.backend.uri-config')), func
 
 
 //enable breadcrumb
-View::composer(Config::get('view.backend.breadcrumbs'), function($view)
+View::composer([Config::get('view.backend.breadcrumbs'), Config::get('view.backend.header')], function($view)
 {
   /*
   $array_disable = array('indexHome');

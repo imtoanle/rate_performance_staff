@@ -3,7 +3,9 @@
     <div class="col-md-12">
       <!-- BEGIN PAGE TITLE & BREADCRUMB-->
       <h3 class="page-title">
-      Dashboard <small>statistics and more</small>
+      <?php $lastBread = end($dataBreadcrumb); ?>
+       {{$lastBread[1]}} <!--<small>statistics and more</small>-->
+       <?php reset($dataBreadcrumb); ?>
       </h3>
       <ul class="page-breadcrumb breadcrumb">
         @foreach($dataBreadcrumb as $bread)

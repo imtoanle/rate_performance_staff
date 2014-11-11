@@ -42,7 +42,7 @@ return array(
         array('', trans('all.reports-by-period'), route('listReportPeriod'), 'last'),
         ),
 
-    'listReportPeriod' => array(
+    'listReportYear' => array(
         array('fa fa-line-chart',trans('all.report'), ''),
         array('', trans('all.reports-by-year'), route('listReportYear'), 'last'),
         ),
@@ -53,7 +53,10 @@ return array(
         array('fa fa-user',trans('all.user-manager'), ''),
         array('', trans('all.user'), route('listUsers'), 'last'),
         ),
-
+    'importUsers' => array(
+        array('fa fa-user',trans('all.user-manager'), ''),
+        array('', 'Nhập thành viên', route('importUsers'), 'last'),
+        ),
     'listJobTitles' => array(
         array('fa fa-user',trans('all.user-manager'), ''),
         array('', trans('all.job-title'), route('listJobTitles'), 'last'),
