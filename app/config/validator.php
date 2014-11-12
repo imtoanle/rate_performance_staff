@@ -124,6 +124,7 @@ return array(
 
     'vote-create' => array(
       'vote_code' => 'required',
+      'department_list' => 'required'
       'title' => 'required',
       'object_vote_title' => 'required',
       'entitled_vote' => 'required',
@@ -134,6 +135,7 @@ return array(
 
     'vote-update' => array(
       'object_vote_title' => 'required',
+      'department_list' => 'required'
       'entitled_vote' => 'required',
       'voter_id' => 'required',
       //'criteria_list' => 'required',
