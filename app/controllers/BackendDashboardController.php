@@ -209,8 +209,15 @@ class BackendDashboardController extends BackendBaseController
     */
     public function getAccessDenied()
     {
-        $this->layout = View::make(Config::get('view.backend.error'), array('message' => trans('syntara::all.messages.denied')));
-        $this->layout->title = trans('syntara::all.titles.error');
-        $this->layout->breadcrumb = Config::get('syntara::breadcrumbs.dashboard');
+        if(Request::Ajax())
+        {
+            App::abort(500, 'Bạn không có quyền truy cập khu vực này');
+        }else
+        {
+            $this->layout = View::make(Config::get('view.backend.error'), array('message' => 'Bạn không có quyền truy cập khu vực này'));    
+            $this->layout->title = 'Từ chối truy cập';
+        }
+        
+        
     }
 }

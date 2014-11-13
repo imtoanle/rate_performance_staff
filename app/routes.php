@@ -32,6 +32,16 @@ Route::group(array('before' => 'basicAuth', 'prefix' => Config::get('variable.ba
       'uses' => 'NotifyBackendController@getNotify')
     );  
 
+    Route::get('user/{userId}', array(
+      'as' => 'showUser',
+      'uses' => 'BackendUserController@getShow')
+    );
+
+    Route::put('user/{userId}', array(
+        'as' => 'putUser',
+        'uses' => 'BackendUserController@putShow')
+    );
+
     Route::get('logout', array(
         'as' => 'logout',
         'uses' => 'BackendDashboardController@getLogout')
@@ -72,15 +82,7 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserController@getCreate')
   );
 
-  Route::get('user/{userId}', array(
-      'as' => 'showUser',
-      'uses' => 'BackendUserController@getShow')
-  );
-
-  Route::put('user/{userId}', array(
-      'as' => 'putUser',
-      'uses' => 'BackendUserController@putShow')
-  );
+  
 
   Route::put('user/{userId}/activate', array(
       'as' => 'putActivateUser',

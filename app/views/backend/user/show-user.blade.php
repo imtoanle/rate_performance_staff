@@ -174,9 +174,11 @@
                       <li>
                         <a data-toggle="tab" href="page_profile.html#tab_3-3"><i class="fa fa-lock"></i> {{trans('all.change-pass')}}</a>
                       </li>
+                      @if($currentUser->hasAnyAccess(['users-management_edit']))
                       <li>
                         <a data-toggle="tab" href="page_profile.html#tab_4-4"><i class="fa fa-eye"></i> {{trans('all.privacity-setting')}}</a>
                       </li>
+                      @endif
                     </ul>
                   </div>
                   <div class="col-md-9">
@@ -225,6 +227,7 @@
                           </div>
                         </form>
                       </div>
+                      @if($currentUser->hasAnyAccess(['users-management_edit']))
                       <div id="tab_4-4" class="tab-pane">
                         <!-- BEGIN FORM-->
                         <form action="{{route('putUser', $user->id)}}" type="PUT" class="form-horizontal base-ajax-form">
@@ -335,6 +338,7 @@
                         </form>
                         <!-- END FORM-->
                       </div>
+                      @endif
                     </div>
                   </div>
                   <!--end col-md-9-->

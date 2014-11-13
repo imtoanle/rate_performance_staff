@@ -408,6 +408,9 @@ class BackendUserController extends BackendBaseController
     */
     public function getShow($userId)
     {
+      $currentUser = Sentry::getUser();
+      if($currentUser->hasAnyAccess(['users-management_edit']) || $currentUser->id == $userId)
+      {
         try
         {
           $user = Sentry::findUserById($userId);
@@ -434,6 +437,11 @@ class BackendUserController extends BackendBaseController
         {
             $this->layout = View::make(Config::get('syntara::views.error'), array('message' => trans('syntara::users.messages.not-found')));
         }
+      }else
+      {
+        $this->layout = View::make(Config::get('view.backend.error'), array('message' => 'Bạn không có quyền truy cập khu vực này'));    
+        $this->layout->title = 'Từ chối truy cập';
+      }
     }
 
     /**
@@ -442,7 +450,10 @@ class BackendUserController extends BackendBaseController
     * @return Response
     */
     public function putShow($userId)
-    {   
+    {
+      $currentUser = Sentry::getUser();
+      if($currentUser->hasAnyAccess(['users-management_edit']) || $currentUser->id == $userId)
+      {
         try
         {
           $user = Sentry::findUserById($userId);
@@ -477,6 +488,11 @@ class BackendUserController extends BackendBaseController
               }
               break;
             case 'privacy_manage':
+              $currentUser = Sentry::getUser();
+              if(!$currentUser->hasAnyAccess(['users-management_edit']))
+              {
+                App::abort(500, 'Bạn không có quyền truy cập khu vực này');
+              }
               $validator = new BackendValidator(Input::all(), 'user-update-privacy');
               if(!$validator->passes())
               {
@@ -488,7 +504,7 @@ class BackendUserController extends BackendBaseController
 
               // Find the user using the user id
 
-              $currentUser = Sentry::getUser();
+              
               $permissions = (empty($permissions)) ? '' : json_encode($permissions);
               $hasPermissionManagement = $currentUser->hasAccess('permissions-management') || $currentUser->hasAccess('superuser');
               if($hasPermissionManagement === true)
@@ -562,8 +578,13 @@ class BackendUserController extends BackendBaseController
         }
         catch(\Exception $e)
         {
-            return Response::json(array('userUpdated' => false, 'message' => trans('all.messages.user-name-exists'), 'messageType' => 'error'));
+            return Response::json(array('userUpdated' => false, 'message' => $e->getMessage(), 'messageType' => 'error'));
         }
+      }else
+      {
+        $this->layout = View::make(Config::get('view.backend.error'), array('message' => 'Bạn không có quyền truy cập khu vực này'));    
+        $this->layout->title = 'Từ chối truy cập';
+      }
     }
 
     protected function _formatPermissions($permissionsValues)
