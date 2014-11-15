@@ -393,30 +393,67 @@ class BackendVoteController extends BackendBaseController
     return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
   }
 
+  public function openGroup()
+  {
+    $voteGroupIds = Input::get('itemIds');
+    $voteGroupArrays = explode(',', $voteGroupIds);
+
+    foreach ($voteGroupArrays as $voteGroupId) {
+      try
+        {
+          $votes = Vote::where('vote_group_id', $voteGroupId)->get();
+          foreach ($votes as $vote) {
+
+            if ($vote->status == Config::get('variable.vote-status.newly'))
+            {
+              $vote->status = Config::get('variable.vote-status.opened');
+              if ($vote->save()) $this->_postUnlockNotify($vote);
+            }
+          }
+        }
+        catch (\Cartalyst\Sentry\Votes\VoteNotFoundException $e)
+        {
+        }
+    }
+
+    return Response::json(array('openedVoteGroup' => true, 'message' => 'Mở đánh giá thành công.', 'messageType' => 'success'));
+  }
+
+  public function closeGroup()
+  {
+    $voteGroupIds = Input::get('itemIds');
+    $voteGroupArrays = explode(',', $voteGroupIds);
+
+    foreach ($voteGroupArrays as $voteGroupId) {
+      try
+        {
+          $votes = Vote::where('vote_group_id', $voteGroupId)->get();
+          foreach ($votes as $vote) {
+
+            if ($vote->status == Config::get('variable.vote-status.opened'))
+            {
+              $vote->status = Config::get('variable.vote-status.closed');
+              if ($vote->save()) $this->_postCloseNotify($vote);
+            }
+          }
+        }
+        catch (\Cartalyst\Sentry\Votes\VoteNotFoundException $e)
+        {
+        }
+    }
+
+    return Response::json(array('openedVoteGroup' => true, 'message' => 'Mở đánh giá thành công.', 'messageType' => 'success'));
+  }
+
   public function postUnlock()
   {
+    return Input::all();
     $vote = Vote::find(Input::get('vote_id'));
     $vote->status = Config::get('variable.vote-status.opened');
 
     if ($vote->save())
     {
-      //entitled user notify
-      foreach (explode(',', $vote->entitled_vote) as $userId) {
-        Notify::create([
-          'user_id' => $userId,
-          'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-entitled-vote', ['voteId' => $vote->id]),
-          'link' => route('viewMyMark', $vote->vote_group_id),
-          ]);
-      }
-
-      //voter notify
-      foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
-        Notify::create([
-          'user_id' => $userId,
-          'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-voter', ['voteId' => $vote->id]),
-          'link' => route('quickUserVote'),
-          ]);
-      }
+      $this->_postUnlockNotify($vote);
 
       return Response::json(array('actionStatus' => true, 'message' => trans('all.messages.vote-open-success'), 'messageType' => 'success'));
     }else
@@ -432,23 +469,7 @@ class BackendVoteController extends BackendBaseController
 
     if ($vote->save())
     {
-      //entitled user notify
-      foreach (explode(',', $vote->entitled_vote) as $userId) {
-        Notify::create([
-          'user_id' => $userId,
-          'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
-          'link' => route('viewMyMark', $vote->vote_group_id),
-          ]);
-      }
-
-      //voter notify
-      foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
-        Notify::create([
-          'user_id' => $userId,
-          'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
-          'link' => route('viewMyVote', $vote->vote_group_id),
-          ]);
-      }
+      $this->_postCloseNotify($vote);
 
       return Response::json(array('actionStatus' => true, 'message' => trans('all.messages.vote-close-success'), 'messageType' => 'success'));
     }else
@@ -469,5 +490,47 @@ class BackendVoteController extends BackendBaseController
       );
     }
     return $dataArr;
+  }
+
+  protected function _postUnlockNotify($vote)
+  {
+    //entitled user notify
+    foreach (explode(',', $vote->entitled_vote) as $userId) {
+      Notify::create([
+        'user_id' => $userId,
+        'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-entitled-vote', ['voteId' => $vote->id]),
+        'link' => route('viewMyMark', $vote->vote_group_id),
+        ]);
+    }
+
+    //voter notify
+    foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
+      Notify::create([
+        'user_id' => $userId,
+        'content' => '<span class="label label-sm label-icon label-info"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.open-vote-voter', ['voteId' => $vote->id]),
+        'link' => route('quickUserVote'),
+        ]);
+    }
+  }
+
+  protected function _postCloseNotify($vote)
+  {
+    //entitled user notify
+    foreach (explode(',', $vote->entitled_vote) as $userId) {
+      Notify::create([
+        'user_id' => $userId,
+        'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
+        'link' => route('viewMyMark', $vote->vote_group_id),
+        ]);
+    }
+
+    //voter notify
+    foreach (CustomHelper::get_array_user_id_from_voter($vote->voter) as $userId) {
+      Notify::create([
+        'user_id' => $userId,
+        'content' => '<span class="label label-sm label-icon label-default"><i class="fa fa-bullhorn"></i></span> ' . trans('all.notifys.close-vote', ['voteId' => $vote->id]),
+        'link' => route('viewMyVote', $vote->vote_group_id),
+        ]);
+    }
   }
 }

@@ -328,6 +328,7 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendVoteController@getShow')
   );
 
+  Route::pattern('voteGroupId', '[0-9]+');
   Route::get('vote-group/{voteGroupId}', array(
       'as' => 'showVoteGroup',
       'uses' => 'BackendVoteController@getShowGroup')
@@ -351,6 +352,16 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   Route::delete('vote-group/delete', array(
       'as' => 'deleteVoteGroup',
       'uses' => 'BackendVoteController@deleteGroup')
+  );
+
+  Route::put('vote-group/open', array(
+      'as' => 'openVoteGroup',
+      'uses' => 'BackendVoteController@openGroup')
+  );
+
+  Route::put('vote-group/close', array(
+      'as' => 'closeVoteGroup',
+      'uses' => 'BackendVoteController@closeGroup')
   );
 
   //user vote

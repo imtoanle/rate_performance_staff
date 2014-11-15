@@ -67,13 +67,13 @@ jQuery(document).ready(function() {
   });
 
   //clear checked when close modal
-  $(document).on('#delete-modal hidden.bs.modal', function () {
+  $(document).on('div.modal hidden.bs.modal', function () {
     clear_selected_checkbox();
   })
 
-  jQuery(document).on('click', '#delete-modal button[name="btn_submit"]', function (e) {
+  jQuery(document).on('click', 'div.modal button[name="btn_submit"]', function (e) {
     e.preventDefault();
-    delete_selected_row();
+    action_on_selected_row($(this).closest('div.modal').attr('id'));
   });
 
   // checkall checkbox
@@ -176,6 +176,57 @@ function toggleCheckbox(this_element)
   this_element.parents('span').toggleClass("checked");
   this_element.parents('tr').toggleClass("active");
   //this_element.prop("checked", !this_element.prop("checked"));
+}
+
+
+function action_on_selected_row(modal_id)
+{
+  var dataTableElement = $('#ajax-data-table'),
+      datas = $('#ajax-data-table tr span.checked input.checkboxes').map(function(){ return $(this).val(); }).get();
+
+  switch (modal_id)
+  {
+    case 'delete-modal':
+      form_type = 'DELETE';
+      form_action = dataTableElement.attr('action-delete');
+      break;
+    case 'open-vote-modal':
+      form_type = 'PUT';
+      form_action = dataTableElement.attr('action-open');
+      break;
+    case 'close-vote-modal':
+      form_type = 'PUT';
+      form_action = dataTableElement.attr('action-close');
+      break;
+    default:  alert('cho khac');
+  }
+
+  ajax_call_custom(form_type, form_action, 'itemIds='+datas, function(result){
+    if(result.messageType == 'success')
+    {
+      switch (modal_id)
+      {
+        case 'delete-modal':
+          //delete row
+          $('#ajax-data-table tr.active').each(function(i) {
+            dataTableElement.dataTable().fnDeleteRow(dataTableElement.dataTable().fnGetPosition($(this).get(0)));  
+          });
+          break;
+        case 'open-vote-modal':
+          dataTableElement.dataTable().fnDraw();
+          break;
+        case 'close-vote-modal':
+          dataTableElement.dataTable().fnDraw();
+          break;
+        default:  alert('cho khac');
+      }
+      
+    ;}
+    //hide modal
+    $('div.modal').modal('hide');
+    //show notice
+    toastr[result.messageType](result.message);
+  });  
 }
 
 function delete_selected_row()

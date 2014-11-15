@@ -12,17 +12,17 @@
       </button>
       <ul class="dropdown-menu pull-right">
         <li>
-          <a href="table_editable.html#">{{trans('all.vote-open')}}</a>
+          <a href="#open-vote-modal" data-toggle="modal">{{trans('all.vote-open')}}</a>
         </li>
         <li>
-          <a href="table_editable.html#">{{trans('all.vote-close')}}</a>
+          <a href="#close-vote-modal" data-toggle="modal">{{trans('all.vote-close')}}</a>
         </li>
       </ul>
     </div>
   </div>
 </div>
 <div class="portlet-body panel-content-area">
-  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
+  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}" action-open="{{route('openVoteGroup')}}" action-close="{{route('closeVoteGroup')}}">
   <thead>
   <tr>
     <th class="table-checkbox">
@@ -81,6 +81,53 @@
 </div>
 <!-- /.modal -->
 <!-- Modal END -->
+
+<!-- Open/Close vote Modal Start -->
+<div class="modal fade" id="open-vote-modal" tabindex="-1" role="open-vote-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{trans('all.confirm')}}</h4>
+      </div>
+      <div class="modal-body">
+         Bạn có muốn mở các phiếu đánh giá đã chọn ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('all.close')}}</button>
+        <button type="button" name="btn_submit" class="btn btn-success">{{trans('all.accept')}}</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- Modal END -->
+
+<!-- Open/Close vote Modal Start -->
+<div class="modal fade" id="close-vote-modal" tabindex="-1" role="open-vote-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">{{trans('all.confirm')}}</h4>
+      </div>
+      <div class="modal-body">
+         Bạn có muốn chốt các phiếu đánh giá đã chọn ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('all.close')}}</button>
+        <button type="button" name="btn_submit" class="btn btn-success">{{trans('all.accept')}}</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- Modal END -->
+
 
 <!-- Modal 7 (Ajax Modal)-->
 <div class="modal fade" id="modal-list-persions">

@@ -170,8 +170,10 @@ return array(
     'listVotes' => 'votes-management_list',
     'newVote' => 'votes-management_create',
     'postNewVote' => 'votes-management_create',
+    'openVoteGroup' => 'votes-management_open',
     'postUnlockVote' => 'votes-management_open',
     'postCloseVote' => 'votes-management_close',
+    'closeVoteGroup' => 'votes-management_close',
     'putVote' => 'votes-management_edit-vote',
     'putVoteGroup' => 'votes-management_edit',
     'copyVoteGroup' => 'votes-management_edit',
@@ -184,6 +186,7 @@ return array(
     'listUsersSearchJob' => 'votes-management_edit',
     'listUsersSearchDepartment' => 'votes-management_edit',
     'listPersionsVote' => 'votes-management_edit',
+
     //user-vote
     'listUserVotes' => 'user-votes-management_list',
     'quickUserVote' => 'user-votes-management_quick',
