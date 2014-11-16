@@ -191,8 +191,8 @@ jQuery(document).ready(function() {
   });
 
   $('a.vote-content').editable({
-    //showbuttons: 'bottom',
-    inputclass: 'form-control input-large',
+    showbuttons: 'bottom',
+    inputclass: 'form-control input-small',
     params: function (params) {  //params already contain `name`, `value` and `pk`
       params.vote = $(this).data('vote');
       params.voter = $(this).data('voter');
