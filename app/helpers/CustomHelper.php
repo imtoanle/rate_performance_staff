@@ -103,6 +103,7 @@ class CustomHelper
 
   public static function get_users_from_voter_list($json_voter)
   {
+    if (!isset($json_voter)) return [];
     $decodeJson = json_decode($json_voter, true);
     $arrayUserId = array();
     foreach ($decodeJson as $value) {

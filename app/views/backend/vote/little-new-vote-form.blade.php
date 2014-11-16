@@ -1,3 +1,4 @@
+<?php $vote = isset($vote) ? $vote : new Vote; ?>
 <!--
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>
@@ -11,7 +12,7 @@
   <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
   <div class="col-md-8">
     <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
-      <input type="text" name="expiration_date" class="form-control" readonly>
+      <input type="text" name="expiration_date" class="form-control" value="{{ isset($vote->expired_at) ? date('d-m-Y', strtotime($vote->expired_at)) : '' }}" readonly>
       <span class="input-group-btn">
         <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>
       </span>
@@ -25,7 +26,7 @@
     <select name="department_list" id="select2_department" class="form-control select2">
       <option></option>
       @foreach($departments as $department)
-      <option value="{{$department->id}}">{{$department->name}}</option>
+      <option value="{{$department->id}}" {{ $department->id == $vote->department_id ? 'selected' : '' }}>{{$department->name}}</option>
       @endforeach
     </select>
   </div>
@@ -57,7 +58,7 @@
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
   <div class="col-md-8">
-    <input type="text" name="object_vote_title" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
+    <input type="text" name="object_vote_title"  value="{{$vote->object_entitled_vote}}" class="form-control" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
   </div>
 </div>
 
@@ -65,10 +66,11 @@
   <label class="control-label col-md-3">{{trans('all.entitled-vote')}}</label>
   <div class="col-md-8">
     <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
+      <?php $entitledVoteArr = explode(',', $vote->entitled_vote); ?>
       @foreach($departments as $department)
         <optgroup label="{{$department->name}}">
-          @foreach($department->users as $user)
-            <option value="{{$user->id}}">{{$user->username}} ({{$user->full_name}})</option>
+          @foreach($usersArray[$department->id] as $user)
+            <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}} ({{$user->full_name}})</option>
           @endforeach
         </optgroup>
       @endforeach
@@ -79,7 +81,16 @@
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.voter')}}</label>
   <div class="col-md-7">
-    <input type="hidden" name="select2_voter" id="select2_voter" class="form-control select2">
+    <select name="select2_voter" id="select2_voter" class="form-control select2">
+      <option></option>
+      @foreach($departments as $department)
+        <optgroup label="{{$department->name}}">
+          @foreach($usersArray[$department->id] as $user)
+            <option value="{{$user->id}}">{{$user->username}} ({{$user->full_name}})</option>
+          @endforeach
+        </optgroup>
+      @endforeach
+    </select>
   </div>
   <div class="col-md-1">
     <button type="button" id="add_voter" class="btn btn-success">{{trans('all.add')}}</button>
@@ -110,6 +121,25 @@
             </tr>
           </thead>
           <tbody>
+            @foreach(CustomHelper::get_users_from_voter_list($vote->voter) as $user)
+              <tr>
+                <td>
+                  <input type="hidden" value="{{$user['id']}}" name="voter_id[]">
+                  <span class="selected-voter">{{$user['id']}}</span>
+                </td>
+                <td>{{$user['username']}}</td>
+                <td>{{$user['full_name']}}</td>
+                <td>{{$user['job_name']}}</td>
+                <td>
+                  <select name="voter_role[]" class="form-control select2-role">
+                    @foreach($roles as $role)
+                    <option value="{{$role->id}}" {{$role->id == $user['role'] ? 'selected' : ''}}>{{$role->name}}</option>
+                    @endforeach
+                  </select>
+                </td>
+                <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
+              </tr>
+              @endforeach
           </tbody>
           </table>
         </div>
@@ -262,13 +292,18 @@ jQuery(document).ready(function() {
     allowClear: true,
   });
 
+  $("#select2_voter").select2({
+    placeholder: 'Chọn người chấm điểm',
+    allowClear: true,
+  });
+
 /*
   $("#select2_criteria").select2({
     placeholder: '{{trans('all.select-criteria')}}',
     allowClear: true,
   });
 */
-
+  /*
   $('#select2_voter').select2({
     placeholder: "{{trans('all.select-voter')}}",
     minimumInputLength: 1,
@@ -277,21 +312,11 @@ jQuery(document).ready(function() {
       dataType: 'json',
       data: function(term, page) {
         var selected_voter = $('#list-voter tbody .selected-voter').map(function(){ return $(this).html(); }).get();
-        /*
-        if (selected_voter.length)
-        {
-          selected_user = $('#multi_entitled_vote').val() + ',' + selected_voter;
-        }else
-        {
-          selected_user = $('#multi_entitled_vote').val();
-        }
-        */
         return {
           q: term,
           page_limit: 10,
           select_id: $(this).attr('id'),
           selected_voter: selected_voter,
-
         };
       },
       results: function (data, page) {
@@ -300,31 +325,9 @@ jQuery(document).ready(function() {
     },
     formatResult: markup_result, // omitted for brevity, see the source of this page
     //formatSelection: function(user){ return user.text;}, // omitted for brevity, see the source of this page
-    //dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    //dropdownCssClass: "bigdrop", apply css that makes the dropdown taller
   });
-  
-  /*
-  $('#can_view_results').select2({
-    placeholder: "{{trans('all.select-head-department')}}",
-    minimumInputLength: 1,
-    ajax: {
-      url: "{{route('listUsersSearch')}}",
-      dataType: 'json',
-      data: function(term, page) {
-        return {
-          q: term,
-          page_limit: 10,
-        };
-      },
-      results: function (data, page) {
-        return { results: data };
-      }
-    },
-    formatResult: markup_result, // omitted for brevity, see the source of this page
-    //formatSelection: function(user){ return user.text;}, // omitted for brevity, see the source of this page
-    //dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-  });
-*/
+  */
   
 
 });

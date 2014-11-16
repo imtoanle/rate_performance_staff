@@ -5,158 +5,17 @@
 <div class="portlet">
   <div class="portlet-title">
     <div class="caption">
-      <i class="fa fa-reorder"></i>{{trans('all.show-vote')}}
+      <i class="fa fa-reorder"></i>Sửa phiếu đánh giá
     </div>
-    <div class="tools">
-      <a href="javascript:;" class="collapse"></a>
-      <a href="form_layouts.html#portlet-config" data-toggle="modal" class="config"></a>
-      <a href="javascript:;" class="reload"></a>
-      <a href="javascript:;" class="remove"></a>
-    </div>
+
   </div>
   <div class="portlet-body form">
     <!-- BEGIN FORM-->
     <form action="{{route('putVote', $vote->id)}}" class="form-horizontal base-ajax-form" type="PUT">
       <div class="form-body">
         <h3 class="form-section">{{trans('all.vote-info')}}</h3>
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
-          <div class="col-md-8">
-            <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
-              <input type="text" name="expiration_date" class="form-control" value="{{ date('d-m-Y', strtotime($vote->expired_at))}}" readonly>
-              <span class="input-group-btn">
-                <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>
-              </span>
-            </div>
-          </div>
-        </div>
+        @include(Config::get('view.backend.little-new-vote-form'))
         
-        <!--
-
-        -->
-
-        <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.department')}}</label>
-          <div class="col-md-8">
-            <select name="department_list" id="select2_department" class="form-control select2">
-              <option></option>
-              @foreach($departments as $department)
-              <option value="{{$department->id}}" {{ $department->id == $vote->department_id ? 'selected' : '' }}>{{$department->name}}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-        <!--
-        <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.criteria')}}</label>
-          <div class="col-md-8">
-            <?php $criteriaIds = explode(',', $vote->criteria); ?>
-            <select name="criteria_list" id="select2_criteria" class="form-control select2" multiple>
-              @foreach($criterias as $criteria)
-              <option value="{{$criteria->id}}" {{ in_array($criteria->id, $criteriaIds) ? 'selected' : '' }}>{{$criteria->name}}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-        -->
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.object-vote')}}</label>
-          <div class="col-md-8">
-            <input type="text" name="object_vote_title" class="form-control" value="{{$vote->object_entitled_vote}}" placeholder="VD: Trưởng/Phó phòng, chi nhánh">
-          </div>
-        </div>
-        <!--
-        <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.object-vote')}}</label>
-          <div class="col-md-8">
-            <select name="object_vote_list" id="select2_object_vote" class="form-control select2" multiple>
-              <?php $objectVoteArr = explode(',', $vote->object_entitled_vote); ?>
-              @foreach($jobTitles as $job)
-              <option value="{{$job->id}}" {{in_array($job->id, $objectVoteArr) ? 'selected' : ''}}>{{$job->name}}</option>
-              @endforeach
-            </select>
-          </div>
-        </div>
-        -->
-
-        <div class="form-group">
-          <label class="control-label col-md-3">{{trans('all.entitled-vote')}}</label>
-          <div class="col-md-8">
-            <?php $entitledVoteArr = explode(',', $vote->entitled_vote); ?>
-            <select name="entitled_vote" class="multi-select select2" multiple="" id="multi_entitled_vote">
-              @foreach($departments as $department)
-                <optgroup label="{{$department->name}}">
-                  @foreach($department->users as $user)
-                    <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}} ({{$user->full_name}})</option>
-                  @endforeach
-                </optgroup>
-              @endforeach
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-3 control-label">{{trans('all.voter')}}</label>
-          <div class="col-md-7">
-            <input type="hidden" name="select2_voter" id="select2_voter" class="form-control select2">
-          </div>
-          <div class="col-md-1">
-            <button type="button" id="add_voter" class="btn btn-success">{{trans('all.add')}}</button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-offset-1 col-md-10">
-            <!-- BEGIN BORDERED TABLE PORTLET-->
-            <div class="portlet">
-              <div class="portlet-title">
-                <div class="caption">
-                  <i class="fa fa-user"></i>{{trans('all.selected-voter-list')}}
-                </div>
-              </div>
-              <div class="portlet-body">
-
-                <div class="table-responsive">
-                  <table id="list-voter" class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>{{trans('all.username')}}</th>
-                      <th>{{trans('all.full-name')}}</th>
-                      <th>{{trans('all.job-title')}}</th>
-                      <th>{{trans('all.role')}}</th>
-                      <th>{{trans('all.actions')}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach(CustomHelper::get_users_from_voter_list($vote->voter) as $user)
-                    <tr>
-                      <td>
-                        <input type="hidden" value="{{$user['id']}}" name="voter_id[]">
-                        <span class="selected-voter">{{$user['id']}}</span>
-                      </td>
-                      <td>{{$user['username']}}</td>
-                      <td>{{$user['full_name']}}</td>
-                      <td>{{$user['job_name']}}</td>
-                      <td>
-                        <select name="voter_role[]" class="form-control select2-role">
-                          @foreach($roles as $role)
-                          <option value="{{$role->id}}" {{$role->id == $user['role'] ? 'selected' : ''}}>{{$role->name}}</option>
-                          @endforeach
-                        </select>
-                      </td>
-                      <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
-                    </tr>
-                    @endforeach
-                  </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
       </div>
       <div class="form-actions right">
