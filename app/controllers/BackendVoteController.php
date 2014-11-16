@@ -463,7 +463,6 @@ class BackendVoteController extends BackendBaseController
 
   public function postUnlock()
   {
-    return Input::all();
     $vote = Vote::find(Input::get('vote_id'));
     $vote->status = Config::get('variable.vote-status.opened');
 

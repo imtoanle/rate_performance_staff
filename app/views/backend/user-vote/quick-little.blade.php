@@ -103,7 +103,7 @@
           @endforeach
         </td>
         <td>
-          <a href="#" class="vote-content editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
+          <a href="#" class="vote-content editable" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
             {{CustomHelper::get_mark_with_criteria($voteResult, 'content')}}
           </a>
         </td>
