@@ -80,7 +80,7 @@
 
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.voter')}}</label>
-  <div class="col-md-7">
+  <div class="col-md-5">
     <select name="select2_voter" id="select2_voter" class="form-control select2">
       <option></option>
       @foreach($departments as $department)
@@ -90,6 +90,13 @@
           @endforeach
         </optgroup>
       @endforeach
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select id="type_of_persion" class="form-control">
+      <option value="1">Người chấm điểm</option>
+      <option value="2">Người xem báo cáo</option>
+      <option value="3">Người chốt điểm</option>
     </select>
   </div>
   <div class="col-md-1">
@@ -139,7 +146,58 @@
                 </td>
                 <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
               </tr>
-              @endforeach
+            @endforeach
+          </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-offset-1 col-md-10">
+    <!-- BEGIN BORDERED TABLE PORTLET-->
+    <div class="portlet">
+      <div class="portlet-title">
+        <div class="caption">
+          <i class="fa fa-user"></i>Danh sách thành viên đặc biệt
+        </div>
+      </div>
+      <div class="portlet-body">
+
+        <div class="table-responsive">
+          <table id="list-specify-user" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{{trans('all.username')}}</th>
+              <th>{{trans('all.full-name')}}</th>
+              <th>{{trans('all.job-title')}}</th>
+              <th>Quyền hạn</th>
+              <th>{{trans('all.actions')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+          @foreach(CustomHelper::get_users_from_specify_users_list($vote->specify_user) as $user)
+              <tr>
+                <td>
+                  <input type="hidden" value="{{$user['id']}}" name="voter_id[]">
+                  <span class="selected-voter">{{$user['id']}}</span>
+                </td>
+                <td>{{$user['username']}}</td>
+                <td>{{$user['full_name']}}</td>
+                <td>{{$user['job_name']}}</td>
+                <td>
+                  @if($user['type_of_persion'] == 2)
+                  Người xem báo cáo
+                  @else($user['type_of_persion'] == 3)
+                  Người chốt điểm
+                  @endif
+                </td>
+                <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
+              </tr>
+            @endforeach
           </tbody>
           </table>
         </div>
@@ -256,18 +314,28 @@ jQuery(document).ready(function() {
 
 
     $('#add_voter').on('click', function(){
-    var user_id = $('#select2_voter').val();
+    var user_id = $('#select2_voter').val(),
+        type_of_persion = $('#type_of_persion');
     if (user_id.length)
     {
       ajax_call_custom('GET', '{{route('listUsersSearch')}}', 'user_id='+user_id, function(result){
-        select_box = '<select name="voter_role[]" class="form-control select2-role"> \
-          <option value="" disabled selected>{{trans('all.select-role')}}</option> \
-          @foreach($roles as $role)
-          <option value="{{$role->id}}">{{$role->name}}</option> \
-          @endforeach
-        </select>';
-        htm_tr = '<tr><td><input type="hidden" name="voter_id[]" value="'+user_id+'" /><span class="selected-voter">'+user_id+'</span></td><td>'+result[0].text+'</td><td>'+result[0].full_name+'</td><td>'+result[0].job_title_name+'</td><td>'+select_box+'</td><td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>';
-        $('#list-voter tbody').append(htm_tr);
+        switch (type_of_persion.val())
+        {
+          case '1':
+            select_box = '<select name="voter_role[]" class="form-control select2-role"> \
+              <option value="" disabled selected>{{trans('all.select-role')}}</option> \
+              @foreach($roles as $role)
+              <option value="{{$role->id}}">{{$role->name}}</option> \
+              @endforeach
+            </select>';
+            htm_tr = '<tr><td><input type="hidden" name="voter_id[]" value="'+user_id+'" /><span class="selected-voter">'+user_id+'</span></td><td>'+result[0].text+'</td><td>'+result[0].full_name+'</td><td>'+result[0].job_title_name+'</td><td>'+select_box+'</td><td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>';
+            $('#list-voter tbody').append(htm_tr);
+            break;
+          default:
+            permission_content = type_of_persion.val() == '2' ? 'Người xem báo cáo' : 'Người chốt điểm';
+            htm_tr = '<tr><td><input type="hidden" name="specify_user[]" value="'+user_id+','+type_of_persion.val()+'" />'+user_id+'</td><td>'+result[0].text+'</td><td>'+result[0].full_name+'</td><td>'+result[0].job_title_name+'</td><td>'+permission_content+'</td><td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>';
+            $('#list-specify-user tbody').append(htm_tr);
+        }
         $("#select2_voter").select2("val", "");
       });
     }else
@@ -276,7 +344,7 @@ jQuery(document).ready(function() {
     } 
   });
 
-  $('#list-voter').on('click', 'a.item-remove', function(){
+  $('#list-voter, #list-specify-user').on('click', 'a.item-remove', function(){
     $(this).closest('tr').remove();
   });
 
@@ -287,12 +355,12 @@ jQuery(document).ready(function() {
   });
   */
 
-  $("#select2_department").select2({
+  $('#select2_department').select2({
     placeholder: '{{trans('all.select-department')}}',
     allowClear: true,
   });
 
-  $("#select2_voter").select2({
+  $('#select2_voter').select2({
     placeholder: 'Chọn người chấm điểm',
     allowClear: true,
   });

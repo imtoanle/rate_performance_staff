@@ -97,7 +97,7 @@ class BackendVoteController extends BackendBaseController
             
             default:
               $statusHtml = '<span class="label label-default">'.trans("all.closed").'</span>';
-              $actionVote = '';
+              $actionVote = '<a class="btn btn-default btn-xs purple unlock-vote-btn" data-item-id="'.$vote->id.'"><i class="fa fa-unlock"></i> Mở đánh giá lại</a>';
               break;
           }
 
@@ -252,6 +252,7 @@ class BackendVoteController extends BackendBaseController
     }
 
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
+    $specify_user_list = $this->_convert_specify_user_list(Input::get('specify_user'));
     $vote = new Vote;
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_title'),
@@ -259,6 +260,7 @@ class BackendVoteController extends BackendBaseController
       'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
+      'specify_user' => json_encode($specify_user_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
       'vote_group_id' => $vote_group_id,
       ));
@@ -505,6 +507,21 @@ class BackendVoteController extends BackendBaseController
       );
     }
     return $dataArr;
+  }
+
+  protected function _convert_specify_user_list($specify_user)
+  {
+    $dataArr = [];
+    foreach ($specify_user as $user_string) {
+      $user = explode(',', $user_string);
+      $dataArr[] = array(
+        'user_id' => $user[0],
+        'type_of_persion' => $user[1],
+      );
+    }
+
+
+    return array_unique($dataArr);
   }
 
   protected function _postUnlockNotify($vote)

@@ -130,6 +130,33 @@ class CustomHelper
     return $finalResult;
   }
 
+  public static function get_users_from_specify_users_list($json_specify_users)
+  {
+    if (!isset($json_specify_users)) return [];
+
+    $decodeJson = json_decode($json_specify_users, true);
+    $arrayUserId = array();
+
+    foreach ($decodeJson as $value) {
+      $arrayUserId[$value['user_id']] = $value['type_of_persion'];
+    }
+
+    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayUserId))->get();
+    $resultArr = [];
+
+    foreach ($users as $user) {
+      $resultArr[] = array(
+        'id' => $user->id,
+        'username' => $user->username,
+        'full_name' => $user->full_name,
+        'job_name' => $user->job_titles_name(),
+        'type_of_persion' => $arrayUserId[$user->id]
+        );
+    }
+
+    return $resultArr;
+  }
+
   public static function get_users_from_user_id_list($userIds)
   {
     return User::whereIn('id', $userIds)->get();
