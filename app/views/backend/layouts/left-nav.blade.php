@@ -55,8 +55,8 @@
   @endif
 
 
-  @if ( $currentUser->hasAnyAccess(['reports-management_period', 'reports-management_year']) )
-  <?php $arrRoutes = array('listReportPeriod', 'listReportYear'); ?>
+  @if ( $currentUser->hasAnyAccess(['reports-management_period', 'reports-management_year', 'reports-management_specify-user']) )
+  <?php $arrRoutes = array('listReportPeriod', 'listReportYear', 'listReportSpecifyUser'); ?>
   {{ BackendSideBar::create_root_open(trans('all.report'), $arrRoutes, 'fa fa-line-chart')}}  
     @if ( $currentUser->hasAnyAccess(['reports-management_period']) )
       {{ BackendSideBar::create_node(trans('all.reports-by-period'), 'listReportPeriod', 'fa fa-list') }}  
@@ -64,7 +64,11 @@
 
     @if ( $currentUser->hasAnyAccess(['reports-management_year']) )
       {{ BackendSideBar::create_node(trans('all.reports-by-year'), 'listReportYear', 'fa fa-list') }}  
-    @endif 
+    @endif
+
+    @if ( $currentUser->hasAnyAccess(['reports-management_specify-user']) )
+      {{ BackendSideBar::create_node('Báo cáo được chỉ định', 'listReportSpecifyUser', 'fa fa-list') }}  
+    @endif
   {{ BackendSideBar::create_root_close() }} 
   @endif
 

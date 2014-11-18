@@ -438,6 +438,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
     'uses' => 'VoteReportBackendController@getDetailHeadGradingVote')
   );
 
+  Route::get('reports-by-specify-user', array(
+      'as' => 'listReportSpecifyUser',
+      'uses' => 'VoteReportBackendController@getSpecifyUser')
+  );
+
   
 
   

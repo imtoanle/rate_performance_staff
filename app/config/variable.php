@@ -206,13 +206,15 @@ return array(
 
     //reports
     'listReportPeriod' => 'reports-management_period',
-    'reportPeriodVote' => 'reports-management_period',
+    'reportPeriodVote' => 'reports-management_period-vote',
     'reportPeriodVoteGroup' => 'reports-management_period',
 
     'listReportYear' => 'reports-management_year',
     'postReportYear' => 'reports-management_year',
     'reportYearVote' => 'reports-management_year',
     'reportYearVoteGroup' => 'reports-management_year',
+
+    'listReportSpecifyUser' => 'reports-management_specify-user'
   ),
 
 );

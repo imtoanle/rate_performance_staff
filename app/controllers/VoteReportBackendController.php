@@ -79,7 +79,15 @@ class VoteReportBackendController extends BackendBaseController
 
   public function getPeriodVote($VoteId)
   {
+    $currentUser = Sentry::getUser();
+    $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
+
     $votes = Vote::where('id', $VoteId)->get();
+    $vote = $votes->first();
+    if (!is_object($vote) || strpos($vote->specify_user, $pattern) === false)
+    {
+      App::abort(500, 'Bạn không có quyền xem báo cáo này.');
+    }
     $params = $this->_get_params_reports($votes);
 
     return View::make(Config::get('view.backend.report-details-child'), $params);
@@ -137,6 +145,38 @@ class VoteReportBackendController extends BackendBaseController
     }
 
     return View::make($viewName, $params);
+  }
+
+  public function getSpecifyUser()
+  {
+    if (Request::Ajax())
+    {
+      if (Input::get('mode') == 'datatable')
+      {
+        $currentUser = Sentry::getUser();
+        $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
+        
+        $votes = Vote::select(array('vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("specify_user regexp '".$pattern."'")->whereNotIn('status', [Config::get('variable.vote-status.newly')]);
+      return Datatables::of($votes)
+        ->remove_column('vote_group_id', 'department_id')
+        ->edit_column('vote_code', function($row){
+          return $row->voteGroup->vote_code;
+        })
+        ->edit_column('title', function($row){
+          return $row->voteGroup->title;
+        })
+        ->edit_column('department_name', function($row){
+          return $row->department->name;
+        })
+        ->edit_column('actions', '
+            <a href="{{route(\'reportPeriodVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xem báo cáo</a>
+          ')
+        #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+        ->make();
+      }
+    }
+    
+    return View::make(Config::get('view.backend.report-by-specify-user'));
   }
 
   protected function _get_params_reports($votes)

@@ -112,6 +112,7 @@
       $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
     });
 
+    @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
     $('a.general-result').editable({
       params: function (params) {  //params already contain `name`, `value` and `pk`
         params.entitled_vote = $(this).data('entitled-vote');
@@ -127,5 +128,6 @@
       inputclass: 'form-control input-small',
       emptytext: '{{trans('all.not-input-yet')}}',
     });
+    @endif
   });
 </script>
