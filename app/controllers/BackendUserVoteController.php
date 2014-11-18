@@ -40,9 +40,9 @@ class BackendUserVoteController extends BackendBaseController
       if (Input::get('mode') == 'datatable')
       {
         $currentUser = Sentry::getUser();
-        $pattern = '"user_id":"'.$currentUser->id.'","role_id":"'.Config::get('variable.head-department-role-id').'"';
+        $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.head-grading').'"';
         
-        $votes = Vote::select(array('vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("voter regexp '".$pattern."'");
+        $votes = Vote::select(array('vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("specify_user regexp '".$pattern."'")->where('status', Config::get('variable.vote-status.opened'));
       return Datatables::of($votes)
         ->remove_column('vote_group_id', 'department_id')
         ->edit_column('vote_code', function($row){
@@ -63,29 +63,6 @@ class BackendUserVoteController extends BackendBaseController
     }
     
     return View::make(Config::get('view.backend.head-grading-index'));
-  }
-
-  public function getDetailHeadGradingVote($voteId)
-  {
-    $vote = Vote::find($voteId);
-    $voterArr = [];
-    foreach (json_decode($vote->voter) as $value) {
-      $voterArr[$value->role_id][] = $value->user_id;
-    }
-
-    //find max voter
-    $maxVoter = 0;
-    foreach ($voterArr as $value) {
-      if(count($value) > $maxVoter)
-      {
-        $maxVoter = count($value);
-      }
-    }
-    $params['voterArr'] = $voterArr;
-    $params['maxVoter'] = $maxVoter;
-    $params['vote'] = $vote;
-
-    return View::make(Config::get('view.backend.head-grading-vote'), $params);
   }
 
   public function postQuickDetailHeadGradingVote()

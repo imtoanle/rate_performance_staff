@@ -315,12 +315,14 @@ class BackendVoteController extends BackendBaseController
     }
 
     $voter_list = $this->_convert_voter_list(Input::get('voter_id'), Input::get('voter_role'));
+    $specify_user_list = $this->_convert_specify_user_list(Input::get('specify_user'));
     $vote->fill(array(
       'object_entitled_vote' => Input::get('object_vote_title'),
       'department_id' => Input::get('department_list'),
       'criteria' => Criteria::first()->id,#Input::get('criteria_list'),
       'entitled_vote' => Input::get('entitled_vote'),
       'voter' => json_encode($voter_list),
+      'specify_user' => json_encode($specify_user_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
       ));
 
@@ -520,8 +522,7 @@ class BackendVoteController extends BackendBaseController
       );
     }
 
-
-    return array_unique($dataArr);
+    return $dataArr;
   }
 
   protected function _postUnlockNotify($vote)

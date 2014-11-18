@@ -1,6 +1,12 @@
 <?php
 
 return array(
+    'type-of-person' => array(
+      'voter' => 1,
+      'view-report' => 2,
+      'head-grading' => 3,
+        ),
+
     'vote-status' => array(
       'newly' => 0,
       'opened' => 1,

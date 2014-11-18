@@ -59,7 +59,15 @@
       </td>
       <td>{{ CustomHelper::get_mark_with_criteria($firstVoterInRow, 'content') }}</td>
       @endforeach
-      <td rowspan="{{$maxVoterArr[$vote->id]}}">{{CustomHelper::get_general_result($vote->id, $userId)}}</td>
+      <td rowspan="{{$maxVoterArr[$vote->id]}}">
+        @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
+          <a href="#" class="general-result" data-type="text" data-pk="{{$vote->id}}" data-entitled-vote="{{$userId}}" data-name="mark" data-placement="left" data-placeholder="{{trans('all.input-mark')}}" data-title="{{trans('all.general-results')}}">
+        @endif
+        {{CustomHelper::get_general_result($vote->id, $userId)}}
+        @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
+          </a>
+        @endif
+      </td>
     </tr>
     @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
     <tr>
@@ -102,6 +110,22 @@
       });
 
       $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+    });
+
+    $('a.general-result').editable({
+      params: function (params) {  //params already contain `name`, `value` and `pk`
+        params.entitled_vote = $(this).data('entitled-vote');
+        return params;
+      },
+      url: '{{route('postQuickHeadGradingUserVote')}}',
+      success: function(result, newValue) {
+        if(typeof(result.errorMessages) != 'undefined')
+        {
+          return result.errorMessages.value[0];
+        }
+      },
+      inputclass: 'form-control input-small',
+      emptytext: '{{trans('all.not-input-yet')}}',
     });
   });
 </script>

@@ -380,11 +380,6 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@getIndexHeadGradingVote')
   );
 
-  Route::get('user-votes/head-grading-detail/{voteId}', array(
-      'as' => 'detailHeadGradingUserVote',
-      'uses' => 'BackendUserVoteController@getDetailHeadGradingVote')
-  );
-
   Route::post('user-votes/head-grading-quick', array(
       'as' => 'postQuickHeadGradingUserVote',
       'uses' => 'BackendUserVoteController@postQuickDetailHeadGradingVote')
@@ -436,6 +431,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
   Route::post('reports-by-year', array(
       'as' => 'postReportYear',
       'uses' => 'VoteReportBackendController@postYearVote')
+  );
+
+  Route::get('reports/head-grading-detail/{voteId}', array(
+    'as' => 'detailHeadGradingUserVote',
+    'uses' => 'VoteReportBackendController@getDetailHeadGradingVote')
   );
 
   

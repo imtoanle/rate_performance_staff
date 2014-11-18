@@ -150,7 +150,7 @@ class CustomHelper
         'username' => $user->username,
         'full_name' => $user->full_name,
         'job_name' => $user->job_titles_name(),
-        'type_of_persion' => $arrayUserId[$user->id]
+        'type_of_person' => $arrayUserId[$user->id]
         );
     }
 

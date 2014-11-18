@@ -180,23 +180,23 @@
           </thead>
           <tbody>
           @foreach(CustomHelper::get_users_from_specify_users_list($vote->specify_user) as $user)
-              <tr>
-                <td>
-                  <input type="hidden" value="{{$user['id']}}" name="voter_id[]">
-                  <span class="selected-voter">{{$user['id']}}</span>
-                </td>
-                <td>{{$user['username']}}</td>
-                <td>{{$user['full_name']}}</td>
-                <td>{{$user['job_name']}}</td>
-                <td>
-                  @if($user['type_of_persion'] == 2)
-                  Người xem báo cáo
-                  @else($user['type_of_persion'] == 3)
-                  Người chốt điểm
-                  @endif
-                </td>
-                <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
-              </tr>
+            <tr>
+              <td>
+                <input type="hidden" value="{{$user['id']}},{{$user['type_of_person']}}" name="specify_user[]">
+                {{$user['id']}}
+              </td>
+              <td>{{$user['username']}}</td>
+              <td>{{$user['full_name']}}</td>
+              <td>{{$user['job_name']}}</td>
+              <td>
+                @if($user['type_of_person'] == Config::get('variable.type-of-person.view-report'))
+                Người xem báo cáo
+                @else($user['type_of_person'] == Config::get('variable.type-of-person.head-grading'))
+                Người chốt điểm
+                @endif
+              </td>
+              <td><a class="item-remove btn btn-xs btn-danger"><i class="fa fa-times"></i> {{trans('all.delete')}}</a></td>
+            </tr>
             @endforeach
           </tbody>
           </table>

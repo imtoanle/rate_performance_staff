@@ -93,6 +93,14 @@ class VoteReportBackendController extends BackendBaseController
     return View::make(Config::get('view.backend.report-details-child'), $params);
   }
 
+  public function getDetailHeadGradingVote($voteId)
+  {
+    $votes = Vote::where('id', $voteId)->get();
+    $params = $this->_get_params_reports($votes);
+
+    return View::make(Config::get('view.backend.report-details-child'), $params);
+    //return View::make(Config::get('view.backend.head-grading-vote'), $params);
+  }
 
   public function getIndexYear()
   {
