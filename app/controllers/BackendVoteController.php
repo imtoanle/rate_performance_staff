@@ -513,6 +513,7 @@ class BackendVoteController extends BackendBaseController
 
   protected function _convert_specify_user_list($specify_user)
   {
+    if(empty($specify_user)) return;
     $dataArr = [];
     foreach ($specify_user as $user_string) {
       $user = explode(',', $user_string);

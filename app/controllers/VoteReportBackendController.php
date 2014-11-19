@@ -84,7 +84,7 @@ class VoteReportBackendController extends BackendBaseController
 
     $votes = Vote::where('id', $VoteId)->get();
     $vote = $votes->first();
-    if (!is_object($vote) || strpos($vote->specify_user, $pattern) === false)
+    if (!is_object($vote) || (strpos($vote->specify_user, $pattern) === false && !$currentUser->hasAnyAccess(['reports-management_period'])))
     {
       App::abort(500, 'Bạn không có quyền xem báo cáo này.');
     }
@@ -183,11 +183,18 @@ class VoteReportBackendController extends BackendBaseController
   {
     $voterArr = [];
     $maxVoterArr = [];
+    $voteByRole = [];
 
     foreach ($votes as $vote) {
+      $roleOfVote = [];
       foreach (json_decode($vote->voter) as $value) {
         $voterArr[$vote->id][$value->role_id][] = $value->user_id;
+        //
+        $roleOfVote[] = $value->role_id;
       }
+      $roleOfVote = array_unique($roleOfVote);
+      sort($roleOfVote);
+      $voteByRole[implode(',', $roleOfVote)][] = $vote;
 
       //find max voter
       $maxVoterArr[$vote->id] = 0;
@@ -199,7 +206,7 @@ class VoteReportBackendController extends BackendBaseController
       }
     }
 
-    return ['voterArr' => $voterArr, 'maxVoterArr' => $maxVoterArr, 'votes' => $votes];
+    return ['voterArr' => $voterArr, 'maxVoterArr' => $maxVoterArr, 'votes' => $votes, 'voteByRole' => $voteByRole];
   }
 
 }
