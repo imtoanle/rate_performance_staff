@@ -508,7 +508,8 @@ class BackendVoteController extends BackendBaseController
         'role_id' => $voter_role[$i],
       );
     }
-    return $dataArr;
+
+    return array_unique($dataArr, SORT_REGULAR);
   }
 
   protected function _convert_specify_user_list($specify_user)

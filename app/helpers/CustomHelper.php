@@ -103,13 +103,16 @@ class CustomHelper
 
   public static function get_users_from_voter_list($json_voter)
   {
+    /*
     if (!isset($json_voter)) return [];
     $decodeJson = json_decode($json_voter, true);
-    $arrayUserId = array();
+    $arrayUserId = [];
+    $roleUsersArray = [];
     foreach ($decodeJson as $value) {
       $arrayUserId[$value['user_id']] = $value['role_id'];
+      $roleUsersArray[$value['role_id']] = $value['user_id'];
     }
-    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_keys($arrayUserId))->get();
+    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', array_values($roleUsersArray))->get();
     $resultArr = [];
     $finalResult = [];
 
@@ -126,8 +129,39 @@ class CustomHelper
     foreach (array_unique(array_values($arrayUserId)) as $roleId) {
       $finalResult = array_merge($finalResult, $resultArr[$roleId]) ;
     }
+  */
 
-    return $finalResult;
+    /////////
+    if (!isset($json_voter)) return [];
+    $decodeJson = json_decode($json_voter, true);
+    $allUsersInVote = [];
+    $roleUsersArray = [];
+
+    foreach ($decodeJson as $value) {
+      $roleUsersArray[$value['role_id']][] = $value['user_id'];
+      $allUsersInVote[] = $value['user_id'];
+    }
+
+    $users = User::select('id', 'username', 'full_name', 'job_title')->whereIn('id', $allUsersInVote)->get();
+
+    $objectUsersInVote = [];
+    foreach ($users as $user) { $objectUsersInVote[$user->id] = $user; }
+
+    $resultArr = [];
+
+    foreach ($roleUsersArray as $roleId => $userIdArr) {
+      foreach ($userIdArr as $userId) {
+        $resultArr[] = [
+          'id' => $userId,
+          'username' => $objectUsersInVote[$userId]->username,
+          'full_name' => $objectUsersInVote[$userId]->full_name,
+          'job_name' => $objectUsersInVote[$userId]->job_titles_name(),
+          'role' => $roleId
+        ];
+      }
+    }
+  
+    return $resultArr;
   }
 
   public static function get_users_from_specify_users_list($json_specify_users)
@@ -169,13 +203,15 @@ class CustomHelper
 
   public static function get_role_current_user($voter, $userId)
   {
+    $resultArr = [];
     foreach (json_decode($voter, true) as $value) {
       if($value['user_id'] == $userId)
       {
         $role = Role::find($value['role_id']);
-        return is_object($role) ? $role->name : '';
+        $resultArr[$value['role_id']] = is_object($role) ? $role->name : '';
       }
     }
+    return $resultArr;
   }
 
   public static function get_mark_with_criteria($voteResult, $criteria_id)

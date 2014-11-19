@@ -37,22 +37,27 @@
 <div class="portlet-body panel-content-area">
   
 
-  <table class="table table-striped table-bordered table-hover">
-  <thead class="text-center">
-    <tr>
-      <th style="width: 5%">#</th>
-      <th style="width: 20%">{{trans('all.full-name')}}</th>
-      <th style="width: 25%">{{trans('all.job-title')}}</th>
-      <th style="width: 25%">{{trans('all.mark')}}</td>
-      <th style="width: 25%">{{trans('all.content-vote')}}</td>
-    </tr>
-  </thead>
-  <tbody>
+  
   @foreach($canVotes as $vote)
+    <?php $roleCurrentUser = CustomHelper::get_role_current_user($vote->voter, $currentUser->id); ?>
+    <table class="table table-striped table-bordered table-hover">
+    <thead class="text-center">
+      <tr>
+        <th style="width: 5%">#</th>
+        <th style="width: 20%">{{trans('all.full-name')}}</th>
+        <th style="width: 25%">{{trans('all.job-title')}}</th>
+        <th style="width: 25%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</td>
+        <th style="width: 25%">{{trans('all.content-vote')}}</td>
+      </tr>
+    </thead>
+    <tbody>
+    
     @if($vote->vote_group_id == $voteGroup->id)
     <tr class="vote-id-{{$vote->id}}">
-      <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}<br /><strong>{{trans('all.role')}}:</strong> {{CustomHelper::get_role_current_user($vote->voter, $currentUser->id)}}</td>
+      <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
+      @foreach($roleCurrentUser as $roleId => $roleName)
       <td>
+        <strong>{{trans('all.role')}}:</strong> {{$roleName}} <br />
         <form class="form-horizontal quick-ajax-form" data-form-name="mark">
           <div class="row">
             <div class="col-md-8">
@@ -66,6 +71,7 @@
           </div>
         </form>
       </td>
+      @endforeach
       <td>
         <form class="form-horizontal quick-ajax-form" data-form-name="content">
           <div class="row">
@@ -93,15 +99,17 @@
         <td>{{$number_in_department}}</td>
         <td>{{$user->full_name}}</td>
         <td>{{$user->job_titles_name()}}</td>
-        <td>
-          @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
-          <p>
-            {{$criteria->name}}: <a href="#" class="criteria-mark editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$criteria->id}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="{{$criteria->name}}">
-            {{CustomHelper::get_mark_with_criteria($voteResult, $criteria->id)}}
-            </a>
-          </p>
-          @endforeach
-        </td>
+        @foreach($roleCurrentUser as $roleId => $roleName)
+          <td>
+            @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
+            <p>
+              {{$criteria->name}}: <a href="#" class="criteria-mark editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$criteria->id}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="{{$criteria->name}}">
+              {{CustomHelper::get_mark_with_criteria($voteResult, $criteria->id)}}
+              </a>
+            </p>
+            @endforeach
+          </td>
+        @endforeach
         <td>
           <a href="#" class="vote-content editable" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
             {{CustomHelper::get_mark_with_criteria($voteResult, 'content')}}
@@ -111,9 +119,10 @@
       <?php $number_in_department++; ?>
       @endforeach
     @endif
-  @endforeach
-  </tbody>
+    </tbody>
   </table>
+  @endforeach
+  
 </div>
 </div>
 <!-- END EXAMPLE TABLE PORTLET-->
