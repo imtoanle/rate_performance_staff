@@ -69,9 +69,11 @@
       <?php $entitledVoteArr = explode(',', $vote->entitled_vote); ?>
       @foreach($departments as $department)
         <optgroup label="{{$department->name}}">
+          @if(isset($usersArray[$department->id]))
           @foreach($usersArray[$department->id] as $user)
             <option value="{{$user->id}}" {{in_array($user->id, $entitledVoteArr) ? 'selected' : ''}}>{{$user->username}} ({{$user->full_name}})</option>
           @endforeach
+          @endif
         </optgroup>
       @endforeach
     </select>
@@ -85,9 +87,11 @@
       <option></option>
       @foreach($departments as $department)
         <optgroup label="{{$department->name}}">
+          @if(isset($usersArray[$department->id]))
           @foreach($usersArray[$department->id] as $user)
             <option value="{{$user->id}}">{{$user->username}} ({{$user->full_name}})</option>
           @endforeach
+          @endif
         </optgroup>
       @endforeach
     </select>
