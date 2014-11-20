@@ -24,6 +24,7 @@
   </thead>
   <tbody>
   @foreach($votes as $vote)
+    <?php $voteResult = CustomHelper::get_array_vote_result_of_entitled_user($vote->id, $currentUser->id); ?>
     <tr>
       <td colspan="7"><strong>{{trans('all.department')}}:</strong> {{$vote->get_department_name()}}</td>
     </tr>
@@ -36,17 +37,17 @@
         <td>{{$user['job_name']}}</td>
         <td>{{CustomHelper::get_role_name($user['role'])}}</td>
         <td>
-          @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
-          <?php $mark = CustomHelper::get_mark_with_criteria($vote->id, $user['id'], $currentUser->id, $criteria->id) ?>
+          
+          <?php $currentVoterInRow = isset($voteResult[$user['id']]) ? $voteResult[$user['id']] : null; ?>
+          <?php $mark = CustomHelper::get_mark_with_role($currentVoterInRow, $user['role']) ?>
             @if(empty($mark))
             <strong class="color-danger">...</strong><br />
             @else
             <strong class="color-success">{{$mark}}</strong><br />
             @endif
-          @endforeach
         </td>
         <td>
-          <?php $content = CustomHelper::get_mark_with_criteria($vote->id, $user['id'], $currentUser->id, 'content'); ?>
+          <?php $content = CustomHelper::get_mark_with_role($currentVoterInRow, 'content'); ?>
           @if(empty($content))
           <strong class="color-danger">...</strong><br />
           @else
@@ -58,7 +59,7 @@
       @endforeach
       <tr>
         <td colspan="5" class="text-center"><strong>{{trans('all.final-mark')}}</strong></td>
-        <td colspan="2"></td>
+        <td colspan="2">{{CustomHelper::get_general_result($vote->id, $currentUser->id)}}</td>
       </tr>
   @endforeach
   </tbody>
