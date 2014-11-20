@@ -109,14 +109,14 @@ class BackendUserVoteController extends BackendBaseController
         ));
       if (empty($voteResult->mark))
       {
-        $criteriaMark[] = array('criteria_id' => Input::get('pk'), 'mark' => Input::get('value'));
+        $roleMark[] = array('role_id' => Input::get('pk'), 'mark' => Input::get('value'));
       }else
       {
         $decodeMark = json_decode($voteResult->mark, true);
         $checkExist = 0;
         $newMark = array();
           foreach ($decodeMark as $value) {
-            if ($value['criteria_id'] == Input::get('pk'))
+            if ($value['role_id'] == Input::get('pk'))
             {
               $value['mark'] = Input::get('value');
               $checkExist++;
@@ -125,11 +125,11 @@ class BackendUserVoteController extends BackendBaseController
           }
         if ($checkExist == 0)
         {
-          $newMark[] = array('criteria_id' => Input::get('pk'), 'mark' => Input::get('value'));
+          $newMark[] = array('role_id' => Input::get('pk'), 'mark' => Input::get('value'));
         }
-        $criteriaMark = $newMark;
+        $roleMark = $newMark;
       }
-      $voteResult->mark = json_encode($criteriaMark);
+      $voteResult->mark = json_encode($roleMark);
     }
     else if(Input::get('name') == 'content')
     {
@@ -165,38 +165,31 @@ class BackendUserVoteController extends BackendBaseController
 
         if(Input::get('mode') == 'mark')
         {
-          $criteriaIds = explode(',',$vote->criteria);
-          $criteriaMark = [];
+          $roleId = Input::get('role_id');
+          #$roleIds = explode(',',$vote->role);
+          $roleMark = [];
           if (empty($voteResult->mark))
           {
-            foreach ($criteriaIds as $criteriaId) {
-              $criteriaMark[] = array('criteria_id' => $criteriaId, 'mark' => Input::get('form_mark'));
-            }
+            $roleMark[] = array('role_id' => $roleId, 'mark' => Input::get('form_mark'));
           }else
           {
             $decodeMark = json_decode($voteResult->mark, true);
-
-            foreach ($criteriaIds as $criteriaId) {
-              $pattern = '/"criteria_id":"'.$criteriaId.'"/';
-              $pattern1 = '/"criteria_id":"'.$criteriaId.'","mark":""/';
-              if (!preg_match($pattern, $voteResult->mark))
+            $detectExist = false;
+            foreach ($decodeMark as &$value) {
+              if($value['role_id'] == $roleId)
               {
-                $newMark = array('criteria_id' => $criteriaId, 'mark' => Input::get('form_mark'));
-                $decodeMark = array_merge($decodeMark, $newMark);
-              }else if(preg_match($pattern1, $voteResult->mark))
-              {
-                foreach ($decodeMark as &$value) {
-                  if($value['criteria_id'] == $criteriaId)
-                  {
-                    $value['mark'] = Input::get('form_mark');
-                  }
-                }
+                $value['mark'] = Input::get('form_mark');
+                $detectExist = true;
               }
             }
-              
-            $criteriaMark = $decodeMark;
+            if ($detectExist == false)
+            {
+              $decodeMark[] = ['role_id' => $roleId, 'mark' => Input::get('form_mark')];
+            }
+            
+            $roleMark = $decodeMark;
           }
-          $voteResult->mark = json_encode($criteriaMark);
+          $voteResult->mark = json_encode($roleMark);
         }else
         {
           if(empty($voteResult->content))

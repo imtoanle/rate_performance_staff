@@ -39,20 +39,21 @@
 
   
   @foreach($canVotes as $vote)
+    @if($vote->vote_group_id == $voteGroup->id)
     <?php $roleCurrentUser = CustomHelper::get_role_current_user($vote->voter, $currentUser->id); ?>
     <table class="table table-striped table-bordered table-hover">
     <thead class="text-center">
       <tr>
         <th style="width: 5%">#</th>
-        <th style="width: 20%">{{trans('all.full-name')}}</th>
-        <th style="width: 25%">{{trans('all.job-title')}}</th>
-        <th style="width: 25%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</td>
-        <th style="width: 25%">{{trans('all.content-vote')}}</td>
+        <th style="width: 15%">{{trans('all.full-name')}}</th>
+        <th style="width: 15%">{{trans('all.job-title')}}</th>
+        <th style="width: 50%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</td>
+        <th style="width: 15%">{{trans('all.content-vote')}}</td>
       </tr>
     </thead>
     <tbody>
     
-    @if($vote->vote_group_id == $voteGroup->id)
+    
     <tr class="vote-id-{{$vote->id}}">
       <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
       @foreach($roleCurrentUser as $roleId => $roleName)
@@ -60,28 +61,30 @@
         <strong>{{trans('all.role')}}:</strong> {{$roleName}} <br />
         <form class="form-horizontal quick-ajax-form" data-form-name="mark">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <input type="text" name="form_mark" class="form-control" placeholder="Nhập điểm">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-12">
               <input type="hidden" name="vote_id" value="{{$vote->id}}" />
               <input type="hidden" name="voter_id" value="{{$currentUser->id}}" />
-              <button type="submit" class="btn btn-info"><i class="fa fa-check"></i> {{trans('all.save')}}</button>
+              <input type="hidden" name="role_id" value="{{$roleId}}" />
+              <button type="submit" class="btn btn-info col-md-12"><i class="fa fa-check"></i> {{trans('all.save')}}</button>
             </div>
           </div>
         </form>
       </td>
       @endforeach
       <td>
+        <br />
         <form class="form-horizontal quick-ajax-form" data-form-name="content">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <input type="text" name="form_content" class="form-control" placeholder="Nhập nội dung">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-12">
               <input type="hidden" name="vote_id" value="{{$vote->id}}" />
               <input type="hidden" name="voter_id" value="{{$currentUser->id}}" />
-              <button type="submit" class="btn btn-info"><i class="fa fa-check"></i> {{trans('all.save')}}</button>
+              <button type="submit" class="btn btn-info col-md-12"><i class="fa fa-check"></i> {{trans('all.save')}}</button>
             </div>
           </div>
         </form>
@@ -101,26 +104,25 @@
         <td>{{$user->job_titles_name()}}</td>
         @foreach($roleCurrentUser as $roleId => $roleName)
           <td>
-            @foreach(CustomHelper::get_criterias_from_id(explode(',', $vote->criteria)) as $criteria)
             <p>
-              {{$criteria->name}}: <a href="#" class="criteria-mark editable" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$criteria->id}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="{{$criteria->name}}">
-              {{CustomHelper::get_mark_with_criteria($voteResult, $criteria->id)}}
+              <a href="#" class="role-mark editable role-id-{{$roleId}}" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$roleId}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="Nhập điểm">
+              {{CustomHelper::get_mark_with_role($voteResult, $roleId)}}
               </a>
             </p>
-            @endforeach
           </td>
         @endforeach
         <td>
           <a href="#" class="vote-content editable" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
-            {{CustomHelper::get_mark_with_criteria($voteResult, 'content')}}
+            {{CustomHelper::get_mark_with_role($voteResult, 'content')}}
           </a>
         </td>
       </tr>
       <?php $number_in_department++; ?>
       @endforeach
-    @endif
+    
     </tbody>
   </table>
+  @endif
   @endforeach
   
 </div>
@@ -132,14 +134,14 @@
 
 <script>
 jQuery(document).ready(function() {   
-  $('a.criteria-mark, a.vote-content').on('hidden', function(e, reason){
+  $('a.role-mark, a.vote-content').on('hidden', function(e, reason){
     
         if(reason === 'save' || reason === 'nochange') {
 
           var $next;
-          if($(this).hasClass('criteria-mark'))
+          if($(this).hasClass('role-mark'))
           {
-            $next = $(this).closest('p').next().find('a.criteria-mark');
+            $next = $(this).closest('td').next().find('a.role-mark');
             if (!$next.length)
             {
               $next = $(this).closest('td').next().find('a.vote-content');
@@ -148,12 +150,12 @@ jQuery(document).ready(function() {
           {
             if($(this).closest('tr').is(':last-child'))
             {
-              $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.criteria-mark:first');
+              $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.role-mark:first');
             }else
             {
               next_tr = $(this).closest('tr').next();
 
-              while(!next_tr.find('p a.criteria-mark').length)
+              while(!next_tr.find('p a.role-mark').length)
               {
                 if(!next_tr.is(':last-child'))
                 {
@@ -164,12 +166,12 @@ jQuery(document).ready(function() {
                 }
               }
 
-              if(next_tr.find('p a.criteria-mark').length)
+              if(next_tr.find('p a.role-mark').length)
               {
-                $next = next_tr.find('p a.criteria-mark:first');
+                $next = next_tr.find('p a.role-mark:first');
               }else
               {
-                $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.criteria-mark:first');
+                $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.role-mark:first');
               }
             }
           }
@@ -181,7 +183,7 @@ jQuery(document).ready(function() {
         }
    });
 
-  $('a.criteria-mark').editable({
+  $('a.role-mark').editable({
     params: function (params) {  //params already contain `name`, `value` and `pk`
       params.vote = $(this).data('vote');
       params.voter = $(this).data('voter');
@@ -254,7 +256,8 @@ jQuery(document).ready(function() {
     tr_avaiable = $(this).closest('tbody').find('tr:not(:first):not(.hide)');
     if($(this).data('form-name') == 'mark')
     {
-      a_mark_unvote = tr_avaiable.find('a.criteria-mark.editable-empty');
+      role_id = $(this).find('input[name=role_id]').val();
+      a_mark_unvote = tr_avaiable.find('a.role-mark.editable-empty.role-id-'+role_id);
       var entitled_user = [];
       a_mark_unvote.each(function(){
         entitled_user.push($(this).data('entitled-vote'));

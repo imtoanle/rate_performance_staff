@@ -16,18 +16,18 @@
     <thead>
       <tr>
         <th rowspan="3">STT</th>
-        <th rowspan="3">{{trans('all.full-name')}}</th>
+        <th rowspnar="3">{{trans('all.full-name')}}</th>
         <th rowspan="3">{{trans('all.job-title')}}</th>
         <th colspan="{{count($voterArr[$voteArray[0]->id])*3}}">{{trans('all.participant')}}</th>
         <th rowspan="3">{{trans('all.general-results')}}</th>
       </tr>
       <tr>
-        @foreach($voterArr[$voteArray[0]->id] as $key => $value)
-          <td colspan="3">{{CustomHelper::get_role_name($key)}}</td>  
+        @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
+          <td colspan="3">{{CustomHelper::get_role_name($roleId)}}</td>  
         @endforeach
       </tr>
       <tr>
-        @foreach($voterArr[$voteArray[0]->id] as $key => $value)
+        @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
           <td>{{trans('all.voter')}}</td>
           <td>{{trans('all.mark')}}</td>
           <td>{{trans('all.content')}}</td>
@@ -57,16 +57,14 @@
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$countEntitled}}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
-      @foreach($voterArr[$voteArray[0]->id] as $key => $value)
-        <?php $firstVoterInRow = isset($voteResult[$voterArr[$vote->id][$key][0]]) ? $voteResult[$voterArr[$vote->id][$key][0]] : null; ?>
+      @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
+        <?php $firstVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][0]]) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
       
-      <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$key][0]) }}</td>
+      <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
       <td>
-        @foreach(explode(',', $vote->criteria) as $criteriaId)
-          {{ CustomHelper::get_mark_with_criteria($firstVoterInRow, $criteriaId) }} <br />
-        @endforeach
+        {{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId) }} <br />
       </td>
-      <td>{{ CustomHelper::get_mark_with_criteria($firstVoterInRow, 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, 'content') }}</td>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">
         @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
@@ -80,16 +78,14 @@
     </tr>
     @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
     <tr>
-      @foreach($voterArr[$voteArray[0]->id] as $key => $value)
-        @if(isset($voterArr[$vote->id][$key][$i]))
-          <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$key][$i]]) ? $voteResult[$voterArr[$vote->id][$key][$i]] : null; ?>
-          <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$key][$i]) }}</td>
+      @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
+        @if(isset($voterArr[$vote->id][$roleId][$i]))
+          <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
+          <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
           <td>
-          @foreach(explode(',', $vote->criteria) as $criteriaId)
-            {{ CustomHelper::get_mark_with_criteria($currentVoterInRow, $criteriaId) }} <br />
-          @endforeach
+            {{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId) }} <br />
           </td>
-          <td>{{ CustomHelper::get_mark_with_criteria($currentVoterInRow, 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, 'content') }}</td>
         @else
           <td colspan="3"></td>
         @endif

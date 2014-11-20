@@ -196,9 +196,9 @@ class CustomHelper
     return User::whereIn('id', $userIds)->get();
   }
 
-  public static function get_criterias_from_id($criteriaIds)
+  public static function get_roles_from_id($roleIds)
   {
-    return Criteria::whereIn('id', $criteriaIds)->get();
+    return Criteria::whereIn('id', $roleIds)->get();
   }
 
   public static function get_role_current_user($voter, $userId)
@@ -214,11 +214,11 @@ class CustomHelper
     return $resultArr;
   }
 
-  public static function get_mark_with_criteria($voteResult, $criteria_id)
+  public static function get_mark_with_role($voteResult, $role_id)
   {
     if (isset($voteResult))
     {
-      if ($criteria_id == 'content')
+      if ($role_id == 'content')
       {
         return $voteResult->content;
       }else
@@ -227,7 +227,7 @@ class CustomHelper
         {
           foreach(json_decode($voteResult->mark, true) as $mark)
           {
-            if($mark['criteria_id'] == $criteria_id) return $mark['mark'];
+            if($mark['role_id'] == $role_id) return $mark['mark'];
           }
         }
       }
@@ -270,13 +270,13 @@ class CustomHelper
     $minArr = [];
     $voteResults = VoteResult::select('mark')->where('vote_id', $voteId)->where('entitled_vote_id', $entitledUser)->get();
     foreach ($voteResults as $result) {
-      $minArr[] = CustomHelper::find_min_mark_from_criterias($result->mark);
+      $minArr[] = CustomHelper::find_min_mark_from_roles($result->mark);
     }
     if(empty($minArr)) return '';
     return min($minArr);
   }
 
-  public static function find_min_mark_from_criterias($markString)
+  public static function find_min_mark_from_roles($markString)
   {
     if (empty($markString))
     {
