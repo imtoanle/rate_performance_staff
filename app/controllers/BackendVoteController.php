@@ -206,14 +206,8 @@ class BackendVoteController extends BackendBaseController
 
   public function getCreate()
   {
-    $users = User::all();
-    $usersArray = [];
-    foreach ($users as $user) {
-      $departmentId = isset($user->department_id) ? $user->department_id : 0;
-      $usersArray[$departmentId][] = $user;
-    }
-
-    $params['usersArray'] = $usersArray;
+    $usersByDepartment = User::all()->groupBy('department_id');
+    $params['usersArray'] = $usersByDepartment;
     $params['jobTitles'] = JobTitle::all();
     $params['departments'] = Department::all();
     $params['criterias'] = Criteria::all();
@@ -283,14 +277,9 @@ class BackendVoteController extends BackendBaseController
       App::abort(500, trans('all.messages.cant-edit-closed-vote'));
     }
     
-    $users = User::all();
-    $usersArray = [];
-    foreach ($users as $user) {
-      $departmentId = isset($user->department_id) ? $user->department_id : 0;
-      $usersArray[$departmentId][] = $user;
-    }
-
-    $params['usersArray'] = $usersArray;
+    $usersByDepartment = User::all()->groupBy('department_id');
+    $params['usersArray'] = $usersByDepartment;
+    
     $params['vote'] = $vote;
     $params['voteDepartment'] = $vote->department;
     $params['jobTitles'] = JobTitle::all();

@@ -166,7 +166,7 @@ class CustomHelper
 
   public static function get_users_from_specify_users_list($json_specify_users)
   {
-    if (!isset($json_specify_users) || empty($json_specify_users)) return [];
+    if (!isset($json_specify_users) || empty($json_specify_users) || $json_specify_users == 'null') return [];
 
     $decodeJson = json_decode($json_specify_users, true);
     $arrayUserId = array();
