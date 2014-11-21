@@ -26,4 +26,9 @@ class VoteResult extends Model
      */
     protected $guarded = array('id');
 
+    public function vote()
+  {
+      return $this->belongsTo('Vote');
+  }
+
 }

@@ -47,8 +47,8 @@
         <th style="width: 5%">#</th>
         <th style="width: 15%">{{trans('all.full-name')}}</th>
         <th style="width: 15%">{{trans('all.job-title')}}</th>
-        <th style="width: 50%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</td>
-        <th style="width: 15%">{{trans('all.content-vote')}}</td>
+        <th style="width: 50%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</th>
+        <th style="width: 15%">{{trans('all.content-vote')}}</th>
       </tr>
     </thead>
     <tbody>

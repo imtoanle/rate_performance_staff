@@ -195,6 +195,7 @@ return array(
 
     //user-vote
     'listUserVotes' => 'user-votes-management_list',
+    'resultSpecifyUserVotes' => 'user-votes-management_list',
     'quickUserVote' => 'user-votes-management_quick',
     'postQuickUserVote' => 'user-votes-management_quick',
     'postQuickMultiUserVote' => 'user-votes-management_quick',

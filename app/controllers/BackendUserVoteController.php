@@ -258,7 +258,78 @@ class BackendUserVoteController extends BackendBaseController
         ->make();
     }
 
-    $this->layout = View::make(Config::get('view.backend.user-votes-index'));
+    $params['departments'] = Department::all();
+    $params['usersByDepartment'] = User::all()->groupBy('department_id');
+    $this->layout = View::make(Config::get('view.backend.user-votes-index'), $params);
+  }
+
+  public function getSpecifyUser()
+  {
+    if (Request::Ajax())
+    {
+      
+      $currentUser = Sentry::getUser();
+      $specifyVoter = Input::has('voter_id') ? Input::get('voter_id') : -1;
+      $voteResults = VoteResult::select('vote_id', 'content', 'mark', 'vote_groups.title', 'departments.name as department_name', 'mark as result')->whereVoterId($specifyVoter)->whereEntitledVoteId($currentUser->id)
+        ->leftJoin('votes', 'vote_results.vote_id', '=', 'votes.id')
+        ->leftJoin('departments', 'departments.id', '=', 'votes.department_id')
+        ->leftJoin('vote_groups', 'vote_groups.id', '=', 'votes.vote_group_id');
+    return Datatables::of($voteResults)
+      ->remove_column('vote_id', 'content', 'mark')
+      ->edit_column('result', function($row){
+        $html = '';
+        foreach (json_decode($row->mark) as $value) {
+          if(empty($value->role_id))
+          {
+            $roleName = '';
+          }else
+          {
+            $role = Role::find($value->role_id);
+            $roleName = is_object($role) ? $role->name : '';
+          }
+          $html .= '<strong>Vai trò: </strong> '.$roleName.'<br />';
+          $html .= '<strong>Điểm: </strong> '.$value->mark.'<br />';
+          $html .= '<strong>Nội dung: </strong> '.$row->content.'<br />';
+          $html .= '------------------------------<br />';
+        }
+        return $html;
+      })
+      /*
+      ->edit_column('vote_group_title', function($row){
+        $vote = $row->vote;
+        if(is_object($vote)) $voteGroup = $vote->voteGroup;
+        else return '';
+        $voteGroupTitle = is_object($voteGroup) ? $voteGroup->title : '';
+        return $voteGroupTitle;
+      })
+      ->edit_column('department', function($row){
+        $vote = $row->vote
+      })
+      */
+    /*
+      ->remove_column('vote_group_id', 'department_id')
+      ->edit_column('vote_code', function($row){
+        return $row->voteGroup->vote_code;
+      })
+      ->edit_column('title', function($row){
+        return $row->voteGroup->title;
+      })
+      ->edit_column('department_name', function($row){
+        return $row->department->name;
+      })
+      ->edit_column('actions', '
+          <a href="{{route(\'detailHeadGradingUserVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.grading\')}}</a>
+        ')
+        */
+      #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
+      ->make();
+    
+    }
+
+    $currentUser = Sentry::getUser();
+    $voteResults = VoteResult::whereVoterId($specifyVoter->id)->whereEntitledVoteId($currentUser->id)->get();
+    $params['specifyVoter'] = $specifyVoter;
+    return View::make(Config::get('view.backend.user-vote-specify'), $params);
   }
 
   public function getViewMyMark($voteGroupId)
