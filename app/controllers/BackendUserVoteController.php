@@ -94,6 +94,17 @@ class BackendUserVoteController extends BackendBaseController
 
   public function postQuickVote()
   {
+    $voteResult = VoteResult::firstOrNew(array(
+        'vote_id' => Input::get('vote'),
+        'voter_id' => Input::get('voter'),
+        'entitled_vote_id' => Input::get('entitled_vote'),
+        ));
+
+    $params = [
+      'roleId' => Input::get('pk'),
+      'value' => Input::get('value'),
+    ];
+
     if(Input::get('name') == 'mark')
     {
       $validator = new BackendValidator(Input::all(), 'vote-result-mark');
@@ -101,44 +112,11 @@ class BackendUserVoteController extends BackendBaseController
       {
           return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
       }
-
-      $voteResult = VoteResult::firstOrNew(array(
-        'vote_id' => Input::get('vote'),
-        'voter_id' => Input::get('voter'),
-        'entitled_vote_id' => Input::get('entitled_vote'),
-        ));
-      if (empty($voteResult->mark))
-      {
-        $roleMark[] = array('role_id' => Input::get('pk'), 'mark' => Input::get('value'));
-      }else
-      {
-        $decodeMark = json_decode($voteResult->mark, true);
-        $checkExist = 0;
-        $newMark = array();
-          foreach ($decodeMark as $value) {
-            if ($value['role_id'] == Input::get('pk'))
-            {
-              $value['mark'] = Input::get('value');
-              $checkExist++;
-            }
-            $newMark[] = $value;
-          }
-        if ($checkExist == 0)
-        {
-          $newMark[] = array('role_id' => Input::get('pk'), 'mark' => Input::get('value'));
-        }
-        $roleMark = $newMark;
-      }
-      $voteResult->mark = json_encode($roleMark);
+      $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $params);
     }
     else if(Input::get('name') == 'content')
     {
-      $voteResult = VoteResult::firstOrNew(array(
-        'vote_id' => Input::get('vote'),
-        'voter_id' => Input::get('voter'),
-        'entitled_vote_id' => Input::get('entitled_vote'),
-        ));
-      $voteResult->content = Input::get('value');
+      $voteResult->content = $this->_UpdateDataVoteResult($voteResult->content, $params, true);
     }
 
     if($voteResult->save())
@@ -165,37 +143,12 @@ class BackendUserVoteController extends BackendBaseController
 
         if(Input::get('mode') == 'mark')
         {
-          $roleId = Input::get('role_id');
-          #$roleIds = explode(',',$vote->role);
-          $roleMark = [];
-          if (empty($voteResult->mark))
-          {
-            $roleMark[] = array('role_id' => $roleId, 'mark' => Input::get('form_mark'));
-          }else
-          {
-            $decodeMark = json_decode($voteResult->mark, true);
-            $detectExist = false;
-            foreach ($decodeMark as &$value) {
-              if($value['role_id'] == $roleId)
-              {
-                $value['mark'] = Input::get('form_mark');
-                $detectExist = true;
-              }
-            }
-            if ($detectExist == false)
-            {
-              $decodeMark[] = ['role_id' => $roleId, 'mark' => Input::get('form_mark')];
-            }
-            
-            $roleMark = $decodeMark;
-          }
-          $voteResult->mark = json_encode($roleMark);
+          $params = ['roleId' => Input::get('role_id'), 'value' => Input::get('form_mark')];
+          $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $params);
         }else
         {
-          if(empty($voteResult->content))
-          {
-            $voteResult->content = Input::get('form_content');
-          }
+          $params = ['roleId' => Input::get('role_id'), 'value' => Input::get('form_content')];
+          $voteResult->content = $this->_UpdateDataVoteResult($voteResult->content, $params, true);
         }
         $voteResult->save();
       }
@@ -458,5 +411,33 @@ class BackendUserVoteController extends BackendBaseController
     }
 
     return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
+  }
+
+
+  protected function _UpdateDataVoteResult($jsonString, $params, $content=false)
+  {
+    $dataType = $content ? 'content' : 'mark';
+    if (empty($jsonString))
+    {
+      $roleData[] = ['role_id' => $params['roleId'], $dataType => $params['value']];
+    }else
+    {
+      $decodeData = json_decode($jsonString, true);
+      $checkExist = false;
+      foreach ($decodeData as &$value) {
+        if($value['role_id'] == $params['roleId'])
+        {
+          $value[$dataType] = $params['value'];
+          $checkExist = true;
+        }
+      }
+      if ($checkExist == false)
+      {
+        $decodeData[] = ['role_id' => $params['roleId'], $dataType => $params['value']];
+      }
+
+      $roleData = $decodeData;
+    }
+    return json_encode($roleData);
   }
 }

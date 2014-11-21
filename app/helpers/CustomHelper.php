@@ -214,25 +214,18 @@ class CustomHelper
     return $resultArr;
   }
 
-  public static function get_mark_with_role($voteResult, $role_id)
+  public static function get_mark_with_role($voteResult, $role_id, $content=false)
   {
-    if (isset($voteResult))
+    $dataType = $content ? 'content' : 'mark';
+    if (isset($voteResult) && !empty($voteResult[$dataType]))
     {
-      if ($role_id == 'content')
+      $voteResult = $voteResult->toArray();
+      $decodeData = empty($voteResult[$dataType]) ? [] : json_decode($voteResult[$dataType], true);
+      foreach($decodeData as $data)
       {
-        return $voteResult->content;
-      }else
-      {
-        if (!empty($voteResult->mark))
-        {
-          foreach(json_decode($voteResult->mark, true) as $mark)
-          {
-            if($mark['role_id'] == $role_id) return $mark['mark'];
-          }
-        }
+        if($data['role_id'] == $role_id) return $data[$dataType];
       }
     }
-    #return '';
   }
 
   public static function get_role_name($roleId)

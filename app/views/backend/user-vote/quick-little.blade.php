@@ -40,15 +40,19 @@
   
   @foreach($canVotes as $vote)
     @if($vote->vote_group_id == $voteGroup->id)
-    <?php $roleCurrentUser = CustomHelper::get_role_current_user($vote->voter, $currentUser->id); ?>
+    <?php $roleCurrentUser = CustomHelper::get_role_current_user($vote->voter, $currentUser->id);
+    $headerWidth = 65/count($roleCurrentUser)/2; ?>
+
     <table class="table table-striped table-bordered table-hover">
     <thead class="text-center">
       <tr>
         <th style="width: 5%">#</th>
         <th style="width: 15%">{{trans('all.full-name')}}</th>
         <th style="width: 15%">{{trans('all.job-title')}}</th>
-        <th style="width: 50%" colspan="{{count($roleCurrentUser)}}">{{trans('all.mark')}}</th>
-        <th style="width: 15%">{{trans('all.content-vote')}}</th>
+        @foreach($roleCurrentUser as $roleId => $roleName)
+        <th style="width: {{$headerWidth}}%">{{trans('all.mark')}}</th>
+        <th style="width: {{$headerWidth}}%">{{trans('all.content-vote')}}</th>
+        @endforeach
       </tr>
     </thead>
     <tbody>
@@ -57,8 +61,7 @@
     <tr class="vote-id-{{$vote->id}}">
       <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
       @foreach($roleCurrentUser as $roleId => $roleName)
-      <td>
-        <strong>{{trans('all.role')}}:</strong> {{$roleName}} <br />
+      <td class="text-center">
         <form class="form-horizontal quick-ajax-form" data-form-name="mark">
           <div class="row">
             <div class="col-md-12">
@@ -72,10 +75,9 @@
             </div>
           </div>
         </form>
+        {{$roleName}}
       </td>
-      @endforeach
       <td>
-        <br />
         <form class="form-horizontal quick-ajax-form" data-form-name="content">
           <div class="row">
             <div class="col-md-12">
@@ -84,11 +86,13 @@
             <div class="col-md-12">
               <input type="hidden" name="vote_id" value="{{$vote->id}}" />
               <input type="hidden" name="voter_id" value="{{$currentUser->id}}" />
+              <input type="hidden" name="role_id" value="{{$roleId}}" />
               <button type="submit" class="btn btn-info col-md-12"><i class="fa fa-check"></i> {{trans('all.save')}}</button>
             </div>
           </div>
         </form>
       </td>
+      @endforeach
     </tr>
       <?php $number_in_department = 1; ?>
       @foreach(CustomHelper::get_users_from_user_id_list(explode(',', $vote->entitled_vote)) as $user)
@@ -110,12 +114,12 @@
               </a>
             </p>
           </td>
+          <td>
+            <a href="#" class="vote-content editable role-id-{{$roleId}}" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="{{$roleId}}" data-title="{{trans('all.input-vote-content')}}">
+              {{CustomHelper::get_mark_with_role($voteResult, $roleId, true)}}
+            </a>
+          </td>
         @endforeach
-        <td>
-          <a href="#" class="vote-content editable" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="1" data-title="{{trans('all.input-vote-content')}}">
-            {{CustomHelper::get_mark_with_role($voteResult, 'content')}}
-          </a>
-        </td>
       </tr>
       <?php $number_in_department++; ?>
       @endforeach
@@ -153,25 +157,29 @@ jQuery(document).ready(function() {
               $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.role-mark:first');
             }else
             {
-              next_tr = $(this).closest('tr').next();
-
-              while(!next_tr.find('p a.role-mark').length)
+              $next = $(this).closest('td').next().find('a.role-mark');
+              if (!$next.length)
               {
-                if(!next_tr.is(':last-child'))
+                next_tr = $(this).closest('tr').next();
+  
+                while(!next_tr.find('p a.role-mark').length)
                 {
-                  next_tr = next_tr.next();
+                  if(!next_tr.is(':last-child'))
+                  {
+                    next_tr = next_tr.next();
+                  }else
+                  {
+                    break;
+                  }
+                }
+  
+                if(next_tr.find('p a.role-mark').length)
+                {
+                  $next = next_tr.find('p a.role-mark:first');
                 }else
                 {
-                  break;
+                  $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.role-mark:first');
                 }
-              }
-
-              if(next_tr.find('p a.role-mark').length)
-              {
-                $next = next_tr.find('p a.role-mark:first');
-              }else
-              {
-                $next = $(this).closest('div.portlet').next().find('div.portlet-body table tbody tr p a.role-mark:first');
               }
             }
           }
@@ -276,7 +284,8 @@ jQuery(document).ready(function() {
       }
     }else
     {
-      a_content_unvote = tr_avaiable.find('a.vote-content.editable-empty');
+      role_id = $(this).find('input[name=role_id]').val();
+      a_content_unvote = tr_avaiable.find('a.vote-content.editable-empty.role-id-'+role_id);
       var entitled_user = [];
       a_content_unvote.each(function(){
         entitled_user.push($(this).data('entitled-vote'));

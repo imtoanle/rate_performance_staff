@@ -47,7 +47,7 @@
             @endif
         </td>
         <td>
-          <?php $content = CustomHelper::get_mark_with_role($currentVoterInRow, 'content'); ?>
+          <?php $content = CustomHelper::get_mark_with_role($currentVoterInRow, $user['role'], true); ?>
           @if(empty($content))
           <strong class="color-danger">...</strong><br />
           @else

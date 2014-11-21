@@ -12,24 +12,26 @@
 <div class="portlet-body panel-content-area">
   @foreach($votes as $vote)
     @if($vote->vote_group_id == $voteGroup->id)
-    <?php $voteRoles = CustomHelper::get_role_current_user($vote->voter, $currentUser->id); ?>
+    <?php $voteRoles = CustomHelper::get_role_current_user($vote->voter, $currentUser->id);
+    $headerWidth = 65/count($voteRoles)/2; ?>
     <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVote')}}">
     <thead class="text-center">
       <tr>
         <th style="width: 5%">#</th>
         <th style="width: 15%">{{trans('all.full-name')}}</th>
         <th style="width: 15%">{{trans('all.job-title')}}</th>
-        <th style="width: 50%" colspan="{{count($voteRoles)}}">{{trans('all.mark')}}</td>
-        <th style="width: 15%">{{trans('all.content-vote')}}</td>
+        @foreach($voteRoles as $roleId => $roleName)
+        <th style="width: {{$headerWidth}}%">{{trans('all.mark')}}</th>
+        <th style="width: {{$headerWidth}}%">{{trans('all.content-vote')}}</th>
+        @endforeach
       </tr>
     </thead>
     <tbody>
     <tr>
       <td colspan="3"><strong>{{trans('all.department')}}:</strong> {{is_object($vote->department) ? $vote->department->name : ''}}</td>
       @foreach($voteRoles as $roleId => $roleName)
-        <td><strong>{{trans('all.role')}}:</strong> {{$roleName}}</td>
+        <td colspan="2"><strong>{{trans('all.role')}}:</strong> {{$roleName}}</td>
       @endforeach
-      <td></td>
     </tr>
       <?php $number_in_department = 1; ?>
       @foreach(CustomHelper::get_users_from_user_id_list(explode(',', $vote->entitled_vote)) as $user)
@@ -47,10 +49,10 @@
             {{CustomHelper::get_mark_with_role($voteResult, $roleId)}}
           </p>
         </td>
-        @endforeach
         <td>
-          {{CustomHelper::get_mark_with_role($voteResult, 'content')}}
+          {{CustomHelper::get_mark_with_role($voteResult, $roleId, true)}}
         </td>
+        @endforeach
       </tr>
       <?php $number_in_department++; ?>
       @endforeach

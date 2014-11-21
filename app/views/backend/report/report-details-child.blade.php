@@ -16,7 +16,7 @@
     <thead>
       <tr>
         <th rowspan="3">STT</th>
-        <th rowspnar="3">{{trans('all.full-name')}}</th>
+        <th rowspan="3">{{trans('all.full-name')}}</th>
         <th rowspan="3">{{trans('all.job-title')}}</th>
         <th colspan="{{count($voterArr[$voteArray[0]->id])*3}}">{{trans('all.participant')}}</th>
         <th rowspan="3">{{trans('all.general-results')}}</th>
@@ -64,7 +64,7 @@
       <td>
         {{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId) }} <br />
       </td>
-      <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, 'content') }}</td>
+      <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId, true) }}</td>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">
         @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
@@ -85,7 +85,7 @@
           <td>
             {{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId) }} <br />
           </td>
-          <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, 'content') }}</td>
+          <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId, true) }}</td>
         @else
           <td colspan="3"></td>
         @endif
