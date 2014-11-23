@@ -98,6 +98,25 @@
 
 <script>
 jQuery(document).ready(function() {
+
+  $('table tbody').on('click', 'a.export-excel', function(e){
+
+    var xhr = $.ajax({
+      type: 'GET',
+      cache: false,
+      async: false,
+      url: '{{route('exportExcelReport')}}',
+      data: 'item_id='+$(this).data('item-id')+'&item_type='+$(this).data('item-type'),
+    });
+
+    var uri = $("table").btechco_excelexport({
+      datatype: $datatype.Html
+      , html: xhr.responseText
+      , returnUri: true
+    });
+    $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+  });
+
   $('#confirm-delete').on('show.bs.modal', function(e) {
     $('td.details_votes_of_group tr.canDeleteVote').removeClass('canDeleteVote');
     $(this).find('.danger').attr('href', $(e.relatedTarget).data('href'));

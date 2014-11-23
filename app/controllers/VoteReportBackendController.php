@@ -34,6 +34,7 @@ class VoteReportBackendController extends BackendBaseController
         })
         ->edit_column('actions', '
             <a href="{{route(\'reportPeriodVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.report\')}}</a>
+            <a class="export-excel btn btn-default btn-xs purple" data-file-name="{{$vote_code}}-{{$actions}}.xlsx" data-item-type="vote-group" data-item-id="{{$actions}}"><i class="fa fa-search"></i> Xuất Excel</a>
           ')
         #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
         ->make();
@@ -54,11 +55,14 @@ class VoteReportBackendController extends BackendBaseController
               $statusHtml = '<span class="label label-default">'.trans("all.closed").'</span>';
               break;
           }
-          $actionsHtml = '<a href="'.route('reportPeriodVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> '.trans('all.report').'</a>';
-            $department = $vote->department;
+          $department = $vote->department;
+          $departmentName = is_object($department) ? $department->name : '';
+          $actionsHtml = '<a href="'.route('reportPeriodVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> '.trans('all.report').'</a>
+          <a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$vote->id.'.xlsx" data-vote-type="vote" data-item-id="'.$vote->id.'"><i class="fa fa-search"></i> Xuất Excel</a>';
+            
 
           $votesArr[] = array(
-            'department' => is_object($department) ? $department->name : '',
+            'department' => $departmentName,
             'created_at' => $vote->created_at->format('d-m-Y'),
             'status' => $statusHtml,
             'actions' => $actionsHtml,
@@ -156,9 +160,9 @@ class VoteReportBackendController extends BackendBaseController
         $currentUser = Sentry::getUser();
         $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
         
-        $votes = Vote::select(array('vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("specify_user regexp '".$pattern."'")->whereNotIn('status', [Config::get('variable.vote-status.newly')]);
+        $votes = Vote::select(array('id', 'vote_group_id', 'department_id', 'id as vote_code', 'id as title', 'id as department_name', 'id as actions'))->whereRaw("specify_user regexp '".$pattern."'")->whereNotIn('status', [Config::get('variable.vote-status.newly')]);
       return Datatables::of($votes)
-        ->remove_column('vote_group_id', 'department_id')
+        ->remove_column('id', 'vote_group_id', 'department_id')
         ->edit_column('vote_code', function($row){
           return $row->voteGroup->vote_code;
         })
@@ -168,15 +172,36 @@ class VoteReportBackendController extends BackendBaseController
         ->edit_column('department_name', function($row){
           return $row->department->name;
         })
-        ->edit_column('actions', '
-            <a href="{{route(\'reportPeriodVote\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xem báo cáo</a>
-          ')
+        ->edit_column('actions', function($row){
+          $departmentName = $row->department->name;
+          $html = '<a href="'.route('reportPeriodVote', $row->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xem báo cáo</a>';
+          $html .= '<a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$row->id.'.xls" data-vote-type="vote" data-item-id="'.$row->id.'"><i class="fa fa-search"></i> Xuất Excel</a>';
+          return $html;
+        })
         #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
         ->make();
       }
     }
     
     return View::make(Config::get('view.backend.report-by-specify-user'));
+  }
+
+  public function getExportExcel()
+  {
+    $itemId = Input::get('item_id');
+    $itemType = Input::get('item_type');
+
+    $votes = ($itemType == 'vote-group') ? Vote::whereVoteGroupId($itemId)->get() : Vote::where('id', $itemId)->get();
+    $firstVote = $votes->first();
+    $currentUser = Sentry::getUser();
+    $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
+    if (!is_object($firstVote) || (strpos($firstVote->specify_user, $pattern) === false && !$currentUser->hasAnyAccess(['reports-management_period'])))
+    {
+      App::abort(500, 'Bạn không có quyền xem báo cáo này.');
+    }
+    $params = $this->_get_params_reports($votes);
+
+    return View::make(Config::get('view.backend.report-export-excel'), $params)->render();
   }
 
   protected function _get_params_reports($votes)

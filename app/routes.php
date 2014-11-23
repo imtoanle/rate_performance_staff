@@ -447,7 +447,11 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'as' => 'listReportSpecifyUser',
       'uses' => 'VoteReportBackendController@getSpecifyUser')
   );
-
+  //export excel
+  Route::get('report-vote/export-excel', array(
+      'as' => 'exportExcelReport',
+      'uses' => 'VoteReportBackendController@getExportExcel')
+  );
   
 
   

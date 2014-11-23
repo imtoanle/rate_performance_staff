@@ -50,6 +50,24 @@ jQuery(document).ready(function() {
   //jQuery('#ajax-data-table_wrapper .dataTables_length select').select2(); // initialize select2 dropdown
   jQuery('.dataTables_filter input').addClass("form-control input-medium"); // modify table search input
   jQuery('.dataTables_length select').addClass("form-control input-xsmall"); // modify table per page dropdown
+
+  $('table tbody').on('click', 'a.export-excel', function(e){
+
+    var xhr = $.ajax({
+      type: 'GET',
+      cache: false,
+      async: false,
+      url: '{{route('exportExcelReport')}}',
+      data: 'item_id='+$(this).data('item-id')+'&item_type='+$(this).data('item-type'),
+    });
+
+    var uri = $("table").btechco_excelexport({
+      datatype: $datatype.Html
+      , html: xhr.responseText
+      , returnUri: true
+    });
+    $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+  });
 });
 </script>
 @stop

@@ -37,7 +37,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('reportPeriodVote', 'reportPeriodVoteGroup')))
+@if(in_array(Route::currentRouteName(), array('reportPeriodVote', 'reportPeriodVoteGroup', 'listReportPeriod', 'listReportSpecifyUser')))
 <script type="text/javascript" src="{{asset('assets/plugins/jquery.battatech.excelexport.min.js')}}"></script>
 @endif
 

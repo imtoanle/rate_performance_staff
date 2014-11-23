@@ -125,6 +125,7 @@ return array(
     'report-by-year-total-departments' => 'backend.report.year-total-departments',
 
     'report-by-specify-user' => 'backend.report.specify-user-index',
+    'report-export-excel' => 'backend.report.export-excel',
 
 
 

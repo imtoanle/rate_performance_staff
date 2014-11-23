@@ -215,7 +215,9 @@ return array(
     'reportYearVote' => 'reports-management_year',
     'reportYearVoteGroup' => 'reports-management_year',
 
-    'listReportSpecifyUser' => 'reports-management_specify-user'
+    'listReportSpecifyUser' => 'reports-management_specify-user',
+    //export excel
+    'exportExcelReport' => 'reports-management_export-excel'
   ),
 
 );
