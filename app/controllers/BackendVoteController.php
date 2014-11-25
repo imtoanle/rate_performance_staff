@@ -272,7 +272,7 @@ class BackendVoteController extends BackendBaseController
   public function getShow($voteId)
   {
     $vote = Vote::find($voteId);
-    if (in_array($vote->status, [Config::get('variable.vote-status.closed'), Config::get('variable.vote-status.opened')]))
+    if (in_array($vote->status, [Config::get('variable.vote-status.closed')]))
     {
       App::abort(500, trans('all.messages.cant-edit-closed-vote'));
     }
