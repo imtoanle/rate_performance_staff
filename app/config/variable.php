@@ -180,7 +180,7 @@ return array(
     'postUnlockVote' => 'votes-management_open',
     'postCloseVote' => 'votes-management_close',
     'closeVoteGroup' => 'votes-management_close',
-    'putVote' => 'votes-management_edit-vote',
+    'putVote' => 'votes-management_edit',
     'putVoteGroup' => 'votes-management_edit',
     'copyVoteGroup' => 'votes-management_edit',
     'postCopyVoteGroup' => 'votes-management_edit',
