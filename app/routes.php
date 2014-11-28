@@ -72,12 +72,12 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserController@delete')
   );
 
-  Route::post('user/new', array(
+  Route::post('users/new', array(
       'as' => 'newUserPost',
       'uses' => 'BackendUserController@postCreate')
   );
 
-  Route::get('user/new', array(
+  Route::get('users/new', array(
       'as' => 'newUser',
       'uses' => 'BackendUserController@getCreate')
   );

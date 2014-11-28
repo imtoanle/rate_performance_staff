@@ -209,13 +209,17 @@ class BackendUserController extends BackendBaseController
         }
       }
 
-        // get alls users
-        $params['users'] = Sentry::findAllUsers();
-        
+      // get alls users
+      $params['users'] = Sentry::findAllUsers();
+      
+      if(Request::Ajax())
+        return View::make(Config::get('view.backend.users-little-index'), $params);
+      else
+        return View::make(Config::get('view.backend.users-index'), $params);
 
-        $this->layout = View::make(Config::get('view.backend.users-index'), $params);
-        //$this->layout->title = trans('syntara::users.titles.list');
-        //$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.users');
+      //$this->layout = View::make(Config::get('view.backend.users-index'), $params);
+      //$this->layout->title = trans('syntara::users.titles.list');
+      //$this->layout->breadcrumb = Config::get('syntara::breadcrumbs.users');
     }
 
     /**
@@ -308,7 +312,7 @@ class BackendUserController extends BackendBaseController
             return Response::json(array('userCreated' => false, 'message' => trans('all.messages.user-email-exists'), 'messageType' => 'error'));
         }
 
-        return Response::json(array('userCreated' => true, 'redirectUrl' => URL::route('listUsers')));
+        return Response::json(array('userCreated' => true,  'message' => 'Tạo thành viên thành công.', 'messageType' => 'success', 'redirectUrl' => URL::route('listUsers')));
     }
 
     /**

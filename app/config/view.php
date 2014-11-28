@@ -75,6 +75,7 @@ return array(
 
     // users
     'users-index' => 'backend.user.index-user',
+    'users-little-index' => 'backend.user.index-user-little',
     'users-import' => 'backend.user.import-user',
     'users-list' => 'backend.user.list-users',
     'user-create' => 'backend.user.new-user',

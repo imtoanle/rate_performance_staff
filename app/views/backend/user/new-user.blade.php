@@ -3,7 +3,7 @@
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-12">
     <!-- BEGIN ALERTS PORTLET-->
     <div class="portlet">
       <div class="portlet-title">
@@ -134,22 +134,6 @@
       </div>
     </div>
     <!-- END ALERTS PORTLET-->
-  </div>
-
-  <div class="col-md-6">
-    <!-- BEGIN EXAMPLE TABLE PORTLET-->
-    <div class="portlet box light-grey">
-    <div class="portlet-title">
-      <div class="caption">
-        <i class="fa fa-globe"></i>{{trans('all.user-infomation')}}
-      </div>
-    </div>
-    <div class="portlet-body" id="users-in-group">
-
-     
-    </div>
-    </div>
-    <!-- END EXAMPLE TABLE PORTLET-->
   </div>
 </div>
 
