@@ -15,14 +15,14 @@
   </div>
 </div>
 <div class="portlet-body panel-content-area">
-  <table class="table table-bordered table-striped table-condensed flip-content" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
+  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
   <thead>
   <tr>
     <th></th>
     <th>{{trans('all.vote-code')}}</th>
     <th>{{trans('all.title')}}</th>
-    <th>{{trans('all.status')}}</th>
-    <th>{{trans('all.actions')}}</th>
+    <th style="width:15%">{{trans('all.status')}}</th>
+    <th style="width:20%">{{trans('all.actions')}}</th>
   </tr>
   </thead>
   <tbody>

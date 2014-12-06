@@ -4,7 +4,7 @@
 
 
 <div class="row ">
-  <div class="col-md-6 col-sm-6">
+  <div class="col-md-8">
     <div class="portlet">
       <div class="portlet-title">
         <div class="caption">
@@ -15,19 +15,23 @@
         <table class="table table-striped table-bordered table-hover">
           <thead>
           <tr>
-            <th>Mã đánh giá</th>
-            <th>Tiêu đề</th>
-            <th>Phòng ban</th>
-            <th>Công cụ</th>
+            <th style="width: 25%">Mã đánh giá</th>
+            <th style="width: 35%">Tiêu đề</th>
+            <th style="width: 20%">Phòng ban</th>
+            <th style="width: 10%">Công cụ</th>
           </tr>
           </thead>
           <tbody>
-          @foreach($canVoter as $vote)
-          <?php $voteGroup = $vote->voteGroup; ?>
+          @foreach($canVoter->groupBy('vote_group_id') as $voteGroupId => $votes)
+          <?php $voteGroup = VoteGroup::find($voteGroupId); ?>
           <tr>
             <td>{{$voteGroup->vote_code}}</td>
             <td>{{$voteGroup->title}}</td>
-            <td>{{$vote->department->name}}</td>
+            <td>
+              @foreach($votes as $vote)
+                {{$vote->department->name}} <br />
+              @endforeach
+            </td>
             <td>
               <a href="{{route('quickUserVote')}}" class="btn btn-default btn-xs">Chấm điểm</a>
             </td>
@@ -38,45 +42,47 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-sm-6">
-    <div class="portlet tasks-widget">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="fa fa-bell"></i>Thông báo
-        </div>
+  <div class="col-md-4">
+  <div class="portlet tasks-widget">
+    <div class="portlet-title">
+      <div class="caption">
+        <i class="fa fa-bell"></i>Thông báo
       </div>
-      <div class="portlet-body">
-        <div class="scroller" style="overflow: hidden; width: auto; height: 250px;" data-always-visible="1" data-rail-visible="0">
-          <ul class="feeds">
-            @foreach($notifys as $notify)
-            <li>
-              <div class="col1">
-                <div class="cont">
-                  <div class="cont-col1">
-                    <div class="label label-sm label-success">
-                      <i class="fa fa-bell"></i>
-                    </div>
+    </div>
+    <div class="portlet-body">
+      <div class="scroller" style="overflow: hidden; width: auto; height: 250px;" data-always-visible="1" data-rail-visible="0">
+        <ul class="feeds">
+          @foreach($notifys as $notify)
+          <li>
+            <div class="col1">
+              <div class="cont">
+                <div class="cont-col1">
+                  <div class="label label-sm label-success">
+                    <i class="fa fa-bell"></i>
                   </div>
-                  <div class="cont-col2">
-                    <div class="desc">
-                       {{$notify->content}}
-                      </span>
-                    </div>
+                </div>
+                <div class="cont-col2">
+                  <div class="desc">
+                     {{$notify->content}}
                   </div>
                 </div>
               </div>
-              <div class="col2">
-                <div class="date">
-                   {{$notify->created_at->diffForHumans()}}
-                </div>
+            </div>
+            <div class="col2">
+              <div class="date">
+                 {{$notify->created_at->diffForHumans()}}
               </div>
-            </li>
-            @endforeach
-          </ul>
-        </div>
+            </div>
+          </li>
+          @endforeach
+        </ul>
       </div>
     </div>
   </div>
+</div>  
+</div>
+<div class="row">
+
 </div>
 <div class="clearfix">
 
