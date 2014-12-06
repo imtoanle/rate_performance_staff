@@ -28,11 +28,11 @@
     <th class="table-checkbox">
       <input type="checkbox" class="group-checkable" data-set="#ajax-data-table .checkboxes"/>
     </th>
-    <th></th>
+    <th style="width:5%"></th>
     <th>{{trans('all.vote-code')}}</th>
-    <th style="width:20%">{{trans('all.title')}}</th>
-    <th>{{trans('all.status')}}</th>
-    <th>{{trans('all.actions')}}</th>
+    <th>{{trans('all.title')}}</th>
+    <th style="width:10%">{{trans('all.status')}}</th>
+    <th style="width:25%">{{trans('all.actions')}}</th>
   </tr>
   </thead>
   <tbody>
