@@ -367,6 +367,7 @@ jQuery(document).ready(function() {
   $('#select2_voter').select2({
     placeholder: 'Chọn người chấm điểm',
     allowClear: true,
+    minimumInputLength: 4, 
   });
 
 /*

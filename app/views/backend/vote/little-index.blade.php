@@ -1,3 +1,18 @@
+<div class="note note-info">
+  <h4 class="block">Ý nghĩa trạng thái</h4>
+  <p>
+     <span class="label label-primary">Mới tạo</span> Phiếu đánh giá vừa được tạo, có thể chỉnh sửa, xóa.
+  </p>
+  <p>
+    <span class="label label-success">Đang đánh giá</span> Phiếu đánh giá đã được mở để nhân viên bắt đầu cho điểm, chỉ có thể sửa.
+  </p>
+  <p>
+    <span class="label label-default">Đã chốt</span> Phiếu đánh giá đã được đóng để vào điểm, không thể sửa, xóa.
+  </p>
+</div>
+
+
+
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet box light-grey">
 <div class="portlet-title">
