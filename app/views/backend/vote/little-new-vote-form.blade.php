@@ -1,4 +1,14 @@
-<?php $vote = isset($vote) ? $vote : new Vote; ?>
+<?php 
+if(isset($vote))
+{
+  $vote = $vote;
+}elseif(isset($copyVote))
+{
+  $vote = new Vote;
+  $vote->voter = $copyVote->voter;
+}else
+  {$vote = new Vote;}
+?>
 <!--
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.head-department')}}</label>

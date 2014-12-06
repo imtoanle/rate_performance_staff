@@ -104,6 +104,7 @@ class BackendVoteController extends BackendBaseController
           $actionsHtml = '<a href="'.route('listPersionsVote', $vote->id).'" class="btn btn-default btn-xs purple ajax-modal"><i class="fa fa-search"></i> '.trans('all.view').'</a> ';
           $actionsHtml .= $actionVote;
           $actionsHtml .= ' <a href="'.route('showVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-edit"></i> '.trans('all.edit').'</a>
+            <a href="'.route('newVote').'/?vote_group_id='.$vote->vote_group_id.'&amp;copy_vote_id='.$vote->id.'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-copy"></i> '.trans('all.copy').'</a>
             <a class="btn btn-default btn-xs black" data-href="'.route('deleteVote').'" data-item-id="'.$vote->id.'" data-toggle="modal" data-target="#confirm-delete" href="#"><i class="fa fa-trash-o"></i> '.trans('all.delete').'</a>';
 
           $department = $vote->department;
@@ -215,6 +216,10 @@ class BackendVoteController extends BackendBaseController
     if (Input::has('vote_group_id'))
     {
       $params['vote_group_id'] = Input::get('vote_group_id');  
+      if (Input::has('copy_vote_id'))
+      {
+        $params['copyVote'] = Vote::find(Input::get('copy_vote_id'));
+      }
       $views = Config::get('view.backend.only-vote-create');
     }else
     {
