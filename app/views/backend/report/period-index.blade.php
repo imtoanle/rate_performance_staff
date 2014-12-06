@@ -15,7 +15,7 @@
   </div>
 </div>
 <div class="portlet-body panel-content-area">
-  <table class="table table-striped table-bordered table-hover" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
+  <table class="table table-bordered table-striped table-condensed flip-content" id="ajax-data-table" action-delete="{{route('deleteVoteGroup')}}">
   <thead>
   <tr>
     <th></th>

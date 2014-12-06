@@ -1,5 +1,7 @@
 @foreach($voteByRole as $voteArray)
 <?php $voteGroup = $voteArray[0]->voteGroup; ?>
+
+@if(Route::currentRouteName() != 'exportExcelReport')
 <!-- BEGIN EXAMPLE TABLE PORTLET-->
 <div class="portlet box light-grey vote-group-id-{{$voteGroup->id}}" id="vote-id-{{$voteArray[0]->id}}">
 <div class="portlet-title">
@@ -11,7 +13,7 @@
   </div>
 </div>
 <div class="portlet-body panel-content-area">
-
+@endif
   <table class="table table-striped table-bordered table-hover" id="vote-data-table-{{$voteArray[0]->id}}" action-delete="{{route('deleteVoteGroup')}}">
     <thead>
       <tr>
@@ -98,7 +100,11 @@
   @endforeach
   </tbody>
   </table>
+
+@if(Route::currentRouteName() != 'exportExcelReport')  
   </div>
   </div>
+@endif
+<br /><br /><br />
 @endforeach
 
