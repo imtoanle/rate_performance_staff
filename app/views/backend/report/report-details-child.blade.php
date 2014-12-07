@@ -52,23 +52,35 @@
   foreach ($entitledUsers as $user) {
     $entitledUsersArray[$user->id] = $user;
   }
+
+  $extendRolePattern = '"role_id":"'.Config::get('variable.extend-member-role').'"';
+  $extendRolevoteResults = VoteResult::where('vote_id', $vote->id)->whereRaw("mark regexp '".$extendRolePattern."'")->get();
+  $extendRoleVoterArr = [];
+  foreach ($extendRolevoteResults as $voteResult) {
+    $extendRoleVoterArr[$voteResult->voter_id][] = $voteResult->entitled_vote_id;
+  }
   ?>
 
   @foreach($entitledArray as $userId)
   <?php $entitledUser = $entitledUsersArray[$userId]; ?>
-    <?php $voteResult = CustomHelper::get_array_vote_result_of_entitled_user($vote->id, $entitledUser->id); ?>
+    <?php
+      $voteResult = CustomHelper::get_array_vote_result_of_entitled_user($vote->id, $entitledUser->id);
+    ?>
     <tr>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$countEntitled}}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
         <?php $firstVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][0]]) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
-      
-      <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
-      <td>
-        {{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId) }} <br />
-      </td>
-      <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId, true) }}</td>
+        <?php if ($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][0]])) ) { ?>
+          <td colspan="3"></td>
+        <?php } else { ?>
+          <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
+          <td>
+            {{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId) }} <br />
+          </td>
+          <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId, true) }}</td>
+        <?php } ?>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">
         @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
@@ -85,11 +97,16 @@
       @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
         @if(isset($voterArr[$vote->id][$roleId][$i]))
           <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
-          <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
-          <td>
-            {{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId) }} <br />
-          </td>
-          <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId, true) }}</td>
+
+          <?php if ($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]]))) { ?>
+            <td colspan="3"></td>
+          <?php } else { ?>
+            <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
+            <td>
+              {{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId) }} <br />
+            </td>
+            <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId, true) }}</td>
+          <?php } ?>
         @else
           <td colspan="3"></td>
         @endif
