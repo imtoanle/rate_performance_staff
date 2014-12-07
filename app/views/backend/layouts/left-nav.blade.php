@@ -38,7 +38,7 @@
   @endif
 
   @if ( $currentUser->hasAnyAccess(['user-votes-management_list', 'user-votes-management_quick', 'user-votes-management_head-grading']) )
-  <?php $arrRoutes = array('listUserVotes', 'quickUserVote', 'headGradingUserVote'); ?>
+  <?php $arrRoutes = array('listUserVotes', 'quickUserVote', 'headGradingUserVote', 'anyUserVote'); ?>
   {{ BackendSideBar::create_root_open(trans('all.grading'), $arrRoutes, 'fa fa-paint-brush')}}  
     @if ( $currentUser->hasAnyAccess(['user-votes-management_list']) )
       {{ BackendSideBar::create_node(trans('all.view-vote'), 'listUserVotes', 'fa fa-signal') }}      
@@ -50,6 +50,10 @@
 
     @if ( $currentUser->hasAnyAccess(['user-votes-management_head-grading']) )
       {{ BackendSideBar::create_node(trans('all.head-of-grading'), 'headGradingUserVote', 'fa fa-legal') }}  
+    @endif
+
+    @if ( $currentUser->hasAnyAccess(['user-votes-management_quick']) )
+      {{ BackendSideBar::create_node('Chấm điểm tự do', 'anyUserVote', 'fa fa-legal') }}  
     @endif
   {{ BackendSideBar::create_root_close() }} 
   @endif

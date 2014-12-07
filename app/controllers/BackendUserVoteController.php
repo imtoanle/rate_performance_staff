@@ -33,6 +33,85 @@ class BackendUserVoteController extends BackendBaseController
       return View::make(Config::get('view.backend.user-votes-quick'), $params);
   }
 
+  public function getAnyVote()
+  {
+    $openedVote = Vote::where('status', Config::get("variable.vote-status.opened"))->get()->groupBy('vote_group_id');
+    If(Request::Ajax())
+    {
+      $voteGroupId = Input::get('vote_group_id');
+      $results = [];
+
+      switch (Input::get('request_mode')) {
+        case 'department':
+          foreach($openedVote[$voteGroupId] as $vote)
+          {
+            $department = $vote->department;
+            $departmentName = is_object($department) ? $department->name : '';
+            $results[] = [
+              'vote_id' => $vote->id,
+              'department_name' => $departmentName,
+            ];
+          }
+          break;
+        case 'entitled_user':
+          $voteId = Input::get('vote_id');
+          $vote = Vote::findOrNew($voteId);
+          $users = User::whereRaw('id IN ('.$vote->entitled_vote.')')->get();
+          foreach ($users as $user) {
+            $results[] = [
+            'id' => $user->id,
+            'username' => $user->username,
+            'full_name' => $user->full_name,
+            ];
+          }
+          break;
+        
+        default:
+          # code...
+          break;
+      }
+      return Response::json(array('results' => $results));
+    }
+    $params['openedVote'] = $openedVote;
+    return View::make(Config::get('view.backend.user-vote-any'), $params);
+  }
+
+  public function postAnyVote()
+  {
+    $validator = new BackendValidator(Input::all(), 'any-user-vote');
+    if(!$validator->passes())
+    {
+        return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
+    }
+    $currentUser = Sentry::getUser();
+    $voteResult = VoteResult::firstOrNew(array(
+        'vote_id' => Input::get('vote'),
+        'voter_id' => $currentUser->id,
+        'entitled_vote_id' => Input::get('entitled_user'),
+        ));
+
+    $roleId = (string)Config::get('variable.extend-member-role');
+    $markParams = [
+      'roleId' => $roleId,
+      'value' => Input::get('mark'),
+    ];
+    $contentParams = [
+      'roleId' => $roleId,
+      'value' => Input::get('content'),
+    ];
+
+    $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $markParams);
+    $voteResult->content = $this->_UpdateDataVoteResult($voteResult->content, $contentParams, true);
+
+    if($voteResult->save())
+    {
+      return Response::json(array('actionStatus' => true, 'message' => 'Chấm điểm nhân viên thành công.', 'messageType' => 'success'));
+    }else
+    {
+      return Response::json(array('actionStatus' => true, 'message' => 'Chấm điểm nhân viên thất bại.', 'messageType' => 'error'));
+    }
+  }
+
   public function getIndexHeadGradingVote()
   {
     if (Request::Ajax())

@@ -31,6 +31,11 @@ return array(
         array('', trans('all.quick-vote'), route('quickUserVote'), 'last'),
         ),
 
+    'anyUserVote' => array(
+        array('fa fa-paint-brush',trans('all.grading'), ''),
+        array('', 'Chấm điểm tự do', route('anyUserVote'), 'last'),
+        ),
+
     'headGradingUserVote' => array(
         array('fa fa-paint-brush',trans('all.grading'), ''),
         array('', trans('all.head-of-grading'), route('headGradingUserVote'), 'last'),

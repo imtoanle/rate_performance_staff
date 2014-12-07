@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'extend-member-role' => 28,
     'type-of-person' => array(
       'voter' => 1,
       'view-report' => 2,
@@ -197,6 +198,8 @@ return array(
     'listUserVotes' => 'user-votes-management_list',
     'resultSpecifyUserVotes' => 'user-votes-management_list',
     'quickUserVote' => 'user-votes-management_quick',
+    'anyUserVote' => 'user-votes-management_quick',
+    'postAnyUserVote' => 'user-votes-management_quick',
     'postQuickUserVote' => 'user-votes-management_quick',
     'postQuickMultiUserVote' => 'user-votes-management_quick',
     'headGradingUserVote' => 'user-votes-management_head-grading',

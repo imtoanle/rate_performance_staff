@@ -375,6 +375,16 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendUserVoteController@getSpecifyUser')
   );
 
+  Route::get('user-votes/any-vote', array(
+      'as' => 'anyUserVote',
+      'uses' => 'BackendUserVoteController@getAnyVote')
+  );
+
+  Route::post('user-votes/any-vote', array(
+      'as' => 'postAnyUserVote',
+      'uses' => 'BackendUserVoteController@postAnyVote')
+  );
+
   Route::get('user-votes/quick-vote', array(
       'as' => 'quickUserVote',
       'uses' => 'BackendUserVoteController@getQuickVote')

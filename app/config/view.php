@@ -107,6 +107,7 @@ return array(
     //votes
     'user-votes-index' => 'backend.user-vote.index',
     'user-votes-quick' => 'backend.user-vote.quick',
+    'user-vote-any' => 'backend.user-vote.any',
     'user-votes-quick-little' => 'backend.user-vote.quick-little',
     'head-grading-index' => 'backend.user-vote.head-grading-index',
     'head-grading-vote' => 'backend.user-vote.head-grading-vote',

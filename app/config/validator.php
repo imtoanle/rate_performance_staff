@@ -52,6 +52,13 @@ return array(
   ),
   
   'backend' => array(
+    'any-user-vote' => array(
+      'vote_group' => 'required',
+      'vote' => 'required',
+      'entitled_user' => 'required',
+      'mark' => 'required|integer|between:0,100',
+      'content' => 'required',
+      ),
     'usergroup-update' => array(
       'group_name' => 'required|min:3',
       ),

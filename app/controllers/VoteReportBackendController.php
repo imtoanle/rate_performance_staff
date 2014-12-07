@@ -212,10 +212,19 @@ class VoteReportBackendController extends BackendBaseController
 
     foreach ($votes as $vote) {
       $roleOfVote = [];
-      foreach (json_decode($vote->voter) as $value) {
-        $voterArr[$vote->id][$value->role_id][] = $value->user_id;
+      $json_voter = json_decode($vote->voter, true);
+      $pattern = '"role_id":"'.Config::get('variable.extend-member-role').'"';
+      $voteResults = VoteResult::where('vote_id', $vote->id)->whereRaw("mark regexp '".$pattern."'")->get();
+      foreach ($voteResults as $voteResult) {
+        $json_voter[] = [
+          'role_id' => Config::get('variable.extend-member-role'),
+          'user_id' => $voteResult->voter_id,
+        ];
+      }
+      foreach ($json_voter as $value) {
+        $voterArr[$vote->id][$value['role_id']][] = $value['user_id'];
         //
-        $roleOfVote[] = $value->role_id;
+        $roleOfVote[] = $value['role_id'];
       }
       $roleOfVote = array_unique($roleOfVote);
       sort($roleOfVote);

@@ -8,9 +8,11 @@
   <div class="caption">
     <i class="fa fa-list"></i>{{$voteGroup->title}}
   </div>
+  <!--
   <div class="actions">
     <a data-file-name="{{camel_case($voteGroup->vote_code)}}-{{$voteArray[0]->id}}.xls" data-vote-id="{{$voteArray[0]->id}}" class="btn btn-info export-excel"><i class="fa fa-pencil"></i> {{trans('all.export-excel')}}</a>
   </div>
+  -->
 </div>
 <div class="portlet-body panel-content-area">
 @endif
