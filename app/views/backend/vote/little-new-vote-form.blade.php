@@ -21,7 +21,7 @@ if(isset($vote))
 <div class="form-group">
   <label class="col-md-3 control-label">{{trans('all.expiration-date')}}</label>
   <div class="col-md-8">
-    <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="+0d">
+    <div class="input-group input-medium date date-picker" data-date-format="dd-mm-yyyy" data-date-start-date="-1y">
       <input type="text" name="expiration_date" class="form-control" value="{{ isset($vote->expired_at) ? date('d-m-Y', strtotime($vote->expired_at)) : '' }}" readonly>
       <span class="input-group-btn">
         <button class="btn btn-info" type="button"><i class="fa fa-calendar"></i></button>

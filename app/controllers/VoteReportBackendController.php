@@ -231,9 +231,9 @@ class VoteReportBackendController extends BackendBaseController
       $voteByRole[implode(',', $roleOfVote)][] = $vote;
 
       //find max voter
-      $maxVoterArr[$vote->id] = 0;
-      foreach ($voterArr[$vote->id] as $value) {
-        if(count($value) > $maxVoterArr[$vote->id])
+      $maxVoterArr[$vote->id] = count($voteResults->groupBy('entitled_vote_id'));
+      foreach ($voterArr[$vote->id] as $roleId => $value) {
+        if((count($value) > $maxVoterArr[$vote->id]) && $roleId != Config::get('variable.extend-member-role'))
         {
           $maxVoterArr[$vote->id] = count($value);
         }
