@@ -110,13 +110,13 @@
           <td>
             <p>
               <a href="#" class="role-mark editable role-id-{{$roleId}}" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$roleId}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="Nhập điểm">
-              {{CustomHelper::get_mark_with_role($voteResult, $roleId)}}
+              {{CustomHelper::get_mark_with_role(['voteResult' => $voteResult, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}
               </a>
             </p>
           </td>
           <td>
             <a href="#" class="vote-content editable role-id-{{$roleId}}" data-type="textarea" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-name="content" data-placement="top" data-pk="{{$roleId}}" data-title="{{trans('all.input-vote-content')}}">
-              {{CustomHelper::get_mark_with_role($voteResult, $roleId, true)}}
+              {{CustomHelper::get_mark_with_role(['voteResult' => $voteResult, 'roleId' => $roleId, 'content' => true])}}
             </a>
           </td>
         @endforeach
@@ -273,11 +273,20 @@ jQuery(document).ready(function() {
 
       if (entitled_user.length > 0)
       {
-        ajax_call_custom('POST', '{{route('postQuickMultiUserVote')}}', 'mode=mark&entitled_user=' + entitled_user + '&' + $(this).serialize(), function(result){
-          toastr[result.messageType](result.message);
+        var xhr = $.ajax({
+          type: 'POST',
+          cache: false,
+          async: false,
+          url: '{{route('postQuickMultiUserVote')}}',
+          data: 'mode=mark&entitled_user=' + entitled_user + '&' + $(this).serialize(),
         });
-        mark_value = $(this).find('input[name=form_mark]').val();
-        a_mark_unvote.editable('setValue', mark_value);
+        result = xhr.responseJSON;
+        toastr[result.messageType](result.message);
+        if(result.actionStatus !== false)
+        {
+          mark_value = $(this).find('input[name=form_mark]').val();
+          a_mark_unvote.editable('setValue', mark_value);
+        }
       }else
       {
         toastr['warning']('Không có điểm nào chưa nhập !');

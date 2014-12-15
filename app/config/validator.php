@@ -56,7 +56,6 @@ return array(
       'vote_group' => 'required',
       'vote' => 'required',
       'entitled_user' => 'required',
-      'mark' => 'required|integer|between:0,100',
       'content' => 'required',
       ),
     'usergroup-update' => array(
@@ -155,7 +154,15 @@ return array(
       ),
 
     'vote-result-mark' => array(
-      'value' => 'integer|between:0,100'
+      'value' => 'integer|between:0,100',
+      'form_mark' => 'integer|between:0,100',
+      'mark' => 'integer|between:0,100'
+
+      ),
+    'vote-result-rating-type' => array(
+      'value' => 'in:A+,A,B,C,D',
+      'form_mark' => 'in:A+,A,B,C,D',
+      'mark' => 'in:A+,A,B,C,D'
       ),
 
     'user-create' => array(

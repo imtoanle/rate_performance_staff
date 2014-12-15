@@ -214,8 +214,13 @@ class CustomHelper
     return $resultArr;
   }
 
-  public static function get_mark_with_role($voteResult, $role_id, $content=false)
+  public static function get_mark_with_role($params)
   {
+    $content = isset($params['content']) ? $params['content'] : '';
+    $voteResult = $params['voteResult'];
+    $role_id = $params['roleId'];
+    $ratingType = isset($params['ratingType']) ? $params['ratingType'] : '';
+
     $dataType = $content ? 'content' : 'mark';
     if (isset($voteResult) && !empty($voteResult[$dataType]))
     {
@@ -223,7 +228,11 @@ class CustomHelper
       $decodeData = empty($voteResult[$dataType]) ? [] : json_decode($voteResult[$dataType], true);
       foreach($decodeData as $data)
       {
-        if($data['role_id'] == $role_id) return $data[$dataType];
+        if($data['role_id'] == $role_id)
+        {
+          if (!isset($data[$dataType])) return;
+          return $ratingType ? array_flip(Config::get('variable.rating-type'))[(int)$data[$dataType]] : $data[$dataType];
+        }
       }
     }
   }
@@ -246,16 +255,17 @@ class CustomHelper
     return User::whereRaw("job_title regexp '".$pattern."'")->get();
   }
 
-  public static function get_general_result($voteId, $entitledUser)
+  public static function get_general_result($voteId, $entitledUser, $ratingVote)
   {
     $result = GeneralResult::where('user_id', $entitledUser)->where('vote_id', $voteId)->first();
     if(is_object($result))
     {
-      return $result->mark;
+      $general_mark = $result->mark;
     }else
     {
-      return CustomHelper::get_min_general_results($voteId, $entitledUser);
+      $general_mark = CustomHelper::get_min_general_results($voteId, $entitledUser);
     }
+    return ($ratingVote) ? array_flip(Config::get('variable.rating-type'))[(int)$general_mark] : $general_mark;
   }
 
   public static function get_min_general_results($voteId, $entitledUser)

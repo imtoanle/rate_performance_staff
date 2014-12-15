@@ -83,6 +83,15 @@ class BackendUserVoteController extends BackendBaseController
     {
         return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
     }
+
+    $vote = Vote::find(Input::get('vote'));
+    $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+    $validator = new BackendValidator(Input::all(), $validation);
+    if(!$validator->passes())
+    {
+        return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
+    }
+      
     $currentUser = Sentry::getUser();
     $voteResult = VoteResult::firstOrNew(array(
         'vote_id' => Input::get('vote'),
@@ -94,11 +103,13 @@ class BackendUserVoteController extends BackendBaseController
     $markParams = [
       'roleId' => $roleId,
       'value' => Input::get('mark'),
+      'rating_type' => $vote->rating_type,
     ];
     $contentParams = [
       'roleId' => $roleId,
       'value' => Input::get('content'),
     ];
+
 
     $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $markParams);
     $voteResult->content = $this->_UpdateDataVoteResult($voteResult->content, $contentParams, true);
@@ -148,7 +159,9 @@ class BackendUserVoteController extends BackendBaseController
   {
     if(Input::get('name') == 'mark')
     {
-      $validator = new BackendValidator(Input::all(), 'vote-result-mark');
+      $vote = Vote::find(Input::get('vote'));
+      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validator = new BackendValidator(Input::all(), $validation);
       if(!$validator->passes())
       {
           return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
@@ -186,11 +199,14 @@ class BackendUserVoteController extends BackendBaseController
 
     if(Input::get('name') == 'mark')
     {
-      $validator = new BackendValidator(Input::all(), 'vote-result-mark');
+      $vote = Vote::find(Input::get('vote'));
+      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validator = new BackendValidator(Input::all(), $validation);
       if(!$validator->passes())
       {
           return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
       }
+      $params['rating_type'] = $vote->rating_type;
       $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $params);
     }
     else if(Input::get('name') == 'content')
@@ -210,6 +226,17 @@ class BackendUserVoteController extends BackendBaseController
   public function postQuickMultiVote()
   {
     $vote = Vote::find(Input::get('vote_id'));
+
+    if(Input::get('mode') == 'mark')
+    {
+      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validator = new BackendValidator(Input::all(), $validation);
+      if(!$validator->passes())
+      {
+        return Response::json(array('actionStatus' => false, 'message' => array_values($validator->getErrors())[0], 'messageType' => 'error'));
+      }  
+    }
+
     $entitledUserIds = array_unique(explode(',', Input::get('entitled_user')));
     try
     {
@@ -222,7 +249,7 @@ class BackendUserVoteController extends BackendBaseController
 
         if(Input::get('mode') == 'mark')
         {
-          $params = ['roleId' => Input::get('role_id'), 'value' => Input::get('form_mark')];
+          $params = ['roleId' => Input::get('role_id'), 'value' => Input::get('form_mark'), 'rating_type' => $vote->rating_type];
           $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $params);
         }else
         {
@@ -506,7 +533,14 @@ class BackendUserVoteController extends BackendBaseController
       foreach ($decodeData as &$value) {
         if($value['role_id'] == $params['roleId'])
         {
-          $value[$dataType] = $params['value'];
+          if($params['rating_type'])
+          {
+            $value[$dataType] = Config::get('variable.rating-type.'.$params['value']) ;
+          }else
+          {
+            $value[$dataType] = $params['value'];
+          }
+          
           $checkExist = true;
         }
       }

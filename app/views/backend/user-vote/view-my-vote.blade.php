@@ -46,11 +46,11 @@
         @foreach($voteRoles as $roleId => $roleName)
         <td>
           <p>
-            {{CustomHelper::get_mark_with_role($voteResult, $roleId)}}
+            {{CustomHelper::get_mark_with_role(['voteResult' => $voteResult, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}
           </p>
         </td>
         <td>
-          {{CustomHelper::get_mark_with_role($voteResult, $roleId, true)}}
+          {{CustomHelper::get_mark_with_role(['voteResult' => $voteResult, 'roleId' => $roleId, 'content' => true])}}
         </td>
         @endforeach
       </tr>

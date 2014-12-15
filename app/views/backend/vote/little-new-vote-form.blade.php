@@ -31,6 +31,13 @@ if(isset($vote))
 </div>
 
 <div class="form-group">
+  <label class="col-md-3 control-label">Phiếu đánh giá xếp loại</label>
+  <div class="col-md-8">
+    <input type="checkbox" name="rating_type" class="form-control" {{ $vote->rating_type ? "checked" : '' }}>
+  </div>
+</div>
+
+<div class="form-group">
   <label class="control-label col-md-3">{{trans('all.department')}}</label>
   <div class="col-md-8">
     <select name="department_list" id="select2_department" class="form-control select2">

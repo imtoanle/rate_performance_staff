@@ -77,16 +77,18 @@
         <?php } else { ?>
           <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
           <td>
-            {{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId) }} <br />
+            {{CustomHelper::get_mark_with_role(['voteResult' => $firstVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
           </td>
-          <td>{{ CustomHelper::get_mark_with_role($firstVoterInRow, $roleId, true) }}</td>
+          <td>
+            {{CustomHelper::get_mark_with_role(['voteResult' => $firstVoterInRow, 'roleId' => $roleId, 'content' => true])}}
+          </td>
         <?php } ?>
       @endforeach
       <td rowspan="{{$maxVoterArr[$vote->id]}}">
         @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
           <a href="#" class="general-result" data-type="text" data-pk="{{$vote->id}}" data-entitled-vote="{{$userId}}" data-name="mark" data-placement="left" data-placeholder="{{trans('all.input-mark')}}" data-title="{{trans('all.general-results')}}">
         @endif
-        {{CustomHelper::get_general_result($vote->id, $userId)}}
+        {{CustomHelper::get_general_result($vote->id, $userId, $vote->rating_type)}}
         @if(Route::currentRouteName() == 'detailHeadGradingUserVote')
           </a>
         @endif
@@ -103,9 +105,11 @@
           <?php } else { ?>
             <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
             <td>
-              {{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId) }} <br />
+              {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
             </td>
-            <td>{{ CustomHelper::get_mark_with_role($currentVoterInRow, $roleId, true) }}</td>
+            <td>
+              {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'content' => true])}}
+            </td>
           <?php } ?>
         @else
           <td colspan="3"></td>

@@ -262,6 +262,7 @@ class BackendVoteController extends BackendBaseController
       'specify_user' => json_encode($specify_user_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
       'vote_group_id' => $vote_group_id,
+      'rating_type' => Input::has('rating_type') ? 1 : 0,
       ));
 
     if($vote->save())
@@ -318,6 +319,7 @@ class BackendVoteController extends BackendBaseController
       'voter' => json_encode($voter_list),
       'specify_user' => json_encode($specify_user_list),
       'expired_at' => Carbon::createFromFormat('d-m-Y', Input::get('expiration_date'))->toDateString(),
+      'rating_type' => Input::has('rating_type') ? 1 : 0,
       ));
 
     if($vote->save())

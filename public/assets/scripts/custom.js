@@ -117,6 +117,7 @@ function ajax_call_custom(type, url, data, successCallback)
   $.ajax({
     type: type,
     cache: false,
+    async: false,
     url: url,
     data: data,
     dataType: "json",

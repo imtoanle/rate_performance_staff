@@ -7,6 +7,13 @@ return array(
       'view-report' => 2,
       'head-grading' => 3,
         ),
+    'rating-type' => array(
+        'A+' => 4,
+        'A' => 3,
+        'B' => 2,
+        'C' => 1,
+        'D' => 0,
+        ),
 
     'vote-status' => array(
       'newly' => 0,

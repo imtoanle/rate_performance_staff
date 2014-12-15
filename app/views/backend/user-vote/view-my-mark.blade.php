@@ -39,7 +39,7 @@
         <td>
           
           <?php $currentVoterInRow = isset($voteResult[$user['id']]) ? $voteResult[$user['id']] : null; ?>
-          <?php $mark = CustomHelper::get_mark_with_role($currentVoterInRow, $user['role']) ?>
+          <?php $mark = CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $user['role'], 'ratingType' => $vote->rating_type]); ?>
             @if(empty($mark))
             <strong class="color-danger">...</strong><br />
             @else
@@ -47,7 +47,7 @@
             @endif
         </td>
         <td>
-          <?php $content = CustomHelper::get_mark_with_role($currentVoterInRow, $user['role'], true); ?>
+          <?php $content = CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $user['role'], 'content' => true]); ?>
           @if(empty($content))
           <strong class="color-danger">...</strong><br />
           @else
@@ -59,7 +59,7 @@
       @endforeach
       <tr>
         <td colspan="5" class="text-center"><strong>{{trans('all.final-mark')}}</strong></td>
-        <td colspan="2">{{CustomHelper::get_general_result($vote->id, $currentUser->id)}}</td>
+        <td colspan="2">{{CustomHelper::get_general_result($vote->id, $currentUser->id, $vote->rating_type)}}</td>
       </tr>
   @endforeach
   </tbody>

@@ -25,5 +25,10 @@ return array(
     "different"        => ":attribute và :other phải khác nhau.",
     'captcha'          => "Sai mã bảo mật.",
     'value.between'    => 'Giá trị lớn hơn :min nhỏ hơn :max',
+    'mark.between'    => 'Giá trị lớn hơn :min nhỏ hơn :max',
     'value.integer'    => 'Giá trị nhập vào phải là số',
+    'mark.integer'    => 'Giá trị nhập vào phải là số',
+    'value.in'         => 'Nhập giá trị trong dãy :values',
+    'mark.in'         => 'Nhập giá trị trong dãy :values',
+    'form_mark.in'         => 'Nhập giá trị trong dãy :values',
 );

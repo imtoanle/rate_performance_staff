@@ -59,7 +59,7 @@
       @endforeach
       <td rowspan="{{$maxVoter}}">
         <a href="#" class="general-result" data-type="text" data-pk="{{$vote->id}}" data-entitled-vote="{{$userId}}" data-name="mark" data-placement="left" data-placeholder="{{trans('all.input-mark')}}" data-title="{{trans('all.general-results')}}">
-          {{CustomHelper::get_general_result($vote->id, $userId)}}
+          {{CustomHelper::get_general_result($vote->id, $userId, $vote->rating_type)}}
         </a>
       </td>
     </tr>
