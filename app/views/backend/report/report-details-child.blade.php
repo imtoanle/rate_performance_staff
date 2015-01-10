@@ -71,8 +71,8 @@
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{ $entitledUser->full_name }}</td>
       <td rowspan="{{ $maxVoterArr[$vote->id] }}">{{$entitledUser->job_titles_name()}}</td>
       @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
-        <?php $firstVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][0]]) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
-        <?php if ($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][0]])) ) { ?>
+        <?php $firstVoterInRow = (isset($voterArr[$vote->id][$roleId][0]) && isset($voteResult[$voterArr[$vote->id][$roleId][0]])) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
+        <?php if ($roleId == Config::get('variable.extend-member-role') && ($voterArr[$vote->id][$roleId][0] == -1 || !in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][0]])) ) { ?>
           <td colspan="3"></td>
         <?php } else { ?>
           <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>

@@ -209,23 +209,38 @@ class VoteReportBackendController extends BackendBaseController
     $voterArr = [];
     $maxVoterArr = [];
     $voteByRole = [];
+    $checkExtendRole = false;
+    $pattern = '"role_id":"'.Config::get('variable.extend-member-role').'"';
+    $voteIds = [];
+    foreach ($votes as $vote) {
+      $voteIds[] = $vote->id;
+    }
+    $countExtendRole = VoteResult::whereIn('vote_id', $voteIds)->whereRaw("mark regexp '".$pattern."'")->count();
+    if($countExtendRole>0) $checkExtendRole = true;
 
     foreach ($votes as $vote) {
       $roleOfVote = [];
       $json_voter = json_decode($vote->voter, true);
-      $pattern = '"role_id":"'.Config::get('variable.extend-member-role').'"';
+      
       $voteResults = VoteResult::where('vote_id', $vote->id)->whereRaw("mark regexp '".$pattern."'")->get();
       foreach ($voteResults as $voteResult) {
         $json_voter[] = [
           'role_id' => Config::get('variable.extend-member-role'),
           'user_id' => $voteResult->voter_id,
         ];
+        $checkExtendRole = true;
       }
       foreach ($json_voter as $value) {
         $voterArr[$vote->id][$value['role_id']][] = $value['user_id'];
         //
         $roleOfVote[] = $value['role_id'];
       }
+      if(!in_array(Config::get('variable.extend-member-role'), $roleOfVote) && $checkExtendRole)
+      {
+        $roleOfVote[] = Config::get('variable.extend-member-role');
+        $voterArr[$vote->id][Config::get('variable.extend-member-role')][] = -1;
+      }
+
       $roleOfVote = array_unique($roleOfVote);
       sort($roleOfVote);
       $voteByRole[implode(',', $roleOfVote)][] = $vote;
@@ -239,6 +254,30 @@ class VoteReportBackendController extends BackendBaseController
         }
       }
     }
+    /*
+    if($checkExtendRole)
+    {
+      $newVoteByRole = [];
+      foreach ($voteByRole as $roleIds => $votes) {
+        $arrRoleIds = explode(',', $roleIds);
+        if(!in_array(Config::get('variable.extend-member-role'), $arrRoleIds))
+        {
+          $arrRoleIds[] = Config::get('variable.extend-member-role');
+        }
+        sort($arrRoleIds);
+        $stringRoleIds = implode(',', $arrRoleIds);
+        if(isset($newVoteByRole[$stringRoleIds]))
+        {
+          $newVoteByRole[$stringRoleIds] = array_merge($newVoteByRole[$stringRoleIds], $votes);
+        }else
+        {
+          $newVoteByRole[$stringRoleIds] = $votes;
+        }
+        //$newVoteByRole = array_unique($newVoteByRole);
+      }
+      $voteByRole = $newVoteByRole;
+    }
+    */
 
     return ['voterArr' => $voterArr, 'maxVoterArr' => $maxVoterArr, 'votes' => $votes, 'voteByRole' => $voteByRole];
   }

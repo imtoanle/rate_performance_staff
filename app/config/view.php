@@ -92,6 +92,8 @@ return array(
     'roles-index' => 'backend.role.index',
     //criteria
     'criterias-index' => 'backend.criteria.index',
+    //rating type
+    'rating-types-index' => 'backend.rating-type.index',
 
     //votes
     'little-new-vote-form' => 'backend.vote.little-new-vote-form',

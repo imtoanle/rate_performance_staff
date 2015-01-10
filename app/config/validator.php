@@ -73,6 +73,11 @@ return array(
       'criteria_name' => 'required|min:3',
     ),
 
+    'rating-type-create' => array(
+      'rating_type_name' => 'required',
+      'rating_type_value' => 'required',
+    ),
+
     'role-create' => array(
       'role_name' => 'required|min:3',
     ),

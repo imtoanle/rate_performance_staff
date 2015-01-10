@@ -226,6 +226,30 @@ Route::group(array('before' => 'basicAuth|hasPermissions', 'prefix' => Config::g
       'uses' => 'BackendCriteriaController@putShow')
   );
 
+  //Rating Types
+  /**
+   * Voting Criterial routes
+   */
+  Route::get('rating-types', array(
+      'as' => 'listRatingTypes',
+      'uses' => 'RatingTypeBackendController@getIndex')
+  );
+
+  Route::post('rating-type/new', array(
+      'as' => 'newRatingTypePost',
+      'uses' => 'RatingTypeBackendController@postCreate')
+  );
+
+  Route::delete('rating-type/deleteMulti', array(
+      'as' => 'deleteRatingType',
+      'uses' => 'RatingTypeBackendController@delete')
+  );
+
+  Route::put('rating-type/{criteriaId}', array(
+      'as' => 'putRatingType',
+      'uses' => 'RatingTypeBackendController@putShow')
+  );
+
   /**
    * Vote Roles routes
    */

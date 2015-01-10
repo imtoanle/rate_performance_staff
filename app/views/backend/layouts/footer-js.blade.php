@@ -3,7 +3,7 @@
 
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'showVoteGroup', 'copyVoteGroup', 'listReportYear', 'quickUserVote', 'listUserVotes')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'showUser', 'newUser', 'newVote', 'showVote', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias',  'listRatingTypes', 'showVoteGroup', 'copyVoteGroup', 'listReportYear', 'quickUserVote', 'listUserVotes')))
 <script type="text/javascript" src="{{asset('assets/plugins/select2/select2.min.js')}}"></script>
 @endif
 
@@ -11,7 +11,7 @@
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/jquery.dataTables.columnFilter.js')}}"></script>
 @endif
 
-@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listReportPeriod', 'headGradingUserVote', 'listReportSpecifyUser')))
+@if(in_array(Route::currentRouteName(), array('listPermissions', 'listGroups', 'showGroup', 'listUsers', 'listVotes', 'listUserVotes', 'listJobTitles', 'listDepartments', 'listRoles', 'listCriterias', 'listRatingTypes', 'listReportPeriod', 'headGradingUserVote', 'listReportSpecifyUser')))
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/jquery.dataTables.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/data-tables/DT_bootstrap.js')}}"></script>
 @endif

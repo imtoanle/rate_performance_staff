@@ -20,8 +20,8 @@
   <?php $arrRoutes = array('indexDashboard'); ?>
   {{ BackendSideBar::create_node(trans('all.dashboard'), 'indexDashboard', 'fa fa-home') }}  
 
-  @if ( $currentUser->hasAnyAccess(['votes-management_list', 'role-management_list', 'criteria-management_list']) )
-  <?php $arrRoutes = array('listVotes', 'listRoles', 'listCriterias'); ?>
+  @if ( $currentUser->hasAnyAccess(['votes-management_list', 'role-management_list', 'criteria-management_list', 'rating-type-management_list']) )
+  <?php $arrRoutes = array('listVotes', 'listRoles', 'listCriterias', 'listRatingTypes'); ?>
   {{ BackendSideBar::create_root_open(trans('all.votes'), $arrRoutes, 'fa fa-bar-chart-o')}}  
     @if ( $currentUser->hasAnyAccess(['votes-management_list']) )
       {{ BackendSideBar::create_node(trans('all.vote-manage'), 'listVotes', 'fa fa-list') }}  
@@ -33,6 +33,12 @@
 
     @if ( $currentUser->hasAnyAccess(['criteria-management_list']) )
       {{ BackendSideBar::create_node(trans('all.criteria'), 'listCriterias', 'fa fa-trophy') }}  
+    @endif
+
+    @if ( $currentUser->hasAnyAccess(['rating-type-management_list']) )
+    <!--
+      {{ BackendSideBar::create_node(trans('all.rating-type'), 'listRatingTypes', 'fa fa-trophy') }}  
+    -->
     @endif
   {{ BackendSideBar::create_root_close() }} 
   @endif

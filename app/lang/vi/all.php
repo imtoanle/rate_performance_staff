@@ -83,6 +83,13 @@ return array(
 		'criteria-not-found' => 'Không tìm thấy tiêu chí này',
 		'criteria-delete-success' => 'Xóa tiêu chí thành công',
 
+		'rating-type-created' => 'Tạo xếp loại thành công !',
+		'rating-type-create-failed' => 'Lỗi khi tạo mới xếp loại',
+		'rating-type-updated' => 'Cập nhập xếp loại thành công !',
+		'rating-type-update-failed' => 'Lỗi khi cập nhập xếp loại',
+		'rating-type-not-found' => 'Không tìm thấy xếp loại này',
+		'rating-type-delete-success' => 'Xóa xếp loại thành công',
+
 		'role-created' => 'Tạo vai trò thành công !',
 		'role-create-failed' => 'Lỗi khi tạo mới vai trò',
 		'role-updated' => 'Cập nhập vai trò thành công !',
@@ -201,6 +208,10 @@ return array(
 	'criteria' => 'Tiêu chí đánh giá',
 	'criteria-list' => 'Danh sách tiêu chí',
 	'select-criteria' => 'Chọn tiêu chí',
+
+	'rating-type' => 'Xếp loại đánh giá',
+	'rating-type-list' => 'Danh sách xếp loại',
+	'select-rating-type' => 'Chọn xếp loại',
 	'input-mark' => 'Nhập điểm',
 	'not-input-yet' => 'Chưa nhập',
 	'mark-over-limit' => 'Điểm nhập quá giới hạn',

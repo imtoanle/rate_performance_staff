@@ -174,11 +174,17 @@ return array(
     'deleteRole' => 'role-management_delete',
     'putRole' => 'role-management_edit',
 
-    //roles
+    //criterial
     'listCriterias' => 'criteria-management_list',
     'newCriteriaPost' => 'criteria-management_create',
     'deleteCriteria' => 'criteria-management_delete',
     'putCriteria' => 'criteria-management_edit',
+
+    //rating types
+    'listRatingTypes' => 'rating-type-management_list',
+    'newRatingTypePost' => 'rating-type-management_create',
+    'deleteRatingType' => 'rating-type-management_delete',
+    'putRatingType' => 'rating-type-management_edit',
     
     //votes
     'listVotes' => 'votes-management_list',
