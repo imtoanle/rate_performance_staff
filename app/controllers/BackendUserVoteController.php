@@ -208,6 +208,7 @@ class BackendUserVoteController extends BackendBaseController
           return Response::json(array('actionStatus' => false, 'errorMessages' => $validator->getErrors()));
       }
       $params['rating_type'] = $vote->rating_type;
+      //return Input::get('value');
       $voteResult->mark = $this->_UpdateDataVoteResult($voteResult->mark, $params);
     }
     else if(Input::get('name') == 'content')
@@ -534,6 +535,7 @@ class BackendUserVoteController extends BackendBaseController
       foreach ($decodeData as &$value) {
         if($value['role_id'] == $params['roleId'])
         {
+          /*
           if($params['rating_type'])
           {
             $value[$dataType] = Config::get('variable.rating-type.'.$params['value']) ;
@@ -541,6 +543,8 @@ class BackendUserVoteController extends BackendBaseController
           {
             $value[$dataType] = $params['value'];
           }
+          */
+          $value[$dataType] = $params['value'];
           
           $checkExist = true;
         }
