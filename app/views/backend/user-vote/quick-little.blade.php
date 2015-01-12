@@ -291,6 +291,9 @@ jQuery(document).ready(function() {
       $('.vote-id-' + dataArr[1]).removeClass('hide');  
     }
   });
+  @if(Input::has('show_vote_data'))
+  $("#department_list").val("{{Input::get('show_vote_data')}}").change();
+  @endif
   
   $('form.quick-ajax-form').submit(function(e){
     e.preventDefault();

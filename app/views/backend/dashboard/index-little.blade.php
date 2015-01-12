@@ -16,9 +16,7 @@
           <thead>
           <tr>
             <th style="width: 25%">Mã đánh giá</th>
-            <th style="width: 35%">Tiêu đề</th>
-            <th style="width: 20%">Phòng ban</th>
-            <th style="width: 10%">Công cụ</th>
+            <th style="width: 35%">Tiêu đề / Phòng ban</th>
           </tr>
           </thead>
           <tbody>
@@ -26,14 +24,13 @@
           <?php $voteGroup = VoteGroup::find($voteGroupId); ?>
           <tr>
             <td>{{$voteGroup->vote_code}}</td>
-            <td>{{$voteGroup->title}}</td>
             <td>
+              {{$voteGroup->title}}<br />
+              <b>Phòng ban:</b><br />
               @foreach($votes as $vote)
-                {{$vote->department->name}} <br />
+                {{$vote->department->name}} {{CustomHelper::check_already_vote($vote, $currentUser->id)}}
+                <a href="{{route('quickUserVote')}}?show_vote_data={{$voteGroup->id}},{{$vote->id}}" class="btn btn-default btn-xs">Chấm điểm</a><br />
               @endforeach
-            </td>
-            <td>
-              <a href="{{route('quickUserVote')}}" class="btn btn-default btn-xs">Chấm điểm</a>
             </td>
           </tr>
           @endforeach

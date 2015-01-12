@@ -279,6 +279,15 @@ class CustomHelper
     return min($minArr);
   }
 
+  public static function check_already_vote($vote, $voterId)
+  {
+    $voteResults = VoteResult::where('vote_id', $vote->id)->where('voter_id', $voterId)->get();
+    if ($voteResults->count() != count(explode(",",$vote->entitled_vote)))
+    {
+      return "(<i style='color: red;'>Chưa chấm xong</i>)";
+    }
+  }
+
   public static function find_min_mark_from_roles($markString)
   {
     if (empty($markString))
