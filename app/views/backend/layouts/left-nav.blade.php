@@ -36,9 +36,7 @@
     @endif
 
     @if ( $currentUser->hasAnyAccess(['rating-type-management_list']) )
-    <!--
       {{ BackendSideBar::create_node(trans('all.rating-type'), 'listRatingTypes', 'fa fa-trophy') }}  
-    -->
     @endif
   {{ BackendSideBar::create_root_close() }} 
   @endif

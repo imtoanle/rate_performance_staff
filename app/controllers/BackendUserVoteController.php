@@ -27,6 +27,7 @@ class BackendUserVoteController extends BackendBaseController
     $params['canVotes'] = $canVotes;
     $params['canVoteGroup'] = $canVoteGroup;
     $params['currentUser'] = $currentUser;
+    $params['ratingTypes'] = RatingType::all()->groupBy('value');
     if(Request::Ajax())
       return View::make(Config::get('view.backend.user-votes-quick-little'), $params);
     else
@@ -85,7 +86,7 @@ class BackendUserVoteController extends BackendBaseController
     }
 
     $vote = Vote::find(Input::get('vote'));
-    $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+    $validation = $vote->rating_type ? 'vote-result-mark' : 'vote-result-mark';
     $validator = new BackendValidator(Input::all(), $validation);
     if(!$validator->passes())
     {
@@ -160,7 +161,7 @@ class BackendUserVoteController extends BackendBaseController
     if(Input::get('name') == 'mark')
     {
       $vote = Vote::find(Input::get('vote'));
-      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validation = $vote->rating_type ? 'vote-result-mark' : 'vote-result-mark';
       $validator = new BackendValidator(Input::all(), $validation);
       if(!$validator->passes())
       {
@@ -200,7 +201,7 @@ class BackendUserVoteController extends BackendBaseController
     if(Input::get('name') == 'mark')
     {
       $vote = Vote::find(Input::get('vote'));
-      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validation = $vote->rating_type ? 'vote-result-mark' : 'vote-result-mark';
       $validator = new BackendValidator(Input::all(), $validation);
       if(!$validator->passes())
       {
@@ -229,7 +230,7 @@ class BackendUserVoteController extends BackendBaseController
 
     if(Input::get('mode') == 'mark')
     {
-      $validation = $vote->rating_type ? 'vote-result-rating-type' : 'vote-result-mark';
+      $validation = $vote->rating_type ? 'vote-result-mark' : 'vote-result-mark';
       $validator = new BackendValidator(Input::all(), $validation);
       if(!$validator->passes())
       {

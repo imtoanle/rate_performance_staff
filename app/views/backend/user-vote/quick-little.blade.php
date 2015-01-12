@@ -65,7 +65,15 @@
         <form class="form-horizontal quick-ajax-form" data-form-name="mark">
           <div class="row">
             <div class="col-md-12">
+              @if($vote->rating_type)
+              <select name="form_mark" placeholder="Chọn xếp loại" class="form-control">
+                @foreach(Config::get('variable.rating-type') as $key => $value)
+                <option value="{{$value}}">{{$key}}</option>
+                @endforeach
+              </select>
+              @else
               <input type="text" name="form_mark" class="form-control" placeholder="Nhập điểm">
+              @endif
             </div>
             <div class="col-md-12">
               <input type="hidden" name="vote_id" value="{{$vote->id}}" />
@@ -109,7 +117,7 @@
         @foreach($roleCurrentUser as $roleId => $roleName)
           <td>
             <p>
-              <a href="#" class="role-mark editable role-id-{{$roleId}}" data-type="text" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$roleId}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="Nhập điểm">
+              <a href="#" class="role-mark {{$vote->rating_type ? 'rating-type' : 'mark-type'}} editable role-id-{{$roleId}}" data-vote="{{$vote->id}}" data-voter="{{$currentUser->id}}" data-entitled-vote="{{$user->id}}" data-pk="{{$roleId}}" data-name="mark" data-placement="top" data-placeholder="{{trans('all.input-mark')}}" data-title="Nhập điểm">
               {{CustomHelper::get_mark_with_role(['voteResult' => $voteResult, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}
               </a>
             </p>
@@ -191,7 +199,7 @@ jQuery(document).ready(function() {
         }
    });
 
-  $('a.role-mark').editable({
+  $('a.role-mark.mark-type').editable({
     params: function (params) {  //params already contain `name`, `value` and `pk`
       params.vote = $(this).data('vote');
       params.voter = $(this).data('voter');
@@ -205,6 +213,31 @@ jQuery(document).ready(function() {
         return result.errorMessages.value[0];
       }
     },
+    type: 'text',
+    inputclass: 'form-control input-small',
+    emptytext: '{{trans('all.not-input-yet')}}',
+  });
+
+  $('a.role-mark.rating-type').editable({
+    params: function (params) {  //params already contain `name`, `value` and `pk`
+      params.vote = $(this).data('vote');
+      params.voter = $(this).data('voter');
+      params.entitled_vote = $(this).data('entitled-vote');
+      return params;
+    },
+    url: '{{route('postQuickUserVote')}}',
+    success: function(result, newValue) {
+      if(typeof(result.errorMessages) != 'undefined')
+      {
+        return result.errorMessages.value[0];
+      }
+    },
+    type: 'select',
+    source: [
+      @foreach(Config::get('variable.rating-type') as $key => $value)
+      {value: "{{$value}}", text: "{{$key}}"},
+      @endforeach
+    ],
     inputclass: 'form-control input-small',
     emptytext: '{{trans('all.not-input-yet')}}',
   });
@@ -284,7 +317,7 @@ jQuery(document).ready(function() {
         toastr[result.messageType](result.message);
         if(result.actionStatus !== false)
         {
-          mark_value = $(this).find('input[name=form_mark]').val();
+          mark_value = $(this).find('input[name=form_mark],select[name=form_mark]').val();
           a_mark_unvote.editable('setValue', mark_value);
         }
       }else
