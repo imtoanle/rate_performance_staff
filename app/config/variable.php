@@ -13,6 +13,7 @@ return array(
         'B' => 48,
         'C' => 47,
         'D' => 46,
+        'Không xác định' => 0,
         ),
 
     'vote-status' => array(
