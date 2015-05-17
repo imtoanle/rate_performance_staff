@@ -56,7 +56,7 @@ jQuery(document).ready(function() {
   jQuery(document).on('click', 'a.remove-item', function (e) {
     e.preventDefault();
     var itemId = $(this).attr('item-id'),
-        checkboxes = $('#ajax-table-item-'+itemId+' td:first .checkboxes');
+        checkboxes = $(this).closest('tr').find('td:first .checkboxes');
 
     //clear all checkbox
     clear_selected_checkbox()
