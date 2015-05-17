@@ -231,7 +231,7 @@ class CustomHelper
         if($data['role_id'] == $role_id)
         {
           if (!isset($data[$dataType])) return;
-          return $ratingType ? array_flip(Config::get('variable.rating-type'))[(int)$data[$dataType]] : $data[$dataType];
+          return $ratingType && $dataType == 'mark' ? $data['mark_type'] : $data[$dataType];
         }
       }
     }
@@ -260,12 +260,12 @@ class CustomHelper
     $result = GeneralResult::where('user_id', $entitledUser)->where('vote_id', $voteId)->first();
     if(is_object($result))
     {
-      $general_mark = $result->mark;
+      $general_mark = ['mark' => $result->mark, 'mark_type' => ''];
     }else
     {
       $general_mark = CustomHelper::get_min_general_results($voteId, $entitledUser);
     }
-    return ($ratingVote) ? array_flip(Config::get('variable.rating-type'))[(int)$general_mark] : $general_mark;
+    return ($ratingVote) ? $general_mark['mark_type'] : $general_mark['mark'];
   }
 
   public static function get_min_general_results($voteId, $entitledUser)
@@ -273,10 +273,14 @@ class CustomHelper
     $minArr = [];
     $voteResults = VoteResult::select('mark')->where('vote_id', $voteId)->where('entitled_vote_id', $entitledUser)->get();
     foreach ($voteResults as $result) {
-      $minArr[] = CustomHelper::find_min_mark_from_roles($result->mark);
+      $minArr = array_merge($minArr, CustomHelper::find_min_mark_from_roles($result->mark));
     }
-    if(empty($minArr)) return '';
-    return min($minArr);
+    if(empty($minArr)) return ['mark' => '', 'mark_type' => ''];
+
+    usort($minArr, function($a, $b) {
+      return min($a['mark'], $b['mark']);
+    });
+    return array_values($minArr)[0];
   }
 
   public static function check_already_vote($vote, $voterId)
@@ -292,13 +296,14 @@ class CustomHelper
   {
     if (empty($markString))
     {
-      return 100;
+      return ['mark' => 100, 'mark_type' => ''];
     }
     $minArr = [];
     foreach (json_decode($markString, true) as $mark) {
-        $minArr[] = $mark['mark'];
+      $mark_type = array_key_exists("mark_type",$mark) ? $mark['mark_type'] : '';
+      $minArr[] = ['mark' => $mark['mark'], 'mark_type' =>  $mark_type];
     }
-    return min($minArr);
+    return $minArr;
   }
 
   public static function get_array_user_id_from_voter($voterString)

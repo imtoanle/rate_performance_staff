@@ -67,8 +67,8 @@
             <div class="col-md-12">
               @if($vote->rating_type)
               <select name="form_mark" placeholder="Chọn xếp loại" class="form-control">
-                @foreach(Config::get('variable.rating-type') as $key => $value)
-                <option value="{{$value}}">{{$key}}</option>
+                @foreach($ratingTypes as $rating_type)
+                <option value="{{$rating_type->id}}">{{$rating_type->name}}</option>
                 @endforeach
               </select>
               @else
@@ -234,8 +234,8 @@ jQuery(document).ready(function() {
     },
     type: 'select',
     source: [
-      @foreach(Config::get('variable.rating-type') as $key => $value)
-      {value: "{{$value}}", text: "{{$key}}"},
+      @foreach($ratingTypes as $rating_type)
+      {value: "{{$rating_type->id}}", text: "{{$rating_type->name}}"},
       @endforeach
     ],
     inputclass: 'form-control input-small',

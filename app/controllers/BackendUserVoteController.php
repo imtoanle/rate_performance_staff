@@ -27,7 +27,7 @@ class BackendUserVoteController extends BackendBaseController
     $params['canVotes'] = $canVotes;
     $params['canVoteGroup'] = $canVoteGroup;
     $params['currentUser'] = $currentUser;
-    $params['ratingTypes'] = RatingType::all()->groupBy('value');
+    $params['ratingTypes'] = RatingType::all();
     if(Request::Ajax())
       return View::make(Config::get('view.backend.user-votes-quick-little'), $params);
     else
@@ -521,37 +521,48 @@ class BackendUserVoteController extends BackendBaseController
     return Response::json(array('deletedVote' => true, 'message' => trans('all.messages.vote-remove-success'), 'messageType' => 'success'));
   }
 
-
   protected function _UpdateDataVoteResult($jsonString, $params, $content=false)
   {
     $dataType = $content ? 'content' : 'mark';
+    if(array_key_exists("rating_type",$params))
+    {
+      $rating_type = RatingType::find($params['value']);
+      $value_of_mark = $rating_type->value;
+    }else{
+      $value_of_mark = $params['value'];
+    }
+
     if (empty($jsonString))
     {
-      $roleData[] = ['role_id' => $params['roleId'], $dataType => $params['value']];
+      $tmp_data = ['role_id' => $params['roleId']];
+      $tmp_data[$dataType] = $value_of_mark;
+      if(array_key_exists("rating_type",$params))
+      {
+        $tmp_data['mark_type'] = $rating_type->name;  
+      }
+      
+      $roleData[] = $tmp_data;
     }else
     {
       $decodeData = json_decode($jsonString, true);
       $checkExist = false;
+      
+
       foreach ($decodeData as &$value) {
         if($value['role_id'] == $params['roleId'])
         {
-          /*
-          if($params['rating_type'])
-          {
-            $value[$dataType] = Config::get('variable.rating-type.'.$params['value']) ;
-          }else
-          {
-            $value[$dataType] = $params['value'];
-          }
-          */
-          $value[$dataType] = $params['value'];
+          if(array_key_exists("rating_type",$params)) $value['mark_type'] = $rating_type->name;
+          $value[$dataType] = $value_of_mark;
           
           $checkExist = true;
         }
       }
       if ($checkExist == false)
       {
-        $decodeData[] = ['role_id' => $params['roleId'], $dataType => $params['value']];
+        $tmp_data = ['role_id' => $params['roleId']];
+        if($params['rating_type']) $tmp_data['mark_type'] = $rating_type->name;
+        $tmp_data[$dataType] = $value_of_mark;
+        $decodeData[] = $tmp_data;
       }
 
       $roleData = $decodeData;
