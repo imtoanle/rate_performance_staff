@@ -524,7 +524,7 @@ class BackendUserVoteController extends BackendBaseController
   protected function _UpdateDataVoteResult($jsonString, $params, $content=false)
   {
     $dataType = $content ? 'content' : 'mark';
-    if(array_key_exists("rating_type",$params))
+    if(array_key_exists("rating_type",$params) && $params['rating_type'])
     {
       $rating_type = RatingType::find($params['value']);
       $value_of_mark = $rating_type->value;
@@ -536,7 +536,7 @@ class BackendUserVoteController extends BackendBaseController
     {
       $tmp_data = ['role_id' => $params['roleId']];
       $tmp_data[$dataType] = $value_of_mark;
-      if(array_key_exists("rating_type",$params))
+      if(array_key_exists("rating_type",$params)  && $params['rating_type'])
       {
         $tmp_data['mark_type'] = $rating_type->name;  
       }
@@ -551,7 +551,7 @@ class BackendUserVoteController extends BackendBaseController
       foreach ($decodeData as &$value) {
         if($value['role_id'] == $params['roleId'])
         {
-          if(array_key_exists("rating_type",$params)) $value['mark_type'] = $rating_type->name;
+          if(array_key_exists("rating_type",$params)  && $params['rating_type']) $value['mark_type'] = $rating_type->name;
           $value[$dataType] = $value_of_mark;
           
           $checkExist = true;
