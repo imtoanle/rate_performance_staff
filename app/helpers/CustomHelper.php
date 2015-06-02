@@ -226,7 +226,7 @@ class CustomHelper
     {
       $voteResult = $voteResult->toArray();
       $decodeData = empty($voteResult[$dataType]) ? [] : json_decode($voteResult[$dataType], true);
-      foreach($decodeData as $data)
+      foreach((array)$decodeData as $data)
       {
         if($data['role_id'] == $role_id)
         {
