@@ -560,7 +560,7 @@ class BackendUserVoteController extends BackendBaseController
       if ($checkExist == false)
       {
         $tmp_data = ['role_id' => $params['roleId']];
-        if($params['rating_type']) $tmp_data['mark_type'] = $rating_type->name;
+        if(array_key_exists("rating_type",$params)  && $params['rating_type']) $tmp_data['mark_type'] = $rating_type->name;
         $tmp_data[$dataType] = $value_of_mark;
         $decodeData[] = $tmp_data;
       }
