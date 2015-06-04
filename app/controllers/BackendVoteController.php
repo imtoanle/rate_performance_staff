@@ -17,7 +17,7 @@ class BackendVoteController extends BackendBaseController
       {
         $limit = Input::get('limit');
       $votes = VoteGroup::select(array('id as inputbox','id as button', 'vote_code', 'title', 'id as vote_group_id','id as actions'))
-                ->orderBy('created_at')->limit($limit);
+                ->orderBy('created_at', 'desc')->limit($limit);
       return Datatables::of($votes)
         ->edit_column('button', '<span class="row-details row-details-close"></span>')
         ->edit_column('inputbox', 
