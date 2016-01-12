@@ -231,7 +231,8 @@ class CustomHelper
         if($data['role_id'] == $role_id)
         {
           if (!isset($data[$dataType])) return;
-          return $ratingType && $dataType == 'mark' ? $data['mark_type'] : $data[$dataType];
+          $mark_type = array_key_exists("mark_type",$data) ? $data['mark_type'] : '';
+          return $ratingType && $dataType == 'mark' ? $mark_type : $data[$dataType];
         }
       }
     }
