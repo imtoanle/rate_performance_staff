@@ -62,6 +62,7 @@
   ?>
 
   @foreach($entitledArray as $userId)
+  <?php if (!array_key_exists($userId, $entitledUsersArray)) break; ?>
   <?php $entitledUser = $entitledUsersArray[$userId]; ?>
     <?php
       $voteResult = CustomHelper::get_array_vote_result_of_entitled_user($vote->id, $entitledUser->id);
