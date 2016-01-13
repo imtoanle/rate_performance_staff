@@ -211,7 +211,7 @@ class VoteReportBackendController extends BackendBaseController
     $voteByRole = [];
     $checkExtendRole = false;
     $pattern = '"role_id":"'.Config::get('variable.extend-member-role').'"';
-    $voteIds = [];
+    $voteIds = [0];
     foreach ($votes as $vote) {
       $voteIds[] = $vote->id;
     }
