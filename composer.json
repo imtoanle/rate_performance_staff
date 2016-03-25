@@ -12,7 +12,8 @@
 		"fzaninotto/faker": "1.3.*@dev",
 		"orangehill/iseed": "1.1",
 		"xethron/migrations-generator": "dev-master",
-		"maatwebsite/excel": "1.*"
+		"maatwebsite/excel": "1.*",
+		"barryvdh/laravel-debugbar": "~1.8"
 	},
 	"autoload": {
 		"classmap": [

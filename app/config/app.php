@@ -92,7 +92,6 @@ return array(
 	*/
 
 	'providers' => array(
-
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
@@ -127,6 +126,7 @@ return array(
 		'Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider',
 		'Orangehill\Iseed\IseedServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Barryvdh\Debugbar\ServiceProvider',
 	),
 
 	/*
@@ -197,6 +197,7 @@ return array(
 		'GeoIP' 					=> 'Torann\GeoIP\GeoIPFacade',
 		'Captcha' 				=> 'Johntaa\Captcha\Facades\Captcha',
 		'Excel' 					=> 'Maatwebsite\Excel\Facades\Excel',
+		'Debugbar' 				=> 'Barryvdh\Debugbar\Facade',
 
 	),
 
