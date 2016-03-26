@@ -297,7 +297,7 @@ class CustomHelper
   {
     if (empty($markString))
     {
-      return ['mark' => 100, 'mark_type' => ''];
+      return [['mark' => 100, 'mark_type' => '']];
     }
     $minArr = [];
     foreach (json_decode($markString, true) as $mark) {
