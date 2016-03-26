@@ -548,11 +548,11 @@ class BackendUserVoteController extends BackendBaseController
       $checkExist = false;
       
 
-      foreach ((array)$decodeData as &$value) {
+      foreach ((array)$decodeData as $key => $value) {
         if($value['role_id'] == $params['roleId'])
         {
           if(array_key_exists("rating_type",$params)  && $params['rating_type']) $value['mark_type'] = $rating_type->name;
-          $value[$dataType] = $value_of_mark;
+          $decodeData[$key][$dataType] = $value_of_mark;
           
           $checkExist = true;
         }
