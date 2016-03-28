@@ -16,7 +16,7 @@
 </div>
 <div class="portlet-body panel-content-area">
 @endif
-  <table class="table table-striped table-bordered table-hover" id="vote-data-table-{{$voteArray[0]->id}}" action-delete="{{route('deleteVoteGroup')}}">
+  <table class="table table-striped table-bordered table-hover export-excel-data-table" id="vote-data-table-{{$voteArray[0]->id}}" action-delete="{{route('deleteVoteGroup')}}">
     <thead>
       <tr>
         <th rowspan="3">STT</th>

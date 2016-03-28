@@ -100,7 +100,8 @@
 jQuery(document).ready(function() {
 
   $('table tbody').on('click', 'a.export-excel', function(e){
-
+    window.location="{{route('exportExcelReport')}}?" + 'item_id='+$(this).data('item-id')+'&item_type='+$(this).data('item-type');
+/*
     var xhr = $.ajax({
       type: 'GET',
       cache: false,
@@ -115,6 +116,7 @@ jQuery(document).ready(function() {
       , returnUri: true
     });
     $(this).attr('download', $(this).data('file-name')).attr('href', uri).attr('target', '_blank');
+*/    
   });
 
   $('#confirm-delete').on('show.bs.modal', function(e) {

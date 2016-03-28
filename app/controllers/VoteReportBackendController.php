@@ -188,20 +188,101 @@ class VoteReportBackendController extends BackendBaseController
 
   public function getExportExcel()
   {
-    $itemId = Input::get('item_id');
-    $itemType = Input::get('item_type');
+    
 
-    $votes = ($itemType == 'vote-group') ? Vote::whereVoteGroupId($itemId)->get() : Vote::where('id', $itemId)->get();
-    $firstVote = $votes->first();
-    $currentUser = Sentry::getUser();
-    $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
-    if (!is_object($firstVote) || (strpos($firstVote->specify_user, $pattern) === false && !$currentUser->hasAnyAccess(['reports-management_period'])))
-    {
-      App::abort(500, 'Bạn không có quyền xem báo cáo này.');
-    }
-    $params = $this->_get_params_reports($votes);
+    Excel::create('excel_report', function($excel) {
 
-    return View::make(Config::get('view.backend.report-export-excel'), $params)->render();
+
+            $itemId = Input::get('item_id');
+            $itemType = Input::get('item_type');
+
+            $votes = ($itemType == 'vote-group') ? Vote::whereVoteGroupId($itemId)->get() : Vote::where('id', $itemId)->get();
+            $firstVote = $votes->first();
+            $currentUser = Sentry::getUser();
+            $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
+            if (!is_object($firstVote) || (strpos($firstVote->specify_user, $pattern) === false && !$currentUser->hasAnyAccess(['reports-management_period'])))
+            {
+              App::abort(500, 'Bạn không có quyền xem báo cáo này.');
+            }
+            $params = $this->_get_params_reports($votes);
+            foreach($params['voteByRole'] as $voteArray)
+            {
+              $params['voteArray'] = $voteArray;
+              foreach($voteArray as $vote)
+              {
+                $params['vote'] = $vote;
+                $params['firstVoteArray'] = array_values($params['voteByRole'])[0];
+                $params['size_of_col'] = count($params['voterArr'][$params['firstVoteArray'][0]->id])*2 + 4;
+                $excel->sheet(Str::limit($vote->get_department_name(), 20), function($sheet) use($params) {
+                  for($i=0;$i<=25;$i++) $sheet->setWidth(chr(65+$i), 15);
+                  $sheet->loadView(Config::get('view.backend.report-export-excel'), $params);
+                  $sheet->setFontFamily('Times New Roman');
+                  $sheet->setFontSize(12);
+                  $sheet->mergeCells('A4:'.chr(64 + $params['size_of_col']).'4');
+                  $sheet->mergeCells('A5:'.chr(64 + $params['size_of_col']).'5');
+                  $sheet->cells('A4:A5', function($cells) {
+                    $cells->setAlignment('center');
+                  });
+
+                  //header ne
+                  $sheet->mergeCells('A7:A9'); #STT
+                  $sheet->cell('A7', 'STT');
+                  $sheet->mergeCells('B7:B9'); #Ho ten
+                  $sheet->cell('B7', trans('all.full-name'));
+                  $sheet->mergeCells('C7:C9'); #Chuc vu
+                  $sheet->cell('C7', trans('all.job-title'));
+                  $sheet->mergeCells('D7:'.chr(64 + $params['size_of_col'] - 1).'7'); #STT
+                  $sheet->cell('D7', trans('all.participant')); #Thanh phan tham gia danh gia
+                  $sheet->mergeCells( chr(64 + $params['size_of_col']).'7:'.chr(64 + $params['size_of_col']).'9'); #Tong hop ket qua
+                  $sheet->cell(chr(64 + $params['size_of_col']).'7', trans('all.general-results')); #Tong hop ket qua
+                  //phan nhom danh gia
+                  $start_at_col_num = 68;# D
+                  foreach($params['voterArr'][$params['voteArray'][0]->id] as $roleId => $value)
+                  {
+                    $sheet->setWidth(chr($start_at_col_num), 10);
+                    $sheet->setWidth(chr($start_at_col_num+1), 20);
+
+                    $sheet->mergeCells(chr($start_at_col_num).'8:'.chr($start_at_col_num+1).'8');
+                    $sheet->cell(chr($start_at_col_num).'8', CustomHelper::get_role_name($roleId));
+
+                    $sheet->cell(chr($start_at_col_num).'9', trans('all.mark'));
+                    $sheet->cell(chr($start_at_col_num+1).'9', trans('all.content'));
+
+                    $sheet->mergeCells(chr($start_at_col_num).'10:'.chr($start_at_col_num+1).'10');
+                    $sheet->cell(chr($start_at_col_num).'10', CustomHelper::get_user_name($params['voterArr'][$params['vote']->id][$roleId][0]));
+
+                    $start_at_col_num += 2;
+                  }
+                  //row height
+                  //$sheet->setHeight(8, 50);
+                  
+                  //bordered
+                  $sheet->setBorder('A7:'.chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote)) + 10), 'thin');
+
+
+                  //thay doi chieu dai
+                  
+                  $sheet->setWidth('A', 5);
+                  $sheet->setWidth('B', 20);
+                  $sheet->setWidth('C', 20);
+                  //$sheet->setWidth(chr(64 + $params['size_of_col']), 5);
+                 //stle header
+                  $sheet->cells('A7:Z10', function($cells) {
+                    $cells->setAlignment('center');
+                    $cells->setValignment('middle');
+                    $cells->setFontWeight('bold');
+                  });
+                });
+              }
+            }
+            //Debugbar::info($votes);
+            
+            //$sheet->setWidth('A', 5);
+            //$sheet->setBorder('A7:M10', 'thin');
+            //$sheet->setAllBorders('thin');
+
+    })->download('xls');
+    //return View::make(, $params)->render();
   }
 
   protected function _get_params_reports($votes)
