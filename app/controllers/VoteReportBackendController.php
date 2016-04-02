@@ -188,11 +188,7 @@ class VoteReportBackendController extends BackendBaseController
 
   public function getExportExcel()
   {
-    
-
-    Excel::create('excel_report', function($excel) {
-
-
+    Excel::create('excel_report_'.Input::get('item_id').'_'.time(), function($excel) {
             $itemId = Input::get('item_id');
             $itemType = Input::get('item_type');
 
@@ -212,8 +208,8 @@ class VoteReportBackendController extends BackendBaseController
               {
                 $params['vote'] = $vote;
                 $params['firstVoteArray'] = array_values($params['voteByRole'])[0];
-                $params['size_of_col'] = count($params['voterArr'][$params['firstVoteArray'][0]->id])*2 + 4;
-                $excel->sheet(Str::limit($vote->get_department_name(), 20), function($sheet) use($params) {
+                $params['size_of_col'] = count($params['voterArr'][$voteArray[0]->id])*2 + 4;
+                $excel->sheet(preg_replace('/\//', '', Str::limit($vote->get_department_name(), 25)), function($sheet) use($params) {
                   for($i=0;$i<=25;$i++) $sheet->setWidth(chr(65+$i), 15);
                   $sheet->loadView(Config::get('view.backend.report-export-excel'), $params);
                   $sheet->setFontFamily('Times New Roman');
@@ -249,7 +245,14 @@ class VoteReportBackendController extends BackendBaseController
                     $sheet->cell(chr($start_at_col_num+1).'9', trans('all.content'));
 
                     $sheet->mergeCells(chr($start_at_col_num).'10:'.chr($start_at_col_num+1).'10');
-                    $sheet->cell(chr($start_at_col_num).'10', CustomHelper::get_user_name($params['voterArr'][$params['vote']->id][$roleId][0]));
+
+                    $voter_names = [];
+                    //Debugbar::info($params['voterArr'][$params['vote']->id][$roleId]);
+                    foreach($params['voterArr'][$params['vote']->id][$roleId] as $key => $user_id)
+                    {
+                      array_push($voter_names, CustomHelper::get_user_name($user_id));
+                    }
+                    $sheet->cell(chr($start_at_col_num).'10', join("\r\n", $voter_names));
 
                     $start_at_col_num += 2;
                   }
@@ -257,7 +260,7 @@ class VoteReportBackendController extends BackendBaseController
                   //$sheet->setHeight(8, 50);
                   
                   //bordered
-                  $sheet->setBorder('A7:'.chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote)) + 10), 'thin');
+                  $sheet->setBorder('A7:'.chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote))*$params['maxVoterArr'][$params['vote']->id] + 10), 'thin');
 
 
                   //thay doi chieu dai

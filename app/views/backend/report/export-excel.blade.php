@@ -119,7 +119,8 @@
             <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
 
             <?php if ($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]]))) { ?>
-              <td colspan="2"></td>
+              <td></td>
+              <td></td>
             <?php } else { ?>
               <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
               <td>
@@ -130,7 +131,8 @@
               </td>
             <?php } ?>
           @else
-            <td colspan="2"></td>
+            <td></td>
+            <td></td>
           @endif
         @endforeach
       </tr>
