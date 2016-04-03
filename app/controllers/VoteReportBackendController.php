@@ -231,6 +231,18 @@ class VoteReportBackendController extends BackendBaseController
                   $sheet->cell('D7', trans('all.participant')); #Thanh phan tham gia danh gia
                   $sheet->mergeCells( chr(64 + $params['size_of_col']).'7:'.chr(64 + $params['size_of_col']).'9'); #Tong hop ket qua
                   $sheet->cell(chr(64 + $params['size_of_col']).'7', trans('all.general-results')); #Tong hop ket qua
+
+
+                  //bordered
+                  $number_of_row_data = count(explode(',', $params['vote']->entitled_vote))*$params['maxVoterArr'][$params['vote']->id] + 10;
+                  $end_row_of_table = chr(64 + $params['size_of_col']).$number_of_row_data;
+                  $sheet->setBorder('A7:'.$end_row_of_table, 'thin');
+
+                  //tong hop ket qua ra giua 
+                  $sheet->cells(chr(64 + $params['size_of_col']).'7:'.$end_row_of_table, function($cells) {
+                    $cells->setAlignment('center');
+                  });
+
                   //phan nhom danh gia
                   $start_at_col_num = 68;# D
                   foreach($params['voterArr'][$params['voteArray'][0]->id] as $roleId => $value)
@@ -240,6 +252,10 @@ class VoteReportBackendController extends BackendBaseController
 
                     $sheet->mergeCells(chr($start_at_col_num).'8:'.chr($start_at_col_num+1).'8');
                     $sheet->cell(chr($start_at_col_num).'8', CustomHelper::get_role_name($roleId));
+
+                    $sheet->cells(chr($start_at_col_num).'9:'.chr($start_at_col_num).$number_of_row_data, function($cells) {
+                      $cells->setAlignment('center');
+                    });
 
                     $sheet->cell(chr($start_at_col_num).'9', trans('all.mark'));
                     $sheet->cell(chr($start_at_col_num+1).'9', trans('all.content'));
@@ -259,9 +275,7 @@ class VoteReportBackendController extends BackendBaseController
                   //row height
                   //$sheet->setHeight(8, 50);
                   
-                  //bordered
-                  $end_row_of_table = chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote))*$params['maxVoterArr'][$params['vote']->id] + 10);
-                  $sheet->setBorder('A7:'.$end_row_of_table, 'thin');
+                  
 
 
                   //thay doi chieu dai

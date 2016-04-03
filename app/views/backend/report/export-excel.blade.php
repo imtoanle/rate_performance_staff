@@ -114,25 +114,25 @@
       </tr>
       @for($i=1; $i < $maxVoterArr[$vote->id]; $i++)
       <tr>
+        <td></td>
+        <td></td>
+        <td></td>
         @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
           @if(isset($voterArr[$vote->id][$roleId][$i]))
             <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
-
-            <?php if ($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]]))) { ?>
-              <td></td>
-              <td></td>
-            <?php } else { ?>
-              <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
+            
+            @if($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]])))
+              <td colspan="2"></td>
+            @else
               <td>
                 {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
               </td>
               <td>
                 {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'content' => true])}}
               </td>
-            <?php } ?>
+            @endif
           @else
-            <td></td>
-            <td></td>
+            <td colspan="2"></td>
           @endif
         @endforeach
       </tr>
