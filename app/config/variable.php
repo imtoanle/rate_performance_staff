@@ -234,7 +234,8 @@ return array(
 
     'listReportSpecifyUser' => 'reports-management_specify-user',
     //export excel
-    'exportExcelReport' => 'reports-management_export-excel'
+    'exportExcelReport' => 'reports-management_export-excel',
+    'exportExcelGeneralReport' => 'reports-management_export-excel-general',
   ),
 
 );

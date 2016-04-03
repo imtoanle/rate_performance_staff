@@ -35,6 +35,7 @@ class VoteReportBackendController extends BackendBaseController
         ->edit_column('actions', '
             <a href="{{route(\'reportPeriodVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.report\')}}</a>
             <a class="export-excel btn btn-default btn-xs purple" data-file-name="{{$vote_code}}-{{$actions}}.xls" data-item-type="vote-group" data-item-id="{{$actions}}"><i class="fa fa-search"></i> Xuất Excel</a>
+            <a href="{{route(\'exportExcelGeneralReport\')}}?item_id={{$actions}}&item_type=vote-group" class="export-excel-general btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất tổng hợp</a>
           ')
         #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
         ->make();
@@ -58,7 +59,8 @@ class VoteReportBackendController extends BackendBaseController
           $department = $vote->department;
           $departmentName = is_object($department) ? $department->name : '';
           $actionsHtml = '<a href="'.route('reportPeriodVote', $vote->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> '.trans('all.report').'</a>
-          <a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$vote->id.'.xls" data-vote-type="vote" data-item-id="'.$vote->id.'"><i class="fa fa-search"></i> Xuất Excel</a>';
+          <a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$vote->id.'.xls" data-vote-type="vote" data-item-id="'.$vote->id.'"><i class="fa fa-search"></i> Xuất Excel</a>
+          <a href="'.route('exportExcelGeneralReport').'?item_id='.$vote->id.'&item_type=vote" class="btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất tổng hợp</a>';
             
 
           $votesArr[] = array(
@@ -176,6 +178,7 @@ class VoteReportBackendController extends BackendBaseController
           $departmentName = $row->department->name;
           $html = '<a href="'.route('reportPeriodVote', $row->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xem báo cáo</a>';
           $html .= '<a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$row->id.'.xls" data-vote-type="vote" data-item-id="'.$row->id.'"><i class="fa fa-search"></i> Xuất Excel</a>';
+          $html .= '<a href="'.route('exportExcelGeneralReport').'?item_id='.$row->id.'&item_type=vote" class="btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất tổng hợp</a>';
           return $html;
         })
         #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
@@ -312,6 +315,69 @@ class VoteReportBackendController extends BackendBaseController
 
     })->download('xls');
     //return View::make(, $params)->render();
+  }
+
+  public function getExportExcelGeneral()
+  {
+    Excel::create('tong_hop_danh_gia_'.Input::get('item_id').'_'.time(), function($excel) {
+      $itemId = Input::get('item_id');
+      $itemType = Input::get('item_type');
+
+      $votes = ($itemType == 'vote-group') ? Vote::whereVoteGroupId($itemId)->get() : Vote::where('id', $itemId)->get();
+      $firstVote = $votes->first();
+      $currentUser = Sentry::getUser();
+      $pattern = '"user_id":"'.$currentUser->id.'","type_of_persion":"'.Config::get('variable.type-of-person.view-report').'"';
+      if (!is_object($firstVote) || (strpos($firstVote->specify_user, $pattern) === false && !$currentUser->hasAnyAccess(['reports-management_period'])))
+      {
+        App::abort(500, 'Bạn không có quyền xem báo cáo này.');
+      }
+      $params = $this->_get_params_reports($votes);
+      Debugbar::info($params);
+      
+      $params['voteGroup'] = $votes->first()->voteGroup;
+
+      $excel->sheet("Tổng hợp kết quả", function($sheet) use($params) {
+        for($i=0;$i<=25;$i++) $sheet->setWidth(chr(65+$i), 15);
+
+        $sheet->loadView(Config::get('view.backend.report-export-excel-general'), $params);
+        $sheet->setFontFamily('Times New Roman');
+        $sheet->setFontSize(12);
+        //thay doi chieu dai
+        
+        $sheet->setWidth('A', 10);
+        $sheet->setWidth('B', 30);
+        $sheet->setWidth('C', 30);
+        $sheet->setWidth('D', 20);
+
+        $sheet->cells('A5:D5', function($cells) {
+          $cells->setAlignment('center');
+          $cells->setFontWeight('bold');
+        });
+
+        $sheet->mergeCells('A2:D2');
+        $sheet->cells('A2', function($cells) {
+          $cells->setAlignment('center');
+          $cells->setFontWeight('bold');
+        });
+
+        $number_of_entitled_voter = 0;
+        foreach($params['voteByRole'] as $voteArray)
+          foreach($voteArray as $vote)
+            $number_of_entitled_voter += (count(explode(',', $vote->entitled_vote)) + 1);
+
+        $sheet->setBorder('A5:D'.($number_of_entitled_voter + 5), 'thin');
+
+        $sheet->cells('A5:A'.($number_of_entitled_voter + 5), function($cells) {
+          $cells->setAlignment('center');
+        });
+
+        $sheet->cells('D5:D'.($number_of_entitled_voter + 5), function($cells) {
+          $cells->setAlignment('center');
+        });
+
+      });
+
+    })->download('xls');
   }
 
   protected function _get_params_reports($votes)

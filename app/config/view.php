@@ -130,6 +130,7 @@ return array(
 
     'report-by-specify-user' => 'backend.report.specify-user-index',
     'report-export-excel' => 'backend.report.export-excel',
+    'report-export-excel-general' => 'backend.report.export-excel-general',
 
 
 
