@@ -252,7 +252,7 @@ class VoteReportBackendController extends BackendBaseController
                     {
                       array_push($voter_names, CustomHelper::get_user_name($user_id));
                     }
-                    $sheet->cell(chr($start_at_col_num).'10', join("\r\n", $voter_names));
+                    $sheet->cell(chr($start_at_col_num).'10', join(" - ", $voter_names));
 
                     $start_at_col_num += 2;
                   }
@@ -260,7 +260,8 @@ class VoteReportBackendController extends BackendBaseController
                   //$sheet->setHeight(8, 50);
                   
                   //bordered
-                  $sheet->setBorder('A7:'.chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote))*$params['maxVoterArr'][$params['vote']->id] + 10), 'thin');
+                  $end_row_of_table = chr(64 + $params['size_of_col']).(count(explode(',', $params['vote']->entitled_vote))*$params['maxVoterArr'][$params['vote']->id] + 10);
+                  $sheet->setBorder('A7:'.$end_row_of_table, 'thin');
 
 
                   //thay doi chieu dai
@@ -268,12 +269,23 @@ class VoteReportBackendController extends BackendBaseController
                   $sheet->setWidth('A', 5);
                   $sheet->setWidth('B', 20);
                   $sheet->setWidth('C', 20);
-                  //$sheet->setWidth(chr(64 + $params['size_of_col']), 5);
+                  $sheet->setWidth(chr(64 + $params['size_of_col']), 10);
                  //stle header
                   $sheet->cells('A7:Z10', function($cells) {
                     $cells->setAlignment('center');
                     $cells->setValignment('middle');
                     $cells->setFontWeight('bold');
+                  });
+
+                  $sheet->cells('A7:'.$end_row_of_table, function($cells){
+                    $cells->setValignment('center');
+                    $style = $cells->sheet->getStyle($cells->cells);
+                    // Apply style from array
+                    $style->applyFromArray(array(
+                      'alignment' => array(
+                        'wrap' => true
+                      )
+                    ));
                   });
                 });
               }
