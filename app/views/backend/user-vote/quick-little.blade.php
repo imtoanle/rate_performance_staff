@@ -301,9 +301,9 @@ jQuery(document).ready(function() {
     if($(this).data('form-name') == 'mark')
     {
       role_id = $(this).find('input[name=role_id]').val();
-      a_mark_unvote = tr_avaiable.find('a.role-mark.editable-empty.role-id-'+role_id);
+      a_mark_canvote = tr_avaiable.find('a.role-mark.editable.role-id-'+role_id);
       var entitled_user = [];
-      a_mark_unvote.each(function(){
+      a_mark_canvote.each(function(){
         entitled_user.push($(this).data('entitled-vote'));
       });
 
@@ -321,7 +321,7 @@ jQuery(document).ready(function() {
         if(result.actionStatus !== false)
         {
           mark_value = $(this).find('input[name=form_mark],select[name=form_mark]').val();
-          a_mark_unvote.editable('setValue', mark_value);
+          a_mark_canvote.editable('setValue', mark_value);
         }
       }else
       {
@@ -330,9 +330,9 @@ jQuery(document).ready(function() {
     }else
     {
       role_id = $(this).find('input[name=role_id]').val();
-      a_content_unvote = tr_avaiable.find('a.vote-content.editable-empty.role-id-'+role_id);
+      a_content_canvote = tr_avaiable.find('a.vote-content.editable.role-id-'+role_id);
       var entitled_user = [];
-      a_content_unvote.each(function(){
+      a_content_canvote.each(function(){
         entitled_user.push($(this).data('entitled-vote'));
       });
 
@@ -342,7 +342,7 @@ jQuery(document).ready(function() {
           toastr[result.messageType](result.message);
         });
         content_value = $(this).find('input[name=form_content]').val();
-        a_content_unvote.editable('setValue', content_value);
+        a_content_canvote.editable('setValue', content_value);
       }else
       {
         toastr['warning']('Không có nội dung nào chưa nhập !');
