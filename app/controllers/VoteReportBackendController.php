@@ -34,7 +34,7 @@ class VoteReportBackendController extends BackendBaseController
         })
         ->edit_column('actions', '
             <a href="{{route(\'reportPeriodVoteGroup\', $actions)}}" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> {{trans(\'all.report\')}}</a>
-            <a class="export-excel btn btn-default btn-xs purple" data-file-name="{{$vote_code}}-{{$actions}}.xls" data-item-type="vote-group" data-item-id="{{$actions}}"><i class="fa fa-search"></i> Xuất Excel</a>
+            <a href="{{route(\'exportExcelReport\')}}?item_id={{$actions}}&item_type=vote-group" class="export-excel-general btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất Excel</a>
             <a href="{{route(\'exportExcelGeneralReport\')}}?item_id={{$actions}}&item_type=vote-group" class="export-excel-general btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất tổng hợp</a>
           ')
         #->filter_column('vote_code', 'where', 'Vote.vote_code', '=', '$1')
@@ -177,7 +177,7 @@ class VoteReportBackendController extends BackendBaseController
         ->edit_column('actions', function($row){
           $departmentName = $row->department->name;
           $html = '<a href="'.route('reportPeriodVote', $row->id).'" class="ajaxify-child-page btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xem báo cáo</a>';
-          $html .= '<a class="export-excel btn btn-default btn-xs purple" data-file-name="'.camel_case($departmentName).'-'.$row->id.'.xls" data-vote-type="vote" data-item-id="'.$row->id.'"><i class="fa fa-search"></i> Xuất Excel</a>';
+          $html .= '<a href="'.route('exportExcelReport').'?item_id='.$row->id.'&item_type=vote" class="btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất Excel</a>';
           $html .= '<a href="'.route('exportExcelGeneralReport').'?item_id='.$row->id.'&item_type=vote" class="btn btn-default btn-xs purple"><i class="fa fa-search"></i> Xuất tổng hợp</a>';
           return $html;
         })
