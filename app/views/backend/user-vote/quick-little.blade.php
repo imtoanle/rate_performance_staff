@@ -253,6 +253,9 @@ jQuery(document).ready(function() {
     },
     url: '{{route('postQuickUserVote')}}',
     emptytext: '{{trans('all.not-input-yet')}}',
+    display: function(value) {
+      $(this).text(value);
+    }
   });
 
   $("#department_list").select2({
