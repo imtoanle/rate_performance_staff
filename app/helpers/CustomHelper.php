@@ -279,7 +279,7 @@ class CustomHelper
     if(empty($minArr)) return ['mark' => '', 'mark_type' => ''];
 
     usort($minArr, function($a, $b) {
-      return min($a['mark'], $b['mark']);
+      return $a['mark'] > $b['mark'];
     });
     return array_values($minArr)[0];
   }
