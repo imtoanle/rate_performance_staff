@@ -24,16 +24,31 @@
         <th rowspan="3">STT</th>
         <th rowspan="3">{{trans('all.full-name')}}</th>
         <th rowspan="3">{{trans('all.job-title')}}</th>
-        <th colspan="{{count($voterArr[$voteArray[0]->id])*2}}">{{trans('all.participant')}}</th>
+        <?php 
+          $counter_header_cols = 0;
+          foreach ($voterArr[$voteArray[0]->id] as $roleId => $value) {
+            if(count($voterArr[$vote->id][$roleId]) > 1)
+            {
+              $counter_header_cols += 3;
+            }else
+            {
+              $counter_header_cols += 2;
+            }
+          }
+        ?>
+        <th colspan="{{$counter_header_cols}}">{{trans('all.participant')}}</th>
         <th rowspan="3">{{trans('all.general-results')}}</th>
       </tr>
       <tr>
         @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
-          <td colspan="2">{{CustomHelper::get_role_name($roleId)}}</td>  
+          <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}">{{CustomHelper::get_role_name($roleId)}}</td>  
         @endforeach
       </tr>
       <tr>
         @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
+          @if(count($voterArr[$vote->id][$roleId]) > 1)
+            <td>Người đánh giá</td>
+          @endif
           <td>{{trans('all.mark')}}</td>
           <td>{{trans('all.content')}}</td>
         @endforeach
@@ -74,8 +89,11 @@
         @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
           <?php $firstVoterInRow = (isset($voterArr[$vote->id][$roleId][0]) && isset($voteResult[$voterArr[$vote->id][$roleId][0]])) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
           <?php if ($roleId == Config::get('variable.extend-member-role') && ($voterArr[$vote->id][$roleId][0] == -1 || !in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][0]])) ) { ?>
-            <td colspan="2"></td>
+            <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
           <?php } else { ?>
+            @if( count($voterArr[$vote->id][$roleId]) > 1 )
+              <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
+            @endif
             <td>
               {{CustomHelper::get_mark_with_role(['voteResult' => $firstVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
             </td>
@@ -95,9 +113,11 @@
             <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
             
             @if($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]])))
-              <td></td>
-              <td></td>
+              <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
             @else
+              @if( count($voterArr[$vote->id][$roleId]) > 1 )
+                <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
+              @endif
               <td>
                 {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
               </td>
@@ -106,8 +126,7 @@
               </td>
             @endif
           @else
-            <td></td>
-            <td></td>
+            <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
           @endif
         @endforeach
       </tr>
