@@ -98,8 +98,11 @@
         @foreach($voterArr[$voteArray[0]->id] as $roleId => $value)
           <?php $firstVoterInRow = (isset($voterArr[$vote->id][$roleId][0]) && isset($voteResult[$voterArr[$vote->id][$roleId][0]])) ? $voteResult[$voterArr[$vote->id][$roleId][0]] : null; ?>
           <?php if ($roleId == Config::get('variable.extend-member-role') && ($voterArr[$vote->id][$roleId][0] == -1 || !in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][0]])) ) { ?>
-            <td colspan="2"></td>
+            <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
           <?php } else { ?>
+            @if( count($voterArr[$vote->id][$roleId]) > 1 )
+              <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][0]) }}</td>
+            @endif
             <td>
               {{CustomHelper::get_mark_with_role(['voteResult' => $firstVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
             </td>
@@ -122,8 +125,11 @@
             <?php $currentVoterInRow = isset($voteResult[$voterArr[$vote->id][$roleId][$i]]) ? $voteResult[$voterArr[$vote->id][$roleId][$i]] : null; ?>
             
             @if($roleId == Config::get('variable.extend-member-role') && (!in_array($userId, $extendRoleVoterArr[$voterArr[$vote->id][$roleId][$i]])))
-              <td colspan="2"></td>
+              <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
             @else
+              @if( count($voterArr[$vote->id][$roleId]) > 1 )
+                <td>{{ CustomHelper::get_user_name($voterArr[$vote->id][$roleId][$i]) }}</td>
+              @endif
               <td>
                 {{CustomHelper::get_mark_with_role(['voteResult' => $currentVoterInRow, 'roleId' => $roleId, 'ratingType' => $vote->rating_type])}}<br />
               </td>
@@ -132,7 +138,7 @@
               </td>
             @endif
           @else
-            <td colspan="2"></td>
+            <td colspan="{{ (count($voterArr[$vote->id][$roleId]) > 1) ? '3' : '2' }}"></td>
           @endif
         @endforeach
       </tr>

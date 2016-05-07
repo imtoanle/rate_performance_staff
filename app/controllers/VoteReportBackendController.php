@@ -211,7 +211,17 @@ class VoteReportBackendController extends BackendBaseController
               {
                 $params['vote'] = $vote;
                 $params['firstVoteArray'] = array_values($params['voteByRole'])[0];
-                $params['size_of_col'] = count($params['voterArr'][$voteArray[0]->id])*2 + 4;
+                $counter_header_cols = 0;
+                foreach ($params['voterArr'][$voteArray[0]->id] as $roleId => $value) {
+                  if(count($params['voterArr'][$params['vote']->id][$roleId]) > 1)
+                  {
+                    $counter_header_cols += 3;
+                  }else
+                  {
+                    $counter_header_cols += 2;
+                  }
+                }
+                $params['size_of_col'] = $counter_header_cols + 4;
                 $excel->sheet(preg_replace('/\//', '', Str::limit($vote->get_department_name(), 25)), function($sheet) use($params) {
                   for($i=0;$i<=25;$i++) $sheet->setWidth(chr(65+$i), 15);
                   $sheet->loadView(Config::get('view.backend.report-export-excel'), $params);
@@ -230,7 +240,7 @@ class VoteReportBackendController extends BackendBaseController
                   $sheet->cell('B7', trans('all.full-name'));
                   $sheet->mergeCells('C7:C9'); #Chuc vu
                   $sheet->cell('C7', trans('all.job-title'));
-                  $sheet->mergeCells('D7:'.chr(64 + $params['size_of_col'] - 1).'7'); #STT
+                  $sheet->mergeCells('D7:'.chr(64 + $params['size_of_col'] - 1).'7'); #Thanh phan tham gia
                   $sheet->cell('D7', trans('all.participant')); #Thanh phan tham gia danh gia
                   $sheet->mergeCells( chr(64 + $params['size_of_col']).'7:'.chr(64 + $params['size_of_col']).'9'); #Tong hop ket qua
                   $sheet->cell(chr(64 + $params['size_of_col']).'7', trans('all.general-results')); #Tong hop ket qua
@@ -250,20 +260,28 @@ class VoteReportBackendController extends BackendBaseController
                   $start_at_col_num = 68;# D
                   foreach($params['voterArr'][$params['voteArray'][0]->id] as $roleId => $value)
                   {
+                    $next_rol_num = 0;
+                    if(count($params['voterArr'][$params['vote']->id][$roleId]) > 1)
+                    {
+                      $sheet->cell(chr($start_at_col_num).'9', trans('all.voter'));
+                      $next_rol_num = 1;
+                    }
+
+                    $sheet->cell(chr($start_at_col_num + $next_rol_num).'9', trans('all.mark'));
+                    $sheet->cell(chr($start_at_col_num + $next_rol_num + 1).'9', trans('all.content'));
+
                     $sheet->setWidth(chr($start_at_col_num), 10);
                     $sheet->setWidth(chr($start_at_col_num+1), 20);
 
-                    $sheet->mergeCells(chr($start_at_col_num).'8:'.chr($start_at_col_num+1).'8');
+                    $sheet->mergeCells(chr($start_at_col_num).'8:'.chr($start_at_col_num+1+$next_rol_num).'8');
                     $sheet->cell(chr($start_at_col_num).'8', CustomHelper::get_role_name($roleId));
 
-                    $sheet->cells(chr($start_at_col_num).'9:'.chr($start_at_col_num).$number_of_row_data, function($cells) {
+                    // Diem ra giua
+                    $sheet->cells(chr($start_at_col_num).'9:'.chr($start_at_col_num+$next_rol_num).$number_of_row_data, function($cells) {
                       $cells->setAlignment('center');
                     });
 
-                    $sheet->cell(chr($start_at_col_num).'9', trans('all.mark'));
-                    $sheet->cell(chr($start_at_col_num+1).'9', trans('all.content'));
-
-                    $sheet->mergeCells(chr($start_at_col_num).'10:'.chr($start_at_col_num+1).'10');
+                    $sheet->mergeCells(chr($start_at_col_num).'10:'.chr($start_at_col_num+1+$next_rol_num).'10');
 
                     $voter_names = [];
                     //Debugbar::info($params['voterArr'][$params['vote']->id][$roleId]);
@@ -271,9 +289,10 @@ class VoteReportBackendController extends BackendBaseController
                     {
                       array_push($voter_names, CustomHelper::get_user_name($user_id));
                     }
-                    $sheet->cell(chr($start_at_col_num).'10', join(" - ", $voter_names));
+                    if(count($params['voterArr'][$params['vote']->id][$roleId]) == 1)
+                      $sheet->cell(chr($start_at_col_num).'10', join(" - ", $voter_names));
 
-                    $start_at_col_num += 2;
+                    $start_at_col_num += (2 + $next_rol_num);
                   }
                   //row height
                   //$sheet->setHeight(8, 50);

@@ -170,7 +170,7 @@ return array(
 	'object-vote' => 'Đối tượng đánh gía',
 	'title' => 'Tiêu đề',
 	'entitled-vote' => 'Người được đánh giá',
-	'voter' => 'Người cho điểm',
+	'voter' => 'Người đánh giá',
 	'create-vote' => 'Tạo đánh giá',
 	'edit-vote' => 'Sửa đánh giá',
 	'vote-info' => 'Thông tin đánh giá',
