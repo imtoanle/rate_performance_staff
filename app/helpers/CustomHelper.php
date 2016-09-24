@@ -302,7 +302,7 @@ class CustomHelper
     $minArr = [];
     foreach (json_decode($markString, true) as $mark) {
       $mark_type = array_key_exists("mark_type",$mark) ? $mark['mark_type'] : '';
-      $minArr[] = ['mark' => $mark['mark'], 'mark_type' =>  $mark_type];
+      $minArr[] = ['mark' => (empty($mark['mark']) ? 0 : $mark['mark']), 'mark_type' =>  $mark_type];
     }
     return $minArr;
   }

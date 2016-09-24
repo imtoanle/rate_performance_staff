@@ -1,11 +1,25 @@
 <?php
 use Cartalyst\Sentry\Users\Eloquent\User as SentryUserModel;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
-class User extends SentryUserModel {
+use Codesleeve\Stapler\ORM\StaplerableInterface;
+class User extends SentryUserModel implements StaplerableInterface {
   use SoftDeletingTrait;
-
-  protected $dates = ['deleted_at'];
   
+  use Codesleeve\Stapler\ORM\EloquentTrait;
+
+  protected $dates = ['avatar', 'deleted_at'];
+  
+  public function __construct(array $attributes = array()) {
+        $this->hasAttachedFile('avatar', [
+            'styles' => [
+                'medium' => '300x300',
+                'thumb' => '100x100'
+            ]
+        ]);
+
+        parent::__construct($attributes);
+    }
+
   public function job_titles_name()
   {
     $idsjob = explode(',', $this->job_title);

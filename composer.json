@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.9",
+		"codesleeve/laravel-stapler": "^1.0",
 		"cartalyst/sentry": "~2",
 		"bllim/datatables": "*",
 		"torann/geoip": "0.1.*@dev",

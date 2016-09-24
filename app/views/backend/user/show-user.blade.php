@@ -184,7 +184,11 @@
                   <div class="col-md-9">
                     <div class="tab-content">
                       <div id="tab_1-1" class="tab-pane active">
-                        <form action="{{route('putUser', $user->id)}}" type="PUT" class="base-ajax-form">
+                        <?= Form::open(['url' => route('putUser', $user->id), 'method' => 'PUT', 'files' => true, 'class' => "base-ajax-form"]) ?>
+                          <div class="form-group">
+                            <label class="control-label">Email</label>
+                            <input type="text" class="form-control" name="email" value="{{$user->email}}" placeholder="Email">
+                          </div>
                           <div class="form-group">
                             <label class="control-label">{{trans('all.full-name')}}</label>
                             <input type="text" class="form-control" name="full_name" value="{{$user->full_name}}" placeholder="{{trans('all.full-name')}}">
@@ -205,7 +209,7 @@
                           <div class="margiv-top-10">
                             <button type="submit" class="btn btn-info">{{trans('all.update')}}</button>
                           </div>
-                        </form>
+                        <?= Form::close() ?>
                       </div>
                       <div id="tab_3-3" class="tab-pane">
                         <form action="{{route('putUser', $user->id)}}" type="PUT" class="base-ajax-form">

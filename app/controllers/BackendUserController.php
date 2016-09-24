@@ -471,6 +471,8 @@ class BackendUserController extends BackendBaseController
               }
 
               $birth_date = explode('/',Input::get('birth_date'));
+              $user->email = Input::get('email');
+              $user->avatar = Input::get('avatar');
               $user->full_name = Input::get('full_name');
               $user->birth_date = Carbon::createFromDate($birth_date[2], $birth_date[1], $birth_date[0]);
               $user->phone_num = Input::get('mobile_number');

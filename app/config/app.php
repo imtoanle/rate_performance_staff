@@ -127,6 +127,7 @@ return array(
 		'Orangehill\Iseed\IseedServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Barryvdh\Debugbar\ServiceProvider',
+		'Codesleeve\LaravelStapler\Providers\L4ServiceProvider'
 	),
 
 	/*
